@@ -4,7 +4,6 @@ Alles wat nog aangeleverd moet worden. Elke regel verwijst naar de plek in de co
 
 ## Teksten
 
-- [ ] **Voornaam van de docent** voor de hero-intro · `src/data/copy.ts` (`hero.intro`)
 - [ ] **Biografie**: achtergrond, opleiding, manier van lesgeven · `src/data/copy.ts` (`over.alineas`)
 - [ ] **Plaats van Muziekvereniging Zeelandia en Phoenix Cultuur** bevestigen · `src/data/organisaties.ts`
 
@@ -24,8 +23,8 @@ Alles wat nog aangeleverd moet worden. Elke regel verwijst naar de plek in de co
 
 ## Beeld (fase 2)
 
-- [ ] **Portretfoto** voor de hero, staand ± 4:5, bij voorkeur met klarinet · `src/sections/Hero.astro`
+- [ ] **Definitieve portretfoto** voor de hero, staand ± 4:5 (tijdelijke vierkante zwart-witfoto staat in `src/assets/portret-christa.jpg`) · `src/sections/Hero.astro`
 - [ ] **Foto uit de lespraktijk**, ± 3:4 · `src/sections/Over.astro`
-- [ ] **Logo / wordmark** · `src/components/Wordmark.astro`
-- [ ] **Favicon** · `public/favicon.svg`
-- [ ] Optioneel: **Open Graph-afbeelding** (1200×630) voor social shares · `src/layouts/Basis.astro`
+- [x] **Logo / wordmark**: het fm-merk (forte-f + mezzo-m uit Bravura) staat in `Wordmark.astro`
+- [x] **Favicon**: forte-f op bordeaux tegel in `public/favicon.svg`
+- [x] **Open Graph-afbeelding**: `public/og.png` met de fm-wordmark

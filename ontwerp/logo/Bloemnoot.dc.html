@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Atkinson+Hyperlegible+Next:wght@400;700&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Atkinson Hyperlegible Next', Verdana, sans-serif; }
+    a { color: #7B1E2B; } a:hover { color: #4A1219; }
+  </style>
+</helmet>
+<div style="width: 760px; height: 980px; background: #FAF6F3; color: {{accent}}; display: flex; flex-direction: column; padding: 48px; box-sizing: border-box; gap: 40px">
+  <p style="margin: 0; font-size: 15px; font-weight: 700; color: #6B5A5D">Richting 1 · De bloemnoot — Flora (bloem) en Musica (noot) in een teken</p>
+
+  <div style="display: flex; align-items: center; justify-content: center; flex-grow: 1">
+    <svg viewBox="0 0 100 140" style="width: 240px; height: 336px" aria-label="Bloemnoot-beeldmerk">
+      <g fill="currentColor">
+        <g>
+          <g transform="rotate(0 40 108)"><ellipse cx="52" cy="108" rx="12.5" ry="6" /></g>
+          <g transform="rotate(72 40 108)"><ellipse cx="52" cy="108" rx="12.5" ry="6" /></g>
+          <g transform="rotate(144 40 108)"><ellipse cx="52" cy="108" rx="12.5" ry="6" /></g>
+          <g transform="rotate(216 40 108)"><ellipse cx="52" cy="108" rx="12.5" ry="6" /></g>
+          <g transform="rotate(288 40 108)"><ellipse cx="52" cy="108" rx="12.5" ry="6" /></g>
+        </g>
+        <circle cx="40" cy="108" r="4.5" fill="#FAF6F3" />
+        <rect x="49.5" y="28" width="5" height="76" rx="2.5" />
+      </g>
+    </svg>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 20px">
+    <svg viewBox="0 0 100 140" style="width: 44px; height: 61px"><g fill="currentColor"><g><g transform="rotate(0 40 108)"><ellipse cx="52" cy="108" rx="12.5" ry="6"/></g><g transform="rotate(72 40 108)"><ellipse cx="52" cy="108" rx="12.5" ry="6"/></g><g transform="rotate(144 40 108)"><ellipse cx="52" cy="108" rx="12.5" ry="6"/></g><g transform="rotate(216 40 108)"><ellipse cx="52" cy="108" rx="12.5" ry="6"/></g><g transform="rotate(288 40 108)"><ellipse cx="52" cy="108" rx="12.5" ry="6"/></g></g><circle cx="40" cy="108" r="4.5" fill="#FAF6F3"/><rect x="49.5" y="28" width="5" height="76" rx="2.5"/></g></svg>
+    <div style="display: flex; flex-direction: column; gap: 2px">
+      <span style="font-family: 'Bricolage Grotesque', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: -0.02em; color: {{accent}}">Flora Musica</span>
+      <span style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6B5A5D">Muziekpraktijk · Oss</span>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 24px">
+    <div style="width: 128px; height: 128px; border-radius: 18px; background: {{accent}}; display: flex; align-items: center; justify-content: center">
+      <svg viewBox="0 0 100 140" style="width: 56px; height: 78px"><g fill="#FAF6F3"><g><g transform="rotate(0 40 108)"><ellipse cx="52" cy="108" rx="12.5" ry="6"/></g><g transform="rotate(72 40 108)"><ellipse cx="52" cy="108" rx="12.5" ry="6"/></g><g transform="rotate(144 40 108)"><ellipse cx="52" cy="108" rx="12.5" ry="6"/></g><g transform="rotate(216 40 108)"><ellipse cx="52" cy="108" rx="12.5" ry="6"/></g><g transform="rotate(288 40 108)"><ellipse cx="52" cy="108" rx="12.5" ry="6"/></g></g><circle cx="40" cy="108" r="4.5" fill="{{accent}}"/><rect x="49.5" y="28" width="5" height="76" rx="2.5"/></g></svg>
+    </div>
+    <div style="width: 32px; height: 32px; border-radius: 6px; background: {{accent}}; display: flex; align-items: center; justify-content: center">
+      <svg viewBox="0 0 100 140" style="width: 15px; height: 21px"><g fill="#FAF6F3"><circle cx="40" cy="108" r="16"/><rect x="49.5" y="28" width="6" height="80" rx="3"/></g></svg>
+    </div>
+    <div style="width: 16px; height: 16px; border-radius: 3px; background: {{accent}}; display: flex; align-items: center; justify-content: center">
+      <svg viewBox="0 0 100 140" style="width: 8px; height: 11px"><g fill="#FAF6F3"><circle cx="40" cy="108" r="18"/><rect x="49.5" y="24" width="8" height="84" rx="4"/></g></svg>
+    </div>
+    <span style="font-size: 13px; color: #6B5A5D">app-icoon · favicon 32 · 16 (vereenvoudigd naar noot)</span>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"accent":{"editor":"color","default":"#7B1E2B","options":["#7B1E2B","#8E2433","#641A24","#4A1219"]}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#7B1E2B' };
+  }
+}
+</script>
+</body>
+</html>

@@ -6,11 +6,11 @@ Twee groepen: ouders die muziekles zoeken voor hun kind, en volwassen (her)begin
 
 ## Centraal concept: het programmaboekje
 
-De pagina is opgebouwd als een concertprogramma. De hero is de omslag: een diep bordeaux vlak met de titel en één uitnodiging. Daarna volgt het binnenwerk op warm papier, met op desktop een marge-grid: het sectielabel staat in de linkermarge op de baseline van de kop, de inhoud in de brede rechterkolom. Dat grid vervangt de gebruikelijke "eyebrow boven elke kop" volledig; de pagina telt nul eyebrows. Op mobiel klapt alles naar één kolom, label boven kop.
+De pagina is opgebouwd als een concertprogramma. De hero is de omslag: een diep bordeaux vlak met de naam van de praktijk groot in display ("Flora Musica"), daaronder "Muziekles in Oss en omgeving" als ondertitel (beide in de h1), en één uitnodiging. Het portretfoto-slot staat op de omslag als tonale outline, niet als licht vlak. Daarna volgt het binnenwerk op warm papier, met op desktop een marge-grid: het sectielabel staat in de linkermarge op de baseline van de kop, de inhoud in de brede rechterkolom. Dat grid vervangt de gebruikelijke "eyebrow boven elke kop" volledig; de pagina telt nul eyebrows. Op mobiel klapt alles naar één kolom, label boven kop.
 
-## De bewuste esthetische keuze
+## De bewuste esthetische keuze: de partituurregel
 
-Het marge-grid, plus één notenbalk-motief: de bovenrand van de footer is een echte vijflijnige notenbalk in bordeaux hairlines. Eén keer op de pagina, nergens anders herhaald, als stille verwijzing naar het vak. Verder is de pagina gedisciplineerd stil, zodat het bordeaux vlak en het grid het werk doen.
+De pagina is één partituurregel. Hij opent op de omslag met een toon-op-toon notenbalk die van rand tot rand loopt, met een echte solsleutel aan het begin (vanaf `md`; op mobiel blijft de omslag schoon), en hij sluit boven de footer af met dezelfde notenbalk mét eindstreep (dunne plus dikke streep, muzikaal correct). De sleutel is de G-sleutel uit Bravura, het professionele notatiefont van Steinberg (SIL Open Font License), als vectorpad overgenomen in `src/components/PartituurRegel.astro` zodat er geen notatiefont geladen wordt. Tussen opening en slot is de pagina gedisciplineerd stil: het marge-grid en het bordeaux vlak doen het werk. Geen verdere notatie-ornamenten strooien; het systeem is opening en slot, niets ertussen.
 
 ## Kleur
 
@@ -53,7 +53,7 @@ Twee families, zelf-gehost via `@fontsource`, nul externe requests:
 - **Display: Bricolage Grotesque** (variabel, 600–700, tracking −0.02em). Een warme grotesk met karakter; hedendaags en persoonlijk zonder "template-serif" te zijn.
 - **Tekst: Atkinson Hyperlegible Next** (400/700, regelafstand 1.65). Ontworpen door het Braille Institute voor maximale leesbaarheid, passend bij een publiek van ouders en volwassen beginners.
 
-Typeschaal met `clamp()`, ratio ±1,25: `--text-hero`, `--text-kop`, `--text-subkop`, `--text-basis` (17px), `--text-klein` (15px). Lopende tekst maximaal 62ch breed.
+Typeschaal met `clamp()`, ratio ±1,25: `--text-omslag` (tot 5.5rem, alleen de hero-naam), `--text-hero`, `--text-kop`, `--text-subkop`, `--text-basis` (17px), `--text-klein` (15px). Lopende tekst maximaal 62ch breed.
 
 ## Spacing
 
@@ -63,6 +63,14 @@ Typeschaal met `clamp()`, ratio ±1,25: `--text-hero`, `--text-kop`, `--text-sub
 
 Alleen licht. Het concept is een papier-referentie; een donker thema zou een tweede ontwerp zijn zonder aanwijsbare winst voor deze doelgroep, en de briefing koos expliciet licht. Het bordeaux hero-vlak is een sectietint binnen het lichte thema, geen thema-wissel.
 
+## Regel voor onvolledige content
+
+Lege of nog niet aangeleverde gegevens worden weggelaten, nooit als zichtbare placeholder-tekst getoond. Geen "TODO" in de gerenderde pagina; de administratie leeft in CONTENT-TODO.md en in code-comments. De twee foto-slots zijn de enige zichtbare uitzondering en heten daar "… volgt". De tarievensectie blijft één zin plus formulierverwijzing tot `tarieven.bekend` waar is.
+
+## Social preview
+
+`public/og.png` (1200×630): bordeaux kaart met "Flora Musica" in Bricolage, ondertitel in Atkinson en de notenbalk onderaan; gekoppeld via og:image en twitter:card summary_large_image. Opnieuw genereren kan met canvas op de site zelf (fonts staan daar al klaar).
+
 ## Beeld (fase 2)
 
 Slots staan klaar in `Figuur.astro` (placeholder zolang er geen foto is, Astro `<Image>` zodra die er wel is):
@@ -70,4 +78,6 @@ Slots staan klaar in `Figuur.astro` (placeholder zolang er geen foto is, Astro `
 1. Hero: staand portret ± 4:5, bij voorkeur met klarinet.
 2. Over: foto uit de lespraktijk, ± 3:4.
 
-Logo en favicon zijn tijdelijke tekst/SVG-placeholders in `src/components/Wordmark.astro` en `public/favicon.svg`; beide op één plek vervangbaar.
+## Beeldmerk: fm
+
+Het merk is gekozen (canvas: "Flora Musica beeldmerk"): de **forte-f** (U+E522) en **mezzo-m** (U+E521) uit Bravura, de dynamiek-letters uit echte bladmuziek. Professioneel getekend, SIL Open Font License, dus commercieel vrij. De paden staan in `src/data/dynamiek.ts`; `Wordmark.astro` combineert ze met Bricolage 600 (em-maten, schaalt mee met de context) en wordt gebruikt in header, hero-omslag en footer. `public/favicon.svg` is de forte-f op een bordeaux tegel; `public/og.png` draagt dezelfde wordmark.

@@ -1,0 +1,23 @@
+{
+  "projectId": "286bf8ac-74fa-43fe-a362-faa9a8888ec9",
+  "shape": "package",
+  "pkg": "flora-musica-ds",
+  "globalName": "FloraMusica",
+  "buildCmd": "npm run build",
+  "cssEntry": "src/styles.css",
+  "overrides": {
+    "PartituurRegel": {
+      "cardMode": "column"
+    },
+    "NotenbalkSlot": {
+      "cardMode": "column"
+    },
+    "Sectie": {
+      "cardMode": "column"
+    },
+    "Veld": {
+      "cardMode": "column"
+    }
+  },
+  "readmeHeader": ".design-sync/conventions.md"
+}

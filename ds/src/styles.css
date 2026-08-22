@@ -1,0 +1,166 @@
+/*
+ * Flora Musica design system — tokens en componentstijlen.
+ * Concept: het programmaboekje / de partituurregel. Bordeaux is het enige
+ * accent; warm papier als grond; nooit zuiver wit of zwart.
+ * Fonts laden via Google Fonts (zelfde families als de site zelf-host).
+ */
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&display=swap");
+
+:root {
+  /* Kleur */
+  --fm-paper: #faf6f3;
+  --fm-paper-deep: #f1e9e4;
+  --fm-ink: #231a1c;
+  --fm-ink-soft: #6b5a5d;
+  --fm-bordeaux: #7b1e2b;
+  --fm-bordeaux-deep: #4a1219;
+  --fm-paper-dim: #e8d8d5;
+  --fm-rule: #dccfc9;
+  --fm-border-strong: #9a8180;
+
+  /* Typografie */
+  --fm-font-display: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
+  --fm-font-body: "Atkinson Hyperlegible Next", Verdana, sans-serif;
+  --fm-text-omslag: clamp(2.75rem, 1.4rem + 6vw, 5.5rem);
+  --fm-text-kop: clamp(1.55rem, 1.15rem + 1.8vw, 2.25rem);
+  --fm-text-subkop: clamp(1.15rem, 1rem + 0.7vw, 1.4rem);
+  --fm-text-basis: 1.0625rem;
+  --fm-text-klein: 0.9375rem;
+
+  /* Ruimte */
+  --fm-sectie: clamp(4rem, 2.5rem + 6vw, 8rem);
+}
+
+.fm-basis {
+  background: var(--fm-paper);
+  color: var(--fm-ink);
+  font-family: var(--fm-font-body);
+  font-size: var(--fm-text-basis);
+  line-height: 1.65;
+}
+
+/* Wordmark */
+.fm-wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--fm-font-display);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--fm-bordeaux);
+}
+.fm-wordmark--paper { color: var(--fm-paper); }
+.fm-wordmark svg { overflow: visible; }
+
+/* Monogram-tegel */
+.fm-monogram {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--fm-bordeaux);
+  border-radius: 14.7%;
+  color: var(--fm-paper);
+}
+.fm-monogram svg { overflow: visible; }
+
+/* Knop */
+.fm-knop {
+  display: inline-block;
+  border: 0;
+  border-radius: 2px;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--fm-font-body);
+  font-size: var(--fm-text-basis);
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 150ms, color 150ms;
+  background: var(--fm-bordeaux);
+  color: var(--fm-paper);
+}
+.fm-knop:hover { background: var(--fm-bordeaux-deep); }
+.fm-knop--paper { background: var(--fm-paper); color: var(--fm-bordeaux-deep); }
+.fm-knop--paper:hover { background: var(--fm-paper-dim); }
+.fm-knop:focus-visible { outline: 2px solid var(--fm-bordeaux); outline-offset: 2px; }
+
+/* Sectie: het marge-grid van het programmaboekje */
+.fm-sectie { padding: var(--fm-sectie) 1.25rem; }
+.fm-sectie--tint { background: var(--fm-paper-deep); }
+.fm-sectie__binnen { max-width: 64rem; margin: 0 auto; }
+.fm-sectie__label {
+  margin: 0 0 0.5rem;
+  font-family: var(--fm-font-body);
+  font-size: var(--fm-text-klein);
+  font-weight: 700;
+  color: var(--fm-bordeaux);
+}
+.fm-sectie__kop {
+  margin: 0;
+  font-family: var(--fm-font-display);
+  font-size: var(--fm-text-kop);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--fm-ink);
+}
+.fm-sectie__inhoud { margin-top: 1.5rem; }
+@media (min-width: 768px) {
+  .fm-sectie__binnen {
+    display: grid;
+    grid-template-columns: 12rem 1fr;
+    gap: 2.5rem;
+  }
+  .fm-sectie__label { margin: 0; padding-top: 0.6em; text-align: right; }
+}
+
+/* Figuur: fotoslot met tonale placeholder */
+.fm-figuur { max-width: 100%; }
+.fm-figuur img { display: block; width: 100%; height: auto; border-radius: 2px; object-fit: cover; }
+.fm-figuur__leeg {
+  font-family: var(--fm-font-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--fm-rule);
+  border-radius: 2px;
+  background: var(--fm-paper-deep);
+  color: var(--fm-ink-soft);
+  font-size: var(--fm-text-klein);
+  text-align: center;
+  padding: 1.5rem;
+}
+.fm-figuur--bordeaux .fm-figuur__leeg {
+  border-color: rgba(232, 216, 213, 0.4);
+  background: transparent;
+  color: rgba(232, 216, 213, 0.8);
+}
+
+/* Veld: label boven, fout eronder */
+.fm-veld { display: block; }
+.fm-veld__label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 700;
+  color: var(--fm-ink);
+}
+.fm-veld__invoer {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--fm-border-strong);
+  border-radius: 2px;
+  background: var(--fm-paper);
+  color: var(--fm-ink);
+  font-family: var(--fm-font-body);
+  font-size: var(--fm-text-basis);
+  padding: 0.625rem 0.75rem;
+}
+.fm-veld__invoer:focus-visible { outline: 2px solid var(--fm-bordeaux); outline-offset: 2px; }
+.fm-veld__fout {
+  margin: 0.25rem 0 0;
+  font-size: var(--fm-text-klein);
+  font-weight: 700;
+  color: var(--fm-bordeaux);
+}
+
+/* Partituurregel en slotbalk */
+.fm-partituurregel { display: block; width: 100%; pointer-events: none; color: var(--fm-bordeaux); }
+.fm-notenbalkslot { display: block; width: 100%; color: var(--fm-bordeaux); }

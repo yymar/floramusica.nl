@@ -5,3 +5,11 @@ dist/
 .env.production
 .DS_Store
 npm-debug.log*
+.ds-sync/
+ds-bundle/
+.design-sync/.cache/
+.design-sync/learnings/
+.design-sync/node_modules
+ds/node_modules/
+ds/dist/
+.impeccable/

@@ -5,9 +5,10 @@
  */
 
 export const hero = {
-  titel: 'Muziekles in Oss en omgeving',
+  titel: 'Flora Musica',
+  subtitel: 'Muziekles in Oss en omgeving',
   intro:
-    'Muziekpraktijk Flora Musica is de lespraktijk van [TODO: voornaam], docent klarinet. Ze geeft ook les in basklarinet, saxofoon, piano en blokfluit, aan kinderen, jongeren en volwassenen.',
+    'Muziekpraktijk Flora Musica is de lespraktijk van Christa ten Berg, docent klarinet. Ze geeft ook les in basklarinet, saxofoon, piano en blokfluit, aan kinderen, jongeren en volwassenen.',
   cta: 'Neem contact op',
 };
 
@@ -19,7 +20,9 @@ export const over = {
    */
   alineas: [
     'De klarinet is haar hoofdinstrument, en van daaruit is de praktijk gegroeid: van basklarinet en saxofoon tot piano en blokfluit. Les op maat, in een rustig tempo dat bij je past, of je nu voor het eerst een instrument vastpakt of na jaren weer begint.',
-    '[TODO: persoonlijke biografie aanleveren: achtergrond, opleiding, hoe ze lesgeeft en wat haar drijft.]',
+    // TODO: persoonlijke biografie aanleveren (achtergrond, opleiding, manier van lesgeven)
+    // en hier als extra alinea's toevoegen. Regel: lege of ontbrekende content wordt
+    // weggelaten, nooit als placeholder getoond.
   ],
   fotoAlt: 'Portret van de docent met haar klarinet', // TODO: echte foto + alt-tekst
 };
@@ -47,7 +50,9 @@ export const locatie = {
 export const praktisch = {
   kop: 'Praktisch',
   intro:
-    'De tarieven en lestijden staan hieronder zodra ze zijn vastgesteld. Wil je nu al iets weten, stel je vraag via het contactformulier.',
+    'De tarieven en lestijden staan hier zodra ze zijn vastgesteld.',
+  introVraagVoor: 'Wil je nu al iets weten, stel je vraag gerust via',
+  introVraagLink: 'het contactformulier',
   opAanvraag: 'op aanvraag',
 };
 

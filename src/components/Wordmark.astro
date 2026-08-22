@@ -1,24 +1,35 @@
 ---
 /**
- * Tekstuele wordmark-placeholder. Komt er een echt logo, dan vervang je
- * alleen dit component (en public/favicon.svg); de rest van de site
- * gebruikt <Wordmark /> en verandert niet mee.
+ * De wordmark van Flora Musica: de forte-f en mezzo-m uit de bladmuziek
+ * (Bravura, SIL OFL) gecombineerd met Bricolage. Alle maten in em,
+ * dus de wordmark schaalt mee met de font-size van de context.
  *
  * `toon` bepaalt de kleur: 'bordeaux' op licht papier, 'paper' op het
- * bordeaux hero-vlak.
+ * bordeaux vlak. Het bijpassende beeldmerk staat in public/favicon.svg.
  */
+import { forteF, mezzoM } from '../data/dynamiek';
+
 interface Props {
   toon?: 'bordeaux' | 'paper';
 }
 const { toon = 'bordeaux' } = Astro.props;
 ---
 
-<span
-  class:list={[
-    'font-display text-[1.15rem] leading-none font-bold tracking-tight',
-    toon === 'paper' ? 'text-paper' : 'text-bordeaux',
-  ]}
->
-  Flora Musica
-  <span class="sr-only">, muziekpraktijk</span>
+<span class:list={['inline-flex items-baseline', toon === 'paper' ? 'text-paper' : 'text-bordeaux']}>
+  <span class="sr-only">Flora Musica, muziekpraktijk</span>
+  <span class="inline-flex items-baseline font-display font-semibold tracking-[-0.015em]" aria-hidden="true">
+    <svg
+      viewBox={forteF.viewBox}
+      class="h-[1.35em] w-[1.15em] overflow-visible"
+      style="margin-right: -0.33em"
+    ><g transform="scale(1,-1)"><path d={forteF.pad} fill="currentColor" /></g></svg>
+    <span>lora</span>
+    <span class="w-[0.33em]"></span>
+    <svg
+      viewBox={mezzoM.viewBox}
+      class="h-[0.69em] w-[1.12em] overflow-visible"
+      style="margin-right: 0.04em"
+    ><g transform="scale(1,-1)"><path d={mezzoM.pad} fill="currentColor" /></g></svg>
+    <span>usica</span>
+  </span>
 </span>

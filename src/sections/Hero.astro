@@ -1,20 +1,36 @@
 ---
 /**
- * De omslag van het programmaboekje: een diep bordeaux vlak met een
- * asymmetrische verdeling. Links de titel en de call-to-action,
- * rechts het portretfoto-slot.
+ * De omslag van het programmaboekje, nu als eerste maat van een partituur:
+ * een toon-op-toon notenbalk met solsleutel loopt achter de titel langs,
+ * de footer sluit de pagina af met de eindstreep. De naam van de praktijk
+ * staat groot in display; de ondertitel draagt de zoekintentie en zit mee
+ * in de h1. Rechts het portretfoto-slot als rustige tonale outline.
  */
 import Figuur from '../components/Figuur.astro';
+import PartituurRegel from '../components/PartituurRegel.astro';
+import Wordmark from '../components/Wordmark.astro';
 import { hero } from '../data/copy';
 import { site } from '../data/site';
+// Tijdelijk portret (vierkant, zwart-wit); definitieve foto ~4:5 volgt in fase 2.
+import portret from '../assets/portret-christa.jpg';
 ---
 
-<section class="bg-bordeaux-deep" data-vlak="bordeaux">
-  <div class="mx-auto max-w-5xl px-5 pt-14 pb-16 sm:px-8 sm:pt-20 sm:pb-24">
+<section class="relative overflow-hidden bg-bordeaux-deep" data-vlak="bordeaux">
+  {/* De partituurregel: van rand tot rand, achter de titel */}
+  <div class="absolute inset-x-0 top-[8.5rem] hidden text-bordeaux md:block" aria-hidden="true">
+    <PartituurRegel class="h-[clamp(8rem,19vw,13rem)]" />
+  </div>
+
+  <div class="relative mx-auto max-w-5xl px-5 pt-14 pb-16 sm:px-8 sm:pt-20 sm:pb-24">
     <div class="grid items-end gap-10 md:grid-cols-[3fr_2fr] md:gap-16">
       <div>
-        <h1 class="font-display text-hero font-bold tracking-tight text-paper">
-          {hero.titel}
+        <h1 class="text-paper">
+          <span class="block text-omslag">
+            <Wordmark toon="paper" />
+          </span>
+          <span class="mt-3 block font-display text-subkop font-semibold text-paper-dim">
+            {hero.subtitel}
+          </span>
         </h1>
         <p class="mt-6 max-w-[46ch] text-paper-dim">
           {hero.intro}
@@ -27,10 +43,11 @@ import { site } from '../data/site';
         </a>
       </div>
       <Figuur
-        alt={`Portretfoto, ${site.naam}`}
-        breedte={4}
-        hoogte={5}
-        todo="TODO: portretfoto (staand, ± 4:5), bijvoorbeeld met klarinet"
+        src={portret}
+        alt="Christa ten Berg met haar klarinet"
+        breedte={640}
+        hoogte={640}
+        toon="bordeaux"
         class="max-w-xs md:max-w-none"
       />
     </div>

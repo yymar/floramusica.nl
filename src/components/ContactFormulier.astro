@@ -152,6 +152,10 @@ const { labels, fouten, status, concept } = formulier;
     const TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 dagen
     const MIN_INVULTIJD_MS = 3000;
     const geladenOm = Date.now();
+    // Spamcheck-klok start bij de eerste echte interactie, niet bij paginalaad;
+    // en vervalt helemaal als een eerder bewaard concept is teruggezet.
+    let eersteInteractie: number | null = null;
+    let conceptTeruggezet = false;
 
     const veldNamen = ['naam', 'email', 'telefoon', 'instrument', 'voor_wie', 'bericht'] as const;
 
@@ -206,7 +210,10 @@ const { labels, fouten, status, concept } = formulier;
             ietsTeruggezet = true;
           }
         }
-        if (ietsTeruggezet) document.getElementById('concept-melding')?.removeAttribute('hidden');
+        if (ietsTeruggezet) {
+          conceptTeruggezet = true;
+          document.getElementById('concept-melding')?.removeAttribute('hidden');
+        }
       } catch {
         /* corrupt concept: negeren */
       }
@@ -214,8 +221,14 @@ const { labels, fouten, status, concept } = formulier;
 
     let debounceTimer: ReturnType<typeof setTimeout>;
     formulier.addEventListener('input', () => {
+      eersteInteractie ??= Date.now();
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(bewaarConcept, 300);
+    });
+    // Refresh of wegklikken binnen de debounce: direct opslaan, niets verliezen.
+    window.addEventListener('pagehide', bewaarConcept);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') bewaarConcept();
     });
     document.getElementById('concept-wissen')?.addEventListener('click', () => {
       wisConcept();
@@ -297,7 +310,8 @@ const { labels, fouten, status, concept } = formulier;
       if (!valideerAlles()) return;
 
       // Spamcheck: een mens heeft meer dan een paar seconden nodig.
-      if (Date.now() - geladenOm < MIN_INVULTIJD_MS) {
+      // Niet bij een teruggezet concept: dat bericht was al geschreven.
+      if (!conceptTeruggezet && Date.now() - (eersteInteractie ?? geladenOm) < MIN_INVULTIJD_MS) {
         statusRegel.textContent = fouten.teSnel;
         statusRegel.classList.add('text-bordeaux');
         return;

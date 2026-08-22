@@ -1,0 +1,105 @@
+{
+  "pages": [
+    {
+      "id": "page-1",
+      "name": "Merk"
+    },
+    {
+      "id": "page-2",
+      "name": "Schetsen"
+    }
+  ],
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 760,
+      "h": 980,
+      "title": "fm · definitief",
+      "page": "page-1"
+    },
+    {
+      "file": "Bloemnoot.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 760,
+      "h": 980,
+      "title": "1 · Bloemnoot",
+      "page": "page-2"
+    },
+    {
+      "file": "Woordmerk.dc.html",
+      "x": 860,
+      "y": 0,
+      "w": 560,
+      "h": 840,
+      "title": "2 · Woordmerk",
+      "page": "page-2"
+    },
+    {
+      "file": "Sleutel.dc.html",
+      "x": 1520,
+      "y": 0,
+      "w": 560,
+      "h": 840,
+      "title": "3 · Sleutel",
+      "page": "page-2"
+    },
+    {
+      "file": "Monogram.dc.html",
+      "x": 2180,
+      "y": 0,
+      "w": 560,
+      "h": 840,
+      "title": "4 · fm-monogram",
+      "page": "page-2"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "note-gekozen",
+      "x": 0,
+      "y": -170,
+      "w": 360,
+      "page": "page-1",
+      "text": "Gekozen merk: de forte-f en mezzo-m uit Bravura (SIL-licentie, commercieel vrij). Doorgevoerd in de site: wordmark in header, hero en footer, favicon.svg en og.png.\nDe eerdere richtingen staan op de pagina Schetsen."
+    },
+    {
+      "id": "note-bloemnoot",
+      "x": 0,
+      "y": -190,
+      "w": 340,
+      "page": "page-2",
+      "text": "Bloemnoot: de naam letterlijk in een teken, bloem en noot tegelijk.\nNiet gekozen: vroeg nog veel vormverfijning."
+    },
+    {
+      "id": "note-woordmerk",
+      "x": 860,
+      "y": -160,
+      "w": 320,
+      "page": "page-2",
+      "text": "Woordmerk: rustig en tijdloos.\nNiet gekozen: minst onderscheidend als los merkteken."
+    },
+    {
+      "id": "note-sleutel",
+      "x": 1520,
+      "y": -160,
+      "w": 320,
+      "page": "page-2",
+      "text": "Sleutel: maximale samenhang met de site.\nNiet gekozen: generiek muziekteken, onleesbaar op 16px."
+    },
+    {
+      "id": "note-monogram",
+      "x": 2180,
+      "y": -160,
+      "w": 320,
+      "page": "page-2",
+      "text": "fm-monogram in Bricolage: sterk op klein formaat.\nNiet gekozen, maar de f+m-gedachte leeft door in het definitieve merk."
+    }
+  ],
+  "launch": {
+    "view": "canvas",
+    "page": "page-1"
+  }
+}

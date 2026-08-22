@@ -4,6 +4,10 @@
  * placeholder-vlak met de juiste verhoudingen; zodra `src` een geïmporteerde
  * afbeelding is, rendert het Astro's <Image> (lazy, expliciete afmetingen).
  *
+ * `toon` maakt de placeholder passend bij de ondergrond: op het bordeaux
+ * vlak een tonale outline in plaats van een licht vlak, zodat het slot
+ * niet alle aandacht trekt.
+ *
  * Foto toevoegen: importeer de afbeelding in de sectie en geef hem door.
  *   import portret from '../assets/portret.jpg';
  *   <Figuur src={portret} alt="..." breedte={560} hoogte={700} />
@@ -16,11 +20,12 @@ interface Props {
   alt: string;
   breedte: number;
   hoogte: number;
-  /** Omschrijving van de foto die hier nog moet komen. */
+  toon?: 'paper' | 'bordeaux';
+  /** Korte omschrijving van de foto die hier nog komt. */
   todo?: string;
   class?: string;
 }
-const { src, alt, breedte, hoogte, todo, class: className } = Astro.props;
+const { src, alt, breedte, hoogte, toon = 'paper', todo, class: className } = Astro.props;
 ---
 
 {
@@ -36,15 +41,23 @@ const { src, alt, breedte, hoogte, todo, class: className } = Astro.props;
   ) : (
     <div
       class:list={[
-        'flex w-full items-center justify-center rounded-sm border border-rule bg-paper-deep p-6',
+        'flex w-full items-center justify-center rounded-sm border p-6',
+        toon === 'bordeaux'
+          ? 'border-paper-dim/40 bg-transparent'
+          : 'border-rule bg-paper-deep',
         className,
       ]}
       style={`aspect-ratio: ${breedte} / ${hoogte};`}
       role="img"
       aria-label={alt}
     >
-      <p class="max-w-[24ch] text-center text-klein text-ink-soft">
-        {todo ?? 'TODO: foto aanleveren'}
+      <p
+        class:list={[
+          'max-w-[24ch] text-center text-klein',
+          toon === 'bordeaux' ? 'text-paper-dim/80' : 'text-ink-soft',
+        ]}
+      >
+        {todo ?? 'Foto volgt'}
       </p>
     </div>
   )

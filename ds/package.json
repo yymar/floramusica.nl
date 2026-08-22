@@ -1,0 +1,22 @@
+{
+  "name": "flora-musica-ds",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Design system van Muziekpraktijk Flora Musica: partituur-concept, bordeaux, Bricolage + Atkinson.",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p ."
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.6.0"
+  }
+}

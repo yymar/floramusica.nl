@@ -12,6 +12,7 @@ const jsonLd: Record<string, unknown> = {
   '@type': 'MusicSchool',
   name: site.naam,
   description: site.omschrijving,
+  founder: { '@type': 'Person', name: 'Christa ten Berg' },
   url: site.url,
   address: {
     '@type': 'PostalAddress',

@@ -12,16 +12,14 @@ import { site } from '../data/site';
     <ContactFormulier />
   </div>
 
-  <p class="mt-8 text-klein text-ink-soft">
-    {contact.mailtoTekst}{' '}
-    {
-      site.email ? (
+  {
+    site.email && (
+      <p class="mt-8 text-klein text-ink-soft">
+        {contact.mailtoTekst}{' '}
         <a href={`mailto:${site.email}`} class="text-bordeaux underline underline-offset-2 hover:text-bordeaux-deep">
           {site.email}
         </a>
-      ) : (
-        <span>TODO: e-mailadres</span>
-      )
-    }
-  </p>
+      </p>
+    )
+  }
 </Sectie>

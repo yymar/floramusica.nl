@@ -21,6 +21,8 @@
   --font-body: 'Atkinson Hyperlegible Next', Verdana, sans-serif;
 
   /* Typeschaal, ratio ~1.25, vloeiend */
+  --text-omslag: clamp(2.75rem, 1.4rem + 6vw, 5.5rem);
+  --text-omslag--line-height: 1.02;
   --text-hero: clamp(2.1rem, 1.2rem + 4vw, 3.55rem);
   --text-hero--line-height: 1.08;
   --text-kop: clamp(1.55rem, 1.15rem + 1.8vw, 2.25rem);
