@@ -1,0 +1,27 @@
+---
+import Sectie from '../components/Sectie.astro';
+import ContactFormulier from '../components/ContactFormulier.astro';
+import { contact } from '../data/copy';
+import { site } from '../data/site';
+---
+
+<Sectie id="contact" label="Contact" kop={contact.kop}>
+  <p class="max-w-[62ch]">{contact.intro}</p>
+
+  <div class="mt-8">
+    <ContactFormulier />
+  </div>
+
+  <p class="mt-8 text-klein text-ink-soft">
+    {contact.mailtoTekst}{' '}
+    {
+      site.email ? (
+        <a href={`mailto:${site.email}`} class="text-bordeaux underline underline-offset-2 hover:text-bordeaux-deep">
+          {site.email}
+        </a>
+      ) : (
+        <span>TODO: e-mailadres</span>
+      )
+    }
+  </p>
+</Sectie>

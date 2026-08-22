@@ -1,0 +1,68 @@
+---
+/**
+ * Basislayout: fonts, meta, SEO, skip-link, header en footer.
+ * Alleen de latin-subsets van de fonts worden geladen.
+ */
+import '@fontsource-variable/bricolage-grotesque';
+import '@fontsource/atkinson-hyperlegible-next/latin-400.css';
+import '@fontsource/atkinson-hyperlegible-next/latin-400-italic.css';
+import '@fontsource/atkinson-hyperlegible-next/latin-700.css';
+import '../styles/global.css';
+
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { site } from '../data/site';
+
+interface Props {
+  /** Paginatitel; de sitenaam wordt er automatisch achter gezet. */
+  titel?: string;
+  omschrijving?: string;
+  /** 404 en bedankt-pagina willen geen indexering. */
+  noindex?: boolean;
+}
+const { titel, omschrijving = site.omschrijving, noindex = false } = Astro.props;
+const volledigeTitel = titel ? `${titel} · ${site.naam}` : `${site.naam} · Muziekles in Oss en omgeving`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{volledigeTitel}</title>
+    <meta name="description" content={omschrijving} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.naam} />
+    <meta property="og:title" content={volledigeTitel} />
+    <meta property="og:description" content={omschrijving} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="nl_NL" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={volledigeTitel} />
+    <meta name="twitter:description" content={omschrijving} />
+
+    <meta name="generator" content={Astro.generator} />
+    <JsonLd />
+  </head>
+  <body>
+    <a
+      href="#inhoud"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-sm focus:bg-paper focus:px-4 focus:py-2 focus:font-bold focus:text-bordeaux"
+    >
+      Direct naar de inhoud
+    </a>
+    <div id="top"></div>
+    <Header />
+    <main id="inhoud">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

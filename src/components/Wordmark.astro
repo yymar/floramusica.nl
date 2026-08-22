@@ -1,0 +1,24 @@
+---
+/**
+ * Tekstuele wordmark-placeholder. Komt er een echt logo, dan vervang je
+ * alleen dit component (en public/favicon.svg); de rest van de site
+ * gebruikt <Wordmark /> en verandert niet mee.
+ *
+ * `toon` bepaalt de kleur: 'bordeaux' op licht papier, 'paper' op het
+ * bordeaux hero-vlak.
+ */
+interface Props {
+  toon?: 'bordeaux' | 'paper';
+}
+const { toon = 'bordeaux' } = Astro.props;
+---
+
+<span
+  class:list={[
+    'font-display text-[1.15rem] leading-none font-bold tracking-tight',
+    toon === 'paper' ? 'text-paper' : 'text-bordeaux',
+  ]}
+>
+  Flora Musica
+  <span class="sr-only">, muziekpraktijk</span>
+</span>

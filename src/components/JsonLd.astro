@@ -1,0 +1,46 @@
+---
+/**
+ * Structured data voor zoekmachines: MusicSchool (subtype van LocalBusiness).
+ * Belangrijk voor zoekopdrachten als "klarinetles Oss". Alles komt uit
+ * src/data; lege TODO-velden worden weggelaten in plaats van verzonnen.
+ */
+import { site } from '../data/site';
+import { instrumenten } from '../data/instrumenten';
+
+const jsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'MusicSchool',
+  name: site.naam,
+  description: site.omschrijving,
+  url: site.url,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.adres.straat,
+    ...(site.adres.postcode ? { postalCode: site.adres.postcode } : {}),
+    addressLocality: site.adres.plaats,
+    addressRegion: site.adres.provincie,
+    addressCountry: site.adres.land,
+  },
+  areaServed: {
+    '@type': 'City',
+    name: site.adres.plaats,
+  },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Muzieklessen',
+    itemListElement: instrumenten.map((instrument) => ({
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Course',
+        name: `${instrument.naam}les`,
+        description: instrument.omschrijving,
+        provider: { '@type': 'MusicSchool', name: site.naam },
+      },
+    })),
+  },
+  ...(site.email ? { email: site.email } : {}),
+  ...(site.telefoon ? { telephone: site.telefoon } : {}),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />

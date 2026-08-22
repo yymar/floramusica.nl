@@ -1,0 +1,38 @@
+---
+/**
+ * Het marge-grid van het programmaboekje: op desktop staat het sectielabel
+ * in de linkermarge op de baseline van de kop, de inhoud in de brede
+ * rechterkolom. Op mobiel klapt het naar een kolom, label boven kop.
+ *
+ * `tint` geeft de sectie een iets dieper papier als achtergrond,
+ * voor rustige afwisseling binnen hetzelfde lichte thema.
+ */
+interface Props {
+  id: string;
+  label: string;
+  kop: string;
+  tint?: boolean;
+}
+const { id, label, kop, tint = false } = Astro.props;
+---
+
+<section id={id} class:list={[tint && 'bg-paper-deep']}>
+  <div class="mx-auto max-w-5xl px-5 py-sectie sm:px-8">
+    <div class="md:grid md:grid-cols-[10rem_1fr] md:gap-10 lg:grid-cols-[12rem_1fr]">
+      <p
+        class="mb-2 text-klein font-bold text-bordeaux md:mb-0 md:pt-[0.6em] md:text-right"
+        aria-hidden="true"
+      >
+        {label}
+      </p>
+      <div>
+        <h2 class="font-display text-kop font-semibold tracking-tight text-ink">
+          {kop}
+        </h2>
+        <div class="mt-6">
+          <slot />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

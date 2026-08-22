@@ -1,0 +1,20 @@
+---
+import Sectie from '../components/Sectie.astro';
+import Figuur from '../components/Figuur.astro';
+import { over } from '../data/copy';
+---
+
+<Sectie id="over" label="Over" kop={over.kop}>
+  <div class="grid gap-8 sm:grid-cols-[2fr_1fr] sm:gap-10">
+    <div class="max-w-[62ch] space-y-4">
+      {over.alineas.map((alinea) => <p>{alinea}</p>)}
+    </div>
+    <Figuur
+      alt={over.fotoAlt}
+      breedte={3}
+      hoogte={4}
+      todo="TODO: foto uit de lespraktijk"
+      class="max-w-[16rem] sm:max-w-none"
+    />
+  </div>
+</Sectie>

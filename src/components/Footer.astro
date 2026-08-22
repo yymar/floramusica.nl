@@ -1,0 +1,56 @@
+---
+/**
+ * Footer met het notenbalk-motief als bovenrand: vijf bordeaux hairlines,
+ * het enige decoratieve motief op de pagina. Daaronder de zakelijke
+ * gegevens (KvK, e-mail, telefoon; nu nog TODO's).
+ */
+import Wordmark from './Wordmark.astro';
+import { site } from '../data/site';
+import { footer } from '../data/copy';
+---
+
+<footer class="mt-sectie">
+  {/* Notenbalk: 5 lijnen, puur decoratief */}
+  <div aria-hidden="true" class="mx-auto max-w-5xl px-5 sm:px-8">
+    <div class="flex flex-col gap-[9px]">
+      {[0, 1, 2, 3, 4].map(() => <span class="block h-px w-full bg-bordeaux/40" />)}
+    </div>
+  </div>
+
+  <div class="mx-auto max-w-5xl px-5 py-12 sm:px-8">
+    <div class="flex flex-col gap-8 sm:flex-row sm:justify-between">
+      <div>
+        <Wordmark />
+        <p class="mt-3 max-w-[36ch] text-klein text-ink-soft">
+          {site.adres.straat}, {site.adres.plaats}<br />
+          Muziekles in {site.regio}
+        </p>
+      </div>
+      <dl class="text-klein text-ink-soft">
+        <div class="flex gap-3">
+          <dt class="font-bold text-ink">E-mail</dt>
+          <dd>
+            {
+              site.email ? (
+                <a href={`mailto:${site.email}`} class="text-bordeaux underline underline-offset-2 hover:text-bordeaux-deep">
+                  {site.email}
+                </a>
+              ) : (
+                <span>TODO: e-mailadres</span>
+              )
+            }
+          </dd>
+        </div>
+        <div class="mt-2 flex gap-3">
+          <dt class="font-bold text-ink">Telefoon</dt>
+          <dd>{site.telefoon || 'TODO: telefoonnummer'}</dd>
+        </div>
+        <div class="mt-2 flex gap-3">
+          <dt class="font-bold text-ink">{footer.kvkLabel}</dt>
+          <dd>{site.kvk || 'TODO: KvK-nummer'}</dd>
+        </div>
+      </dl>
+    </div>
+    <p class="mt-10 text-klein text-ink-soft">{footer.colofon}</p>
+  </div>
+</footer>

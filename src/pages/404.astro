@@ -1,0 +1,16 @@
+---
+import Basis from '../layouts/Basis.astro';
+import { nietGevonden } from '../data/copy';
+---
+
+<Basis titel={nietGevonden.titel} noindex>
+  <section class="mx-auto max-w-5xl px-5 py-sectie sm:px-8">
+    <h1 class="font-display text-kop font-semibold tracking-tight">{nietGevonden.titel}</h1>
+    <p class="mt-4 max-w-[62ch]">{nietGevonden.tekst}</p>
+    <p class="mt-8">
+      <a href="/" class="font-bold text-bordeaux underline underline-offset-2 hover:text-bordeaux-deep">
+        {nietGevonden.terug}
+      </a>
+    </p>
+  </section>
+</Basis>

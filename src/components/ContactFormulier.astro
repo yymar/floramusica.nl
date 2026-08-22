@@ -1,0 +1,342 @@
+---
+/**
+ * Contactformulier via Web3Forms.
+ *
+ * Zonder JavaScript werkt dit als een gewone POST naar Web3Forms met een
+ * redirect terug naar /bedankt. Met JavaScript komt daar bovenop:
+ * fetch-verzending zonder redirect, Nederlandse inline validatie,
+ * draft-persistence in localStorage en een minimale-invultijd-spamcheck.
+ *
+ * De key komt uit PUBLIC_WEB3FORMS_KEY in .env; zie README.md.
+ */
+import { instrumenten } from '../data/instrumenten';
+import { formulier } from '../data/copy';
+import { site } from '../data/site';
+
+const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
+const redirectUrl = new URL('/bedankt', Astro.site);
+const { labels, fouten, status, concept } = formulier;
+---
+
+<form
+  id="contact-formulier"
+  action="https://api.web3forms.com/submit"
+  method="POST"
+  class="max-w-xl"
+  data-fouten={JSON.stringify(fouten)}
+  data-status={JSON.stringify(status)}
+>
+  <input type="hidden" name="access_key" value={key} />
+  <input type="hidden" name="redirect" value={redirectUrl.href} />
+  <input type="hidden" name="subject" value={`Nieuw bericht via ${site.url}`} />
+  <input type="hidden" name="from_name" value={site.naam} />
+  {/* Honeypot van Web3Forms: mensen zien dit veld niet, bots vullen het in. */}
+  <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" aria-hidden="true" />
+
+  {/* Melding bij teruggezet concept */}
+  <p id="concept-melding" hidden class="mb-6 flex flex-wrap items-center gap-3 rounded-sm bg-paper-deep px-4 py-3 text-klein">
+    <span>{concept.melding}</span>
+    <button type="button" id="concept-wissen" class="font-bold text-bordeaux underline underline-offset-2 hover:text-bordeaux-deep">
+      {concept.wissen}
+    </button>
+  </p>
+
+  <div class="space-y-5">
+    <div>
+      <label for="veld-naam" class="mb-1 block font-bold">{labels.naam}</label>
+      <input
+        type="text"
+        id="veld-naam"
+        name="naam"
+        required
+        autocomplete="name"
+        class="w-full rounded-sm border border-border-strong bg-paper px-3 py-2.5"
+        aria-describedby="fout-naam"
+      />
+      <p id="fout-naam" hidden class="mt-1 text-klein font-bold text-bordeaux"></p>
+    </div>
+
+    <div>
+      <label for="veld-email" class="mb-1 block font-bold">{labels.email}</label>
+      <input
+        type="email"
+        id="veld-email"
+        name="email"
+        required
+        autocomplete="email"
+        class="w-full rounded-sm border border-border-strong bg-paper px-3 py-2.5"
+        aria-describedby="fout-email"
+      />
+      <p id="fout-email" hidden class="mt-1 text-klein font-bold text-bordeaux"></p>
+    </div>
+
+    <div>
+      <label for="veld-telefoon" class="mb-1 block font-bold">{labels.telefoon}</label>
+      <input
+        type="tel"
+        id="veld-telefoon"
+        name="telefoon"
+        autocomplete="tel"
+        class="w-full rounded-sm border border-border-strong bg-paper px-3 py-2.5"
+      />
+    </div>
+
+    <div>
+      <label for="veld-instrument" class="mb-1 block font-bold">{labels.instrument}</label>
+      <select
+        id="veld-instrument"
+        name="instrument"
+        class="w-full rounded-sm border border-border-strong bg-paper px-3 py-2.5"
+      >
+        <option value="">{labels.instrumentPlaceholder}</option>
+        {instrumenten.map((instrument) => <option value={instrument.id}>{instrument.naam}</option>)}
+        <option value="anders">{labels.instrumentAnders}</option>
+      </select>
+    </div>
+
+    <fieldset aria-describedby="fout-voor-wie">
+      <legend class="mb-1 font-bold">{labels.voorWie}</legend>
+      <div class="flex flex-wrap gap-x-6 gap-y-2">
+        <label class="inline-flex items-center gap-2">
+          <input type="radio" name="voor_wie" value="voor mezelf" required class="accent-bordeaux" />
+          {labels.voorMezelf}
+        </label>
+        <label class="inline-flex items-center gap-2">
+          <input type="radio" name="voor_wie" value="voor mijn kind" class="accent-bordeaux" />
+          {labels.voorKind}
+        </label>
+      </div>
+      <p id="fout-voor-wie" hidden class="mt-1 text-klein font-bold text-bordeaux"></p>
+    </fieldset>
+
+    <div>
+      <label for="veld-bericht" class="mb-1 block font-bold">{labels.bericht}</label>
+      <textarea
+        id="veld-bericht"
+        name="bericht"
+        required
+        rows={5}
+        class="w-full rounded-sm border border-border-strong bg-paper px-3 py-2.5"
+        aria-describedby="fout-bericht"></textarea>
+      <p id="fout-bericht" hidden class="mt-1 text-klein font-bold text-bordeaux"></p>
+    </div>
+  </div>
+
+  <button
+    type="submit"
+    data-bezig={labels.bezig}
+    class="mt-7 rounded-sm bg-bordeaux px-6 py-3 font-bold text-paper transition-colors hover:bg-bordeaux-deep disabled:cursor-not-allowed disabled:opacity-60"
+  >
+    {labels.versturen}
+  </button>
+
+  {/* Succes- en foutmeldingen voor screenreaders en zichtbaar */}
+  <p id="formulier-status" role="status" aria-live="polite" class="mt-4 font-bold empty:hidden"></p>
+</form>
+
+<script>
+  // Progressive enhancement bovenop de werkende no-JS-POST hierboven.
+  const formulier = document.getElementById('contact-formulier') as HTMLFormElement | null;
+
+  if (formulier) {
+    // Met JS actief nemen wij de validatie over; zonder JS blijft de native HTML5-validatie werken.
+    formulier.setAttribute('novalidate', '');
+
+    const fouten = JSON.parse(formulier.dataset.fouten ?? '{}');
+    const statusTeksten = JSON.parse(formulier.dataset.status ?? '{}');
+    const statusRegel = document.getElementById('formulier-status')!;
+    const verstuurKnop = formulier.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const knopTekst = verstuurKnop.textContent;
+
+    const OPSLAG_KEY = 'fm:contact-concept:v1';
+    const TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 dagen
+    const MIN_INVULTIJD_MS = 3000;
+    const geladenOm = Date.now();
+
+    const veldNamen = ['naam', 'email', 'telefoon', 'instrument', 'voor_wie', 'bericht'] as const;
+
+    // ---- Draft-persistence -------------------------------------------------
+
+    const leesVelden = () => {
+      const data: Record<string, string> = {};
+      const formData = new FormData(formulier);
+      for (const naam of veldNamen) {
+        const waarde = formData.get(naam);
+        if (typeof waarde === 'string' && waarde.trim() !== '') data[naam] = waarde;
+      }
+      return data;
+    };
+
+    const bewaarConcept = () => {
+      try {
+        const data = leesVelden();
+        if (Object.keys(data).length === 0) {
+          localStorage.removeItem(OPSLAG_KEY);
+          return;
+        }
+        localStorage.setItem(OPSLAG_KEY, JSON.stringify({ bewaardOp: Date.now(), data }));
+      } catch {
+        // localStorage kan geblokkeerd zijn; het formulier werkt dan gewoon zonder concept.
+      }
+    };
+
+    const wisConcept = () => {
+      try {
+        localStorage.removeItem(OPSLAG_KEY);
+      } catch {
+        /* zie boven */
+      }
+      document.getElementById('concept-melding')?.setAttribute('hidden', '');
+    };
+
+    const zetConceptTerug = () => {
+      try {
+        const ruw = localStorage.getItem(OPSLAG_KEY);
+        if (!ruw) return;
+        const { bewaardOp, data } = JSON.parse(ruw);
+        if (typeof bewaardOp !== 'number' || Date.now() - bewaardOp > TTL_MS) {
+          localStorage.removeItem(OPSLAG_KEY);
+          return;
+        }
+        let ietsTeruggezet = false;
+        for (const [naam, waarde] of Object.entries(data as Record<string, string>)) {
+          const veld = formulier.elements.namedItem(naam);
+          if (veld instanceof RadioNodeList || (veld && 'value' in veld)) {
+            (veld as HTMLInputElement | RadioNodeList).value = waarde;
+            ietsTeruggezet = true;
+          }
+        }
+        if (ietsTeruggezet) document.getElementById('concept-melding')?.removeAttribute('hidden');
+      } catch {
+        /* corrupt concept: negeren */
+      }
+    };
+
+    let debounceTimer: ReturnType<typeof setTimeout>;
+    formulier.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(bewaarConcept, 300);
+    });
+    document.getElementById('concept-wissen')?.addEventListener('click', () => {
+      wisConcept();
+      formulier.reset();
+    });
+    zetConceptTerug();
+
+    // ---- Validatie met Nederlandse meldingen -------------------------------
+
+    const foutVoorVeld = (naam: string): string | null => {
+      if (naam === 'naam' || naam === 'bericht') {
+        const veld = formulier.elements.namedItem(naam) as HTMLInputElement | HTMLTextAreaElement;
+        if (veld.value.trim() === '') return fouten[naam];
+      }
+      if (naam === 'email') {
+        const veld = formulier.elements.namedItem('email') as HTMLInputElement;
+        if (veld.value.trim() === '' || !veld.checkValidity()) return fouten.email;
+      }
+      if (naam === 'voor_wie') {
+        const gekozen = new FormData(formulier).get('voor_wie');
+        if (!gekozen) return fouten.voorWie;
+      }
+      return null;
+    };
+
+    const foutElementId = (naam: string) => `fout-${naam.replace('_', '-')}`;
+
+    const toonFout = (naam: string, melding: string | null) => {
+      const foutRegel = document.getElementById(foutElementId(naam));
+      const veld = formulier.elements.namedItem(naam);
+      const veldElement =
+        veld instanceof RadioNodeList ? (veld[0] as HTMLInputElement) : (veld as HTMLInputElement | null);
+      if (!foutRegel) return;
+      if (melding) {
+        foutRegel.textContent = melding;
+        foutRegel.removeAttribute('hidden');
+        veldElement?.setAttribute('aria-invalid', 'true');
+      } else {
+        foutRegel.textContent = '';
+        foutRegel.setAttribute('hidden', '');
+        veldElement?.removeAttribute('aria-invalid');
+      }
+    };
+
+    const teValiderenVelden = ['naam', 'email', 'voor_wie', 'bericht'];
+
+    // Meldingen verschijnen pas na blur, niet tijdens het typen.
+    for (const naam of teValiderenVelden) {
+      const veld = formulier.elements.namedItem(naam);
+      const elementen = veld instanceof RadioNodeList ? Array.from(veld) : veld ? [veld] : [];
+      for (const element of elementen) {
+        (element as HTMLElement).addEventListener('blur', () => toonFout(naam, foutVoorVeld(naam)));
+      }
+    }
+
+    const valideerAlles = (): boolean => {
+      let eersteFout: string | null = null;
+      for (const naam of teValiderenVelden) {
+        const melding = foutVoorVeld(naam);
+        toonFout(naam, melding);
+        if (melding && !eersteFout) eersteFout = naam;
+      }
+      if (eersteFout) {
+        const veld = formulier.elements.namedItem(eersteFout);
+        const focusDoel = veld instanceof RadioNodeList ? (veld[0] as HTMLElement) : (veld as HTMLElement);
+        focusDoel?.focus();
+        return false;
+      }
+      return true;
+    };
+
+    // ---- Verzenden via fetch ----------------------------------------------
+
+    formulier.addEventListener('submit', async (gebeurtenis) => {
+      gebeurtenis.preventDefault();
+      statusRegel.textContent = '';
+      statusRegel.classList.remove('text-bordeaux');
+
+      if (!valideerAlles()) return;
+
+      // Spamcheck: een mens heeft meer dan een paar seconden nodig.
+      if (Date.now() - geladenOm < MIN_INVULTIJD_MS) {
+        statusRegel.textContent = fouten.teSnel;
+        statusRegel.classList.add('text-bordeaux');
+        return;
+      }
+
+      const accessKey = (formulier.elements.namedItem('access_key') as HTMLInputElement)?.value;
+      if (!accessKey) {
+        statusRegel.textContent = statusTeksten.geenKey;
+        statusRegel.classList.add('text-bordeaux');
+        return;
+      }
+
+      verstuurKnop.disabled = true;
+      verstuurKnop.textContent = verstuurKnop.dataset.bezig ?? 'Versturen…';
+
+      try {
+        const formData = new FormData(formulier);
+        formData.delete('redirect'); // fetch-pad: geen redirect nodig
+        const antwoord = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData,
+          headers: { Accept: 'application/json' },
+        });
+        const resultaat = await antwoord.json();
+        if (antwoord.ok && resultaat.success) {
+          statusRegel.textContent = statusTeksten.succes;
+          formulier.reset();
+          wisConcept();
+        } else {
+          throw new Error(resultaat.message ?? 'Onbekende fout');
+        }
+      } catch {
+        // Netwerkfout of afwijzing: het ingevulde bericht blijft staan.
+        statusRegel.textContent = statusTeksten.fout;
+        statusRegel.classList.add('text-bordeaux');
+      } finally {
+        verstuurKnop.disabled = false;
+        verstuurKnop.textContent = knopTekst;
+      }
+    });
+  }
+</script>

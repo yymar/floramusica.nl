@@ -1,0 +1,38 @@
+---
+/**
+ * De omslag van het programmaboekje: een diep bordeaux vlak met een
+ * asymmetrische verdeling. Links de titel en de call-to-action,
+ * rechts het portretfoto-slot.
+ */
+import Figuur from '../components/Figuur.astro';
+import { hero } from '../data/copy';
+import { site } from '../data/site';
+---
+
+<section class="bg-bordeaux-deep" data-vlak="bordeaux">
+  <div class="mx-auto max-w-5xl px-5 pt-14 pb-16 sm:px-8 sm:pt-20 sm:pb-24">
+    <div class="grid items-end gap-10 md:grid-cols-[3fr_2fr] md:gap-16">
+      <div>
+        <h1 class="font-display text-hero font-bold tracking-tight text-paper">
+          {hero.titel}
+        </h1>
+        <p class="mt-6 max-w-[46ch] text-paper-dim">
+          {hero.intro}
+        </p>
+        <a
+          href="#contact"
+          class="mt-8 inline-block rounded-sm bg-paper px-6 py-3 font-bold text-bordeaux-deep transition-colors hover:bg-paper-dim"
+        >
+          {hero.cta}
+        </a>
+      </div>
+      <Figuur
+        alt={`Portretfoto, ${site.naam}`}
+        breedte={4}
+        hoogte={5}
+        todo="TODO: portretfoto (staand, ± 4:5), bijvoorbeeld met klarinet"
+        class="max-w-xs md:max-w-none"
+      />
+    </div>
+  </div>
+</section>

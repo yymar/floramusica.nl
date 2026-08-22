@@ -1,0 +1,51 @@
+---
+/**
+ * De eigen lespraktijk voorop (daar neemt ze zelf leerlingen aan),
+ * daaronder de organisaties als tekstuele lijst, geen logowall.
+ */
+import Sectie from '../components/Sectie.astro';
+import { locatie } from '../data/copy';
+import { site } from '../data/site';
+import { organisaties } from '../data/organisaties';
+---
+
+<Sectie id="locatie" label="Locatie" kop={locatie.kop}>
+  <h3 class="font-display text-subkop font-semibold text-ink">{locatie.praktijkKop}</h3>
+  <p class="mt-2 max-w-[62ch]">{locatie.praktijkTekst}</p>
+  <p class="mt-4">
+    <strong>{site.adres.straat}, {site.adres.plaats}</strong>
+    <span class="mx-2 text-rule" aria-hidden="true">|</span>
+    <a
+      href={site.adres.kaartUrl}
+      rel="noopener"
+      class="text-bordeaux underline underline-offset-2 hover:text-bordeaux-deep"
+    >
+      {locatie.kaartLabel}
+    </a>
+  </p>
+
+  <h3 class="mt-12 font-display text-subkop font-semibold text-ink">
+    {locatie.organisatiesKop}
+  </h3>
+  <p class="mt-2 max-w-[62ch]">{locatie.organisatiesTekst}</p>
+  <ul class="mt-5 grid gap-x-10 gap-y-3 sm:grid-cols-2">
+    {
+      organisaties.map((organisatie) => (
+        <li class="border-b border-rule pb-3">
+          {organisatie.url ? (
+            <a
+              href={organisatie.url}
+              rel="noopener"
+              class="text-bordeaux underline underline-offset-2 hover:text-bordeaux-deep"
+            >
+              {organisatie.naam}
+            </a>
+          ) : (
+            <span>{organisatie.naam}</span>
+          )}
+          {organisatie.plaats && <span class="text-klein text-ink-soft"> · {organisatie.plaats}</span>}
+        </li>
+      ))
+    }
+  </ul>
+</Sectie>

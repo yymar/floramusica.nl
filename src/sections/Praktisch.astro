@@ -1,0 +1,41 @@
+---
+/**
+ * Tarieven en lesduur. Zolang tarieven.bekend false is, toont dit
+ * de structuur met "op aanvraag" in plaats van verzonnen bedragen.
+ */
+import Sectie from '../components/Sectie.astro';
+import { praktisch } from '../data/copy';
+import { tarieven } from '../data/tarieven';
+---
+
+<Sectie id="praktisch" label="Praktisch" kop={praktisch.kop} tint>
+  <p class="max-w-[62ch]">{praktisch.intro}</p>
+
+  <dl class="mt-8 max-w-xl">
+    {
+      tarieven.lesvormen.map((lesvorm) => (
+        <div class="flex items-baseline justify-between gap-6 border-b border-rule py-4">
+          <dt>
+            <span class="font-bold">{lesvorm.naam}</span>
+            {tarieven.bekend && lesvorm.duur && (
+              <span class="block text-klein text-ink-soft">{lesvorm.duur}</span>
+            )}
+          </dt>
+          <dd class="text-right whitespace-nowrap">
+            {tarieven.bekend && lesvorm.prijs ? lesvorm.prijs : praktisch.opAanvraag}
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+
+  {
+    tarieven.opmerkingen.length > 0 && (
+      <ul class="mt-6 max-w-[62ch] space-y-2 text-klein text-ink-soft">
+        {tarieven.opmerkingen.map((opmerking) => (
+          <li>{opmerking}</li>
+        ))}
+      </ul>
+    )
+  }
+</Sectie>

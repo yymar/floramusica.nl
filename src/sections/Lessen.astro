@@ -1,0 +1,49 @@
+---
+/**
+ * Lesaanbod: asymmetrisch grid met precies één cel per instrument.
+ * Het hoofdinstrument (klarinet) krijgt de grote cel met bordeaux rand.
+ */
+import Sectie from '../components/Sectie.astro';
+import { instrumenten, doelgroepen } from '../data/instrumenten';
+import { lessen } from '../data/copy';
+
+const hoofd = instrumenten.find((i) => i.hoofdinstrument);
+const overige = instrumenten.filter((i) => !i.hoofdinstrument);
+---
+
+<Sectie id="lessen" label="Lessen" kop={lessen.kop} tint>
+  <p class="max-w-[62ch]">{lessen.intro}</p>
+
+  <div class="mt-8 grid gap-4 sm:grid-cols-2">
+    {
+      hoofd && (
+        <article class="rounded-sm border-2 border-bordeaux bg-paper p-6 sm:col-span-2 sm:p-8">
+          <h3 class="font-display text-subkop font-semibold text-bordeaux">{hoofd.naam}</h3>
+          <p class="mt-2 max-w-[52ch]">{hoofd.omschrijving}</p>
+        </article>
+      )
+    }
+    {
+      overige.map((instrument) => (
+        <article class="rounded-sm border border-rule bg-paper p-6">
+          <h3 class="font-display text-[1.1rem] leading-snug font-semibold text-ink">
+            {instrument.naam}
+          </h3>
+          <p class="mt-2 text-klein text-ink-soft">{instrument.omschrijving}</p>
+        </article>
+      ))
+    }
+  </div>
+
+  <h3 class="mt-10 font-display text-subkop font-semibold text-ink">{lessen.doelgroepLabel}</h3>
+  <p class="mt-2 max-w-[62ch]">{lessen.doelgroepTekst}</p>
+  <ul class="mt-4 flex flex-wrap gap-2" aria-label="Doelgroepen">
+    {
+      doelgroepen.map((groep) => (
+        <li class="rounded-full border border-border-strong px-4 py-1 text-klein capitalize">
+          {groep}
+        </li>
+      ))
+    }
+  </ul>
+</Sectie>
