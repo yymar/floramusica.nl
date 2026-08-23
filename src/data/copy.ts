@@ -24,7 +24,7 @@ export const over = {
     // en hier als extra alinea's toevoegen. Regel: lege of ontbrekende content wordt
     // weggelaten, nooit als placeholder getoond.
   ],
-  fotoAlt: 'Portret van de docent met haar klarinet', // TODO: echte foto + alt-tekst
+  fotoAlt: 'Christa met haar klarinet aan de piano in de lespraktijk',
 };
 
 export const lessen = {
@@ -112,4 +112,8 @@ export const nietGevonden = {
 export const footer = {
   kvkLabel: 'KvK',
   colofon: `© ${new Date().getFullYear()} Muziekpraktijk Flora Musica`,
+};
+
+export const galerij = {
+  kop: 'De praktijk in beeld',
 };

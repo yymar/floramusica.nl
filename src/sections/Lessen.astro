@@ -1,7 +1,9 @@
 ---
 /**
- * Lesaanbod: asymmetrisch grid met precies één cel per instrument.
- * Het hoofdinstrument (klarinet) krijgt de grote cel met bordeaux rand.
+ * Lesaanbod als programma: het hoofdinstrument (klarinet) opent groot met
+ * een bordeaux regel erboven, de overige instrumenten volgen als rustige
+ * lijst op hairlines — dezelfde taal als de organisatielijst bij Locatie.
+ * Geen kaartjes; het programmaboekje zet zijn repertoire onder elkaar.
  */
 import Sectie from '../components/Sectie.astro';
 import { instrumenten, doelgroepen } from '../data/instrumenten';
@@ -14,22 +16,23 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
 <Sectie id="lessen" label="Lessen" kop={lessen.kop} tint>
   <p class="max-w-[62ch]">{lessen.intro}</p>
 
-  <div class="mt-8 grid gap-4 sm:grid-cols-2">
-    {
-      hoofd && (
-        <article class="rounded-sm border-2 border-bordeaux bg-paper p-6 sm:col-span-2 sm:p-8">
-          <h3 class="font-display text-subkop font-semibold text-bordeaux">{hoofd.naam}</h3>
-          <p class="mt-2 max-w-[52ch]">{hoofd.omschrijving}</p>
-        </article>
-      )
-    }
+  {
+    hoofd && (
+      <article class="mt-10 border-t-2 border-bordeaux pt-5">
+        <h3 class="font-display text-subkop font-semibold text-bordeaux">{hoofd.naam}</h3>
+        <p class="mt-2 max-w-[52ch]">{hoofd.omschrijving}</p>
+      </article>
+    )
+  }
+
+  <div class="mt-8 grid gap-x-10 sm:grid-cols-2">
     {
       overige.map((instrument) => (
-        <article class="rounded-sm border border-rule bg-paper p-6">
+        <article class="border-t border-rule py-4">
           <h3 class="font-display text-[1.1rem] leading-snug font-semibold text-ink">
             {instrument.naam}
           </h3>
-          <p class="mt-2 text-klein text-ink-soft">{instrument.omschrijving}</p>
+          <p class="mt-1 text-klein text-ink-soft">{instrument.omschrijving}</p>
         </article>
       ))
     }
@@ -37,13 +40,12 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
 
   <h3 class="mt-10 font-display text-subkop font-semibold text-ink">{lessen.doelgroepLabel}</h3>
   <p class="mt-2 max-w-[62ch]">{lessen.doelgroepTekst}</p>
-  <ul class="mt-4 flex flex-wrap gap-2" aria-label="Doelgroepen">
-    {
-      doelgroepen.map((groep) => (
-        <li class="rounded-full border border-border-strong px-4 py-1 text-klein capitalize">
-          {groep}
-        </li>
-      ))
-    }
-  </ul>
+  <p class="mt-3 text-klein text-ink-soft" aria-label="Doelgroepen">
+    {doelgroepen.map((groep, i) => (
+      <>
+        <span class="capitalize">{groep}</span>
+        {i < doelgroepen.length - 1 && <span aria-hidden="true"> · </span>}
+      </>
+    ))}
+  </p>
 </Sectie>

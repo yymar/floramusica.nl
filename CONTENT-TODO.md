@@ -23,8 +23,11 @@ Alles wat nog aangeleverd moet worden. Elke regel verwijst naar de plek in de co
 
 ## Beeld (fase 2)
 
-- [ ] **Definitieve portretfoto** voor de hero, staand ± 4:5 (tijdelijke vierkante zwart-witfoto staat in `src/assets/portret-christa.jpg`) · `src/sections/Hero.astro`
-- [ ] **Foto uit de lespraktijk**, ± 3:4 · `src/sections/Over.astro`
+- [x] **Definitieve portretfoto** voor de hero (professionele serie, 4:5) · `src/assets/portret-christa.jpg`
+- [x] **Foto uit de lespraktijk** (Christa aan de piano, 3:4) · `src/assets/lespraktijk.jpg`
+- [x] **Galerij**: acht foto's als editoriale spread · `src/data/fotos.ts`, `src/sections/Galerij.astro`
+- [ ] **Toestemming portretrecht** checken voor galerijfoto's met herkenbare personen: het klarinetensemble (№ 5), het optreden (№ 6) en het briefje met de voornaam van een leerling (№ 3, "Luna") · `src/data/fotos.ts`
+- [ ] **Bijschriften galerij** aanvullen of corrigeren (nu alleen № 3 en № 5) · `src/data/fotos.ts`
 - [x] **Logo / wordmark**: het fm-merk (forte-f + mezzo-m uit Bravura) staat in `Wordmark.astro`
 - [x] **Favicon**: forte-f op bordeaux tegel in `public/favicon.svg`
 - [x] **Open Graph-afbeelding**: `public/og.png` met de fm-wordmark

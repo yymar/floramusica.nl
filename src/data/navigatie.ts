@@ -7,6 +7,7 @@ export interface NavItem {
 
 export const navigatie: NavItem[] = [
   { label: 'Over', anker: '#over' },
+  { label: 'Beelden', anker: '#beelden' },
   { label: 'Lessen', anker: '#lessen' },
   { label: 'Locatie', anker: '#locatie' },
   { label: 'Praktisch', anker: '#praktisch' },

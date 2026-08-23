@@ -164,3 +164,49 @@
 /* Partituurregel en slotbalk */
 .fm-partituurregel { display: block; width: 100%; pointer-events: none; color: var(--fm-bordeaux); }
 .fm-notenbalkslot { display: block; width: 100%; color: var(--fm-bordeaux); }
+
+/* Galerij: de editoriale spread. Rijenritme breed / staand / paar, elke
+   cyclus gespiegeld; op mobiel een kolom met wisselende inspringing. */
+.fm-galerij { display: grid; row-gap: clamp(2rem, 5vw, 3.5rem); }
+.fm-galerij__plaat { margin: 0; }
+.fm-galerij__plaat img { width: 100%; height: auto; object-fit: cover; border-radius: 2px; }
+.fm-galerij__rij--breed .fm-galerij__plaat img { aspect-ratio: 3 / 2; }
+.fm-galerij__rij--staand .fm-galerij__plaat img,
+.fm-galerij__rij--paar .fm-galerij__plaat img { aspect-ratio: 4 / 5; }
+.fm-galerij__onderschrift {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: var(--fm-text-klein);
+}
+.fm-galerij__nummer { font-family: var(--fm-font-display); font-weight: 600; color: var(--fm-bordeaux); }
+.fm-galerij__tekst { font-style: italic; color: var(--fm-ink-soft); }
+.fm-galerij__rij--staand .fm-galerij__plaat { width: 86%; margin-inline-start: auto; }
+.fm-galerij__rij--paar { display: grid; row-gap: 2rem; }
+.fm-galerij__rij--paar .fm-galerij__plaat:nth-child(2) { width: 86%; }
+@media (min-width: 40rem) {
+  .fm-galerij__rij { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: clamp(0.75rem, 2vw, 1.25rem); }
+  .fm-galerij__rij--breed .fm-galerij__plaat { grid-column: 1 / 10; }
+  .fm-galerij__rij--breed.fm-galerij__rij--spiegel .fm-galerij__plaat { grid-column: 4 / 13; }
+  .fm-galerij__rij--staand .fm-galerij__plaat { grid-column: 7 / 12; width: auto; margin-inline-start: 0; }
+  .fm-galerij__rij--staand.fm-galerij__rij--spiegel .fm-galerij__plaat { grid-column: 2 / 7; }
+  .fm-galerij__rij--paar { row-gap: 0; }
+  .fm-galerij__rij--paar .fm-galerij__plaat:nth-child(1) { grid-column: 1 / 7; }
+  .fm-galerij__rij--paar .fm-galerij__plaat:nth-child(2) { grid-column: 8 / 13; width: auto; margin-top: clamp(1.5rem, 4vw, 3rem); }
+  .fm-galerij__rij--paar.fm-galerij__rij--spiegel .fm-galerij__plaat:nth-child(1) { grid-column: 1 / 6; margin-top: clamp(1.5rem, 4vw, 3rem); }
+  .fm-galerij__rij--paar.fm-galerij__rij--spiegel .fm-galerij__plaat:nth-child(2) { grid-column: 7 / 13; margin-top: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .fm-galerij__plaat {
+      animation: fm-plaat-op linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 45%;
+    }
+  }
+}
+@keyframes fm-plaat-op {
+  from { opacity: 0.25; transform: translateY(0.75rem); }
+  to { opacity: 1; transform: none; }
+}

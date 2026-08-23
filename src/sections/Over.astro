@@ -2,6 +2,7 @@
 import Sectie from '../components/Sectie.astro';
 import Figuur from '../components/Figuur.astro';
 import { over } from '../data/copy';
+import lespraktijk from '../assets/lespraktijk.jpg';
 ---
 
 <Sectie id="over" label="Over" kop={over.kop}>
@@ -10,10 +11,10 @@ import { over } from '../data/copy';
       {over.alineas.map((alinea) => <p>{alinea}</p>)}
     </div>
     <Figuur
+      src={lespraktijk}
       alt={over.fotoAlt}
-      breedte={3}
-      hoogte={4}
-      todo="Foto uit de lespraktijk volgt"
+      breedte={600}
+      hoogte={800}
       class="max-w-[16rem] sm:max-w-none"
     />
   </div>

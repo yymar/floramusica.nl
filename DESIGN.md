@@ -71,12 +71,16 @@ Lege of nog niet aangeleverde gegevens worden weggelaten, nooit als zichtbare pl
 
 `public/og.png` (1200×630): bordeaux kaart met "Flora Musica" in Bricolage, ondertitel in Atkinson en de notenbalk onderaan; gekoppeld via og:image en twitter:card summary_large_image. Opnieuw genereren kan met canvas op de site zelf (fonts staan daar al klaar).
 
-## Beeld (fase 2)
+## Beeld
 
-Slots staan klaar in `Figuur.astro` (placeholder zolang er geen foto is, Astro `<Image>` zodra die er wel is):
+De foto's zijn aangeleverd (professionele serie plus praktijk-archief) en staan verkleind in `src/assets/`. `Figuur.astro` rendert Astro's `<Image>`; zonder `src` valt hij terug op een rustig placeholder-vlak.
 
-1. Hero: staand portret ± 4:5, bij voorkeur met klarinet.
-2. Over: foto uit de lespraktijk, ± 3:4.
+1. Hero: staand portret 4:5 met klarinet (`portret-christa.jpg`).
+2. Over: Christa aan de piano, 3:4 (`lespraktijk.jpg`).
+
+## De galerij: een editoriale spread
+
+`src/sections/Galerij.astro` toont de foto's uit `src/data/fotos.ts` niet als fotomodule maar als pagina's uit het programmaboekje: een herhalend ritme van drie rijen (breed liggend 3:2 · staand 4:5 rechts naast witruimte · een paar 4:5 naast elkaar, de tweede iets verlaagd), elke cyclus gespiegeld. Vanaf het marge-grid claimt de spread de labelmarge terug en krijgt zo de volle boekbreedte. Bijschriften zijn plaatnummers ("№ 3", Bricolage, bordeaux) met optioneel een cursieve regel in Atkinson; er is bewust geen lightbox (de platen staan groot genoeg op de pagina, en CSS-only lightboxes breken terugknop of focus). Nul JavaScript; de enige beweging is een CSS scroll-reveal achter `@supports (animation-timeline: view())` en `prefers-reduced-motion: no-preference`. Op mobiel klapt alles naar één kolom met een licht wisselende inspringing. De sectie verdwijnt vanzelf als `fotos` leeg is.
 
 ## Beeldmerk: fm
 

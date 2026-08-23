@@ -190,3 +190,64 @@ export function Veld({ label, fout, id, ...rest }: {
     </span>
   );
 }
+
+/** Eén foto in de galerij-spread. */
+export interface GalerijFoto {
+  /** URL van de foto; weglaten rendert een rustig placeholder-slot. */
+  src?: string;
+  alt: string;
+  /** Kort bijschrift; weglaten toont alleen het plaatnummer. */
+  onderschrift?: string;
+}
+
+/**
+ * De galerij als editoriale spread: geen fotomodule maar pagina's uit het
+ * programmaboekje. Herhalend ritme van drie rijen — breed liggend (3:2),
+ * staand (4:5) rechts naast witruimte, een paar naast elkaar met de tweede
+ * iets verlaagd — en elke cyclus spiegelt. Bijschriften zijn plaatnummers
+ * ("№ 3", bordeaux) met optioneel een cursieve regel. Bewust geen lightbox.
+ */
+export function Galerij({ fotos }: { fotos: GalerijFoto[] }) {
+  type RijType = 'breed' | 'staand' | 'paar';
+  const ritme: RijType[] = ['breed', 'staand', 'paar'];
+  const rijen: { type: RijType; spiegel: boolean; fotos: { nummer: number; foto: GalerijFoto }[] }[] = [];
+  let index = 0;
+  let stap = 0;
+  while (index < fotos.length) {
+    const type = ritme[stap % 3];
+    const aantal = type === 'paar' ? 2 : 1;
+    rijen.push({
+      type,
+      spiegel: Math.floor(stap / 3) % 2 === 1,
+      fotos: fotos.slice(index, index + aantal).map((foto, j) => ({ nummer: index + j + 1, foto })),
+    });
+    index += aantal;
+    stap += 1;
+  }
+  if (rijen.length === 0) return null;
+  return (
+    <div className="fm-galerij">
+      {rijen.map((rij, r) => (
+        <div
+          key={r}
+          className={`fm-galerij__rij fm-galerij__rij--${rij.type}${rij.spiegel ? ' fm-galerij__rij--spiegel' : ''}`}
+        >
+          {rij.fotos.map(({ nummer, foto }) => (
+            <figure key={nummer} className="fm-galerij__plaat">
+              <Figuur
+                src={foto.src}
+                alt={foto.alt}
+                breedte={rij.type === 'breed' ? 3 : 4}
+                hoogte={rij.type === 'breed' ? 2 : 5}
+              />
+              <figcaption className="fm-galerij__onderschrift">
+                <span className="fm-galerij__nummer">№ {nummer}</span>
+                {foto.onderschrift && <span className="fm-galerij__tekst">{foto.onderschrift}</span>}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}

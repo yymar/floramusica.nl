@@ -35,7 +35,7 @@
   --text-klein--line-height: 1.55;
 
   /* Spacing op 4px-basis; secties ademen ruim */
-  --spacing-sectie: clamp(4rem, 2.5rem + 6vw, 8rem);
+  --spacing-sectie: clamp(3.5rem, 2.25rem + 4.5vw, 6.5rem);
 }
 
 /* Fonts zijn zelf-gehost via @fontsource; imports staan in Basis.astro. */
@@ -64,6 +64,15 @@ body {
   font-size: var(--text-basis);
   line-height: var(--text-basis--line-height);
   -webkit-font-smoothing: antialiased;
+  /* Ook de browserdelen dragen het ontwerp: invoegteken en native
+     formulierelementen (radio's, vinkjes) kleuren bordeaux mee. */
+  caret-color: var(--color-bordeaux);
+  accent-color: var(--color-bordeaux);
+}
+
+/* Koppen breken gebalanceerd, niet met een los woord op de laatste regel. */
+h1, h2, h3 {
+  text-wrap: balance;
 }
 
 ::selection {

@@ -1,0 +1,178 @@
+---
+/**
+ * De galerij als editoriale spread: geen fotomodule maar pagina's uit het
+ * programmaboekje. Een herhalend ritme van drie rijen — breed liggend,
+ * staand rechts naast witruimte, een paar naast elkaar — met plaatnummers
+ * als bijschrift, zoals platen in een gedrukt programma.
+ *
+ * De rijen worden in de frontmatter uit src/data/fotos.ts opgebouwd; elke
+ * cyclus spiegelt, zodat een langere reeks niet mechanisch oogt. Nul
+ * JavaScript; de scroll-reveal is CSS-only en alleen actief waar
+ * ondersteund én zonder reduced-motion.
+ */
+import Sectie from '../components/Sectie.astro';
+import Figuur from '../components/Figuur.astro';
+import { fotos } from '../data/fotos';
+import { galerij } from '../data/copy';
+
+type Rij = { type: 'breed' | 'staand' | 'paar'; spiegel: boolean; fotos: { nummer: number; foto: (typeof fotos)[number] }[] };
+
+const ritme = ['breed', 'staand', 'paar'] as const;
+const rijen: Rij[] = [];
+let index = 0;
+let stap = 0;
+while (index < fotos.length) {
+  const type = ritme[stap % 3];
+  const aantal = type === 'paar' ? 2 : 1;
+  rijen.push({
+    type,
+    spiegel: Math.floor(stap / 3) % 2 === 1,
+    fotos: fotos.slice(index, index + aantal).map((foto, j) => ({ nummer: index + j + 1, foto })),
+  });
+  index += aantal;
+  stap += 1;
+}
+
+/** Verhoudingen per slot: breed liggend 3:2, staand 4:5. */
+const maat = (type: Rij['type']) => (type === 'breed' ? { b: 3, h: 2 } : { b: 4, h: 5 });
+---
+
+{
+  fotos.length > 0 && (
+    <Sectie id="beelden" label="Beelden" kop={galerij.kop}>
+      <div class="spread">
+        {rijen.map((rij) => (
+          <div class:list={['rij', `rij-${rij.type}`, rij.spiegel && 'spiegel']}>
+            {rij.fotos.map(({ nummer, foto }) => (
+              <figure>
+                <Figuur
+                  src={foto.src}
+                  alt={foto.alt}
+                  breedte={foto.src?.width ?? maat(rij.type).b}
+                  hoogte={foto.src?.height ?? maat(rij.type).h}
+                  class:list={[
+                    'foto',
+                    rij.type === 'breed' ? 'aspect-[3/2]' : 'aspect-[4/5]',
+                  ]}
+                />
+                <figcaption class="mt-2 flex items-baseline gap-3 text-klein">
+                  <span class="nummer font-display font-semibold text-bordeaux">№ {nummer}</span>
+                  {foto.onderschrift && <span class="text-ink-soft italic">{foto.onderschrift}</span>}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        ))}
+      </div>
+    </Sectie>
+  )
+}
+
+<style>
+  .spread {
+    display: grid;
+    row-gap: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  /* De spread is een volle pagina uit het boekje: vanaf het marge-grid
+     van Sectie (md) claimt hij de labelmarge terug, zodat de platen de
+     volledige boekbreedte krijgen in plaats van de smalle tekstkolom. */
+  @media (min-width: 48rem) {
+    .spread {
+      margin-inline-start: -12.5rem;
+    }
+  }
+  @media (min-width: 64rem) {
+    .spread {
+      margin-inline-start: -14.5rem;
+    }
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  figure :global(.foto) {
+    height: auto;
+    object-fit: cover;
+  }
+
+  /* Mobiel: één kolom met een licht wisselende inspringing, zodat het
+     ritme van de spread voelbaar blijft. */
+  .rij-staand figure {
+    width: 86%;
+    margin-inline-start: auto;
+  }
+  .rij-paar {
+    display: grid;
+    row-gap: 2rem;
+  }
+  .rij-paar figure:nth-child(2) {
+    width: 86%;
+  }
+
+  /* Vanaf sm: het 12-koloms spread-grid van het programmaboekje. */
+  @media (min-width: 40rem) {
+    .rij {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      column-gap: clamp(0.75rem, 2vw, 1.25rem);
+    }
+    .rij-breed figure {
+      grid-column: 1 / 10;
+    }
+    .rij-breed.spiegel figure {
+      grid-column: 4 / 13;
+    }
+    .rij-staand figure {
+      grid-column: 7 / 12;
+      width: auto;
+      margin-inline-start: 0;
+    }
+    .rij-staand.spiegel figure {
+      grid-column: 2 / 7;
+    }
+    .rij-paar {
+      row-gap: 0;
+    }
+    .rij-paar figure:nth-child(1) {
+      grid-column: 1 / 7;
+    }
+    .rij-paar figure:nth-child(2) {
+      grid-column: 8 / 13;
+      width: auto;
+      margin-top: clamp(1.5rem, 4vw, 3rem);
+    }
+    .rij-paar.spiegel figure:nth-child(1) {
+      grid-column: 1 / 6;
+      margin-top: clamp(1.5rem, 4vw, 3rem);
+    }
+    .rij-paar.spiegel figure:nth-child(2) {
+      grid-column: 7 / 13;
+      margin-top: 0;
+    }
+  }
+
+  /* Eén geregisseerd moment: platen komen rustig op terwijl je er langs
+     scrolt. Alleen waar scroll-driven animaties bestaan en de bezoeker
+     geen reduced-motion heeft; anders staan ze er gewoon. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      figure {
+        animation: plaat-op linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 45%;
+      }
+    }
+  }
+  @keyframes plaat-op {
+    from {
+      opacity: 0.25;
+      transform: translateY(0.75rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
