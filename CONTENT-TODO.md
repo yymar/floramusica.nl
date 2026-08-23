@@ -28,6 +28,7 @@ Alles wat nog aangeleverd moet worden. Elke regel verwijst naar de plek in de co
 - [x] **Galerij**: acht foto's als editoriale spread · `src/data/fotos.ts`, `src/sections/Galerij.astro`
 - [ ] **Toestemming portretrecht** checken voor galerijfoto's met herkenbare personen: het klarinetensemble (№ 5), het optreden (№ 6) en het briefje met de voornaam van een leerling (№ 3, "Luna") · `src/data/fotos.ts`
 - [ ] **Bijschriften galerij** aanvullen of corrigeren (nu alleen № 3 en № 5) · `src/data/fotos.ts`
+- [ ] **Citaat voor de galerij** (optioneel): een kort tekstfragment voor een bordeaux cel in het grid, zodat het niet mechanisch voelt · `src/sections/Galerij.astro`
 - [x] **Logo / wordmark**: het fm-merk (forte-f + mezzo-m uit Bravura) staat in `Wordmark.astro`
 - [x] **Favicon**: forte-f op bordeaux tegel in `public/favicon.svg`
 - [x] **Open Graph-afbeelding**: `public/og.png` met de fm-wordmark

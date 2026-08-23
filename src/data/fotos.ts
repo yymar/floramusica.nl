@@ -29,43 +29,57 @@ export interface GalerijFoto {
   src?: ImageMetadata;
   /** Beschrijving voor screenreaders en het placeholder-slot. */
   alt: string;
-  /** Kort bijschrift onder de foto; weglaten toont alleen het plaatnummer. */
+  /** Kort bijschrift; zichtbaar als overlay bij hover/focus en in de lightbox. */
   onderschrift?: string;
+  /**
+   * Formaat in het quilted grid: 'groot' is het anker (2×2), 'middel'
+   * volgt de oriëntatie van de foto (staand 1×2, liggend 2×1),
+   * 'klein' is 1×1. Het grid pakt zichzelf dicht (dense).
+   */
+  formaat: 'groot' | 'middel' | 'klein';
 }
 
 export const fotos: GalerijFoto[] = [
   {
     src: klarinetPiano,
+    formaat: 'groot',
     alt: 'Klarinet in close-up, liggend op de vleugel',
   },
   {
     src: christaBank,
+    formaat: 'middel',
     alt: 'Christa ten Berg zit lachend op de bank met haar klarinet op schoot',
   },
   {
     src: liedjeLeerling,
+    formaat: 'klein',
     alt: 'Handgeschreven briefje van een leerling, met een zelfbedacht liedje op een eigen notenbalk',
     onderschrift: 'Een eigen liedje van een leerling',
   },
   {
     src: klarinetSneeuw,
+    formaat: 'middel',
     alt: 'Klarinet rechtop voor een besneeuwde deur',
   },
   {
     src: klarinetensemble,
+    formaat: 'middel',
     alt: 'Klarinetensemble tijdens een optreden op een buitenpodium',
     onderschrift: 'Het klarinetensemble op het podium',
   },
   {
     src: optreden,
+    formaat: 'klein',
     alt: 'Optreden met klarinet',
   },
   {
     src: cdStapel,
+    formaat: 'klein',
     alt: 'Stapel cd\u2019s met een koptelefoon erbovenop',
   },
   {
     src: roosBladmuziek,
+    formaat: 'klein',
     alt: 'Witte roos op bladmuziek naast een klarinet, in zwart-wit',
   },
 ];

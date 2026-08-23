@@ -64,7 +64,7 @@ Typeschaal met `clamp()`, ratio ±1,25: `--text-omslag` (tot 5.5rem, alleen de h
 Beweging is een ontwerpbeslissing; de pagina kent drie geregisseerde momenten en verder niets. Alles is compositor-vriendelijk (alleen `transform`/`opacity`), CSS-only via scroll-driven animations achter `@supports (animation-timeline: view())`, en `prefers-reduced-motion: reduce` schakelt alles uit — content staat er dan gewoon, volledig zichtbaar. Geen animatiebibliotheken, geen scroll-listeners.
 
 1. **Parallax op de omslag** (`Hero.astro`): twee lagen die achterlopen op de scroll terwijl de omslag het beeld uit schuift — de partituurregel 3.5rem, het portret 1.25rem (~10% van de scrollafstand). Lineair aan de scroll gekoppeld (`animation-range: exit`), dus geen eigen duur of easing: de vinger van de bezoeker is de easing.
-2. **Platen-reveal in de galerij** (`Galerij.astro`): opacity 0.25→1 plus 12px translate over de eerste 45% van de entry. Bewust niet herhaald op andere secties; één moment, geen entree-parade.
+2. **Cel-reveal in de galerij** (`Galerij.astro`): opacity 0.25→1 plus 12px translate per cel, met een kleine stagger via verschoven `animation-range` per nth-child. Bewust niet herhaald op andere secties; één moment, geen entree-parade. Daarnaast een heel lichte hover-scale (1.02) van het beeld binnen de cel.
 3. **Lightbox-open** (`Galerij.astro`): 240ms `cubic-bezier(0.2, 0, 0, 1)` (uitgesproken uitloop), opacity plus 8px translate.
 
 Micro-interacties (hover op knoppen, links en formulier­velden) zijn kleurwissels via `transition-colors`, circa 150ms, binnen het bordeaux-palet.

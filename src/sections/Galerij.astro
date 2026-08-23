@@ -1,108 +1,102 @@
 ---
 /**
- * De galerij als editoriale spread: geen fotomodule maar pagina's uit het
- * programmaboekje. Een herhalend ritme van drie rijen — breed liggend,
- * staand rechts naast witruimte, een paar naast elkaar — met plaatnummers
- * als bijschrift, zoals platen in een gedrukt programma.
+ * De galerij als quilted/editorial grid: een gecureerde spread, geen
+ * fotorol. CSS Grid met dense flow; per foto bepaalt `formaat` uit de
+ * data-file de cel (groot 2×2, middel 1×2 of 2×1 naar oriëntatie,
+ * klein 1×1). Mobiel 2 kolommen, vanaf 48rem 4. Bijschriften liggen als
+ * subtiele overlay op hover/focus en staan altijd in de lightbox.
  *
- * De rijen worden in de frontmatter uit src/data/fotos.ts opgebouwd; elke
- * cyclus spiegelt, zodat een langere reeks niet mechanisch oogt.
- *
- * Lightbox: klik of Enter opent het native <dialog>-element met een groot
- * beeld en het bijschrift; vorige/volgende via knoppen, pijltjestoetsen en
- * swipe, sluiten met Esc of de knop, focus keert terug naar de aangeklikte
- * plaat. Zonder JavaScript linkt elke plaat gewoon naar het beeldbestand.
+ * Lightbox: native <dialog>. Bladeren zonder lag: buren (n−1, n+1)
+ * worden voorgeladen, bij een wissel staat direct de thumbnail (al in
+ * cache) licht geblurd klaar en pas na `img.decode()` cross-fadet de
+ * hoge resolutie erin. Eigen srcset (800/1600 webp), teller, spinner na
+ * 400ms, Nederlandse foutmelding met opnieuw-knop. Zonder JavaScript
+ * linkt elke cel gewoon naar het beeldbestand.
  */
 import { getImage } from 'astro:assets';
+import { Image } from 'astro:assets';
 import Sectie from '../components/Sectie.astro';
-import Figuur from '../components/Figuur.astro';
 import { fotos } from '../data/fotos';
 import { galerij } from '../data/copy';
 
-type Rij = {
-  type: 'breed' | 'staand' | 'paar';
-  spiegel: boolean;
-  fotos: { nummer: number; foto: (typeof fotos)[number]; groot?: string }[];
+type Cel = {
+  foto: (typeof fotos)[number];
+  nummer: number;
+  span: 'groot' | 'staand' | 'liggend' | 'klein';
+  thumb?: string;
+  srcset?: string;
+  groot?: string;
 };
 
-// Grote varianten voor de lightbox (webp, 1600px breed).
-const groten = await Promise.all(
-  fotos.map((foto) => (foto.src ? getImage({ src: foto.src, width: 1600, format: 'webp' }) : null))
+// Lightbox-varianten: eigen srcset (max 1600px, webp) plus een kleine
+// thumb voor de instant blur-up.
+const cellen: Cel[] = await Promise.all(
+  fotos.map(async (foto, i): Promise<Cel> => {
+    const liggend = (foto.src?.width ?? 0) > (foto.src?.height ?? 1);
+    const span =
+      foto.formaat === 'groot' ? 'groot' : foto.formaat === 'middel' ? (liggend ? 'liggend' : 'staand') : 'klein';
+    if (!foto.src) return { foto, nummer: i + 1, span };
+    const [klein, middel, groot] = await Promise.all([
+      getImage({ src: foto.src, width: 400, format: 'webp' }),
+      getImage({ src: foto.src, width: 800, format: 'webp' }),
+      getImage({ src: foto.src, width: 1600, format: 'webp' }),
+    ]);
+    return {
+      foto,
+      nummer: i + 1,
+      span,
+      thumb: klein.src,
+      srcset: `${middel.src} 800w, ${groot.src} 1600w`,
+      groot: groot.src,
+    };
+  })
 );
-
-const ritme = ['breed', 'staand', 'paar'] as const;
-const rijen: Rij[] = [];
-let index = 0;
-let stap = 0;
-while (index < fotos.length) {
-  const type = ritme[stap % 3];
-  const aantal = type === 'paar' ? 2 : 1;
-  rijen.push({
-    type,
-    spiegel: Math.floor(stap / 3) % 2 === 1,
-    fotos: fotos
-      .slice(index, index + aantal)
-      .map((foto, j) => ({ nummer: index + j + 1, foto, groot: groten[index + j]?.src })),
-  });
-  index += aantal;
-  stap += 1;
-}
-
-/** Verhoudingen per slot: breed liggend 3:2, staand 4:5. */
-const maat = (type: Rij['type']) => (type === 'breed' ? { b: 3, h: 2 } : { b: 4, h: 5 });
 ---
 
 {
   fotos.length > 0 && (
     <Sectie id="beelden" label="Beelden" kop={galerij.kop}>
-      <div class="spread" id="galerij-spread">
-        {rijen.map((rij) => (
-          <div class:list={['rij', `rij-${rij.type}`, rij.spiegel && 'spiegel']}>
-            {rij.fotos.map(({ nummer, foto, groot }) => (
-              <figure>
-                {groot ? (
-                  <a
-                    class="plaat-link block rounded-sm"
-                    href={groot}
-                    data-groot={groot}
-                    data-alt={foto.alt}
-                    data-onderschrift={foto.onderschrift ?? ''}
-                    data-nummer={nummer}
-                    aria-label={`Bekijk foto ${nummer} groot: ${foto.alt}`}
-                  >
-                    <Figuur
-                      src={foto.src}
-                      alt={foto.alt}
-                      breedte={foto.src?.width ?? maat(rij.type).b}
-                      hoogte={foto.src?.height ?? maat(rij.type).h}
-                      class:list={['foto', rij.type === 'breed' ? 'aspect-[3/2]' : 'aspect-[4/5]']}
-                    />
-                  </a>
-                ) : (
-                  <Figuur
-                    src={foto.src}
-                    alt={foto.alt}
-                    breedte={maat(rij.type).b}
-                    hoogte={maat(rij.type).h}
-                    class:list={['foto', rij.type === 'breed' ? 'aspect-[3/2]' : 'aspect-[4/5]']}
-                  />
-                )}
-                <figcaption class="mt-2 flex items-baseline gap-3 text-klein">
-                  <span class="nummer font-display font-semibold text-bordeaux">№ {nummer}</span>
-                  {foto.onderschrift && <span class="text-ink-soft italic">{foto.onderschrift}</span>}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
+      <div class="grid-quilt" id="galerij-grid">
+        {cellen.map(({ foto, nummer, span, thumb, srcset, groot }) => (
+          <figure class:list={['cel', `cel-${span}`]}>
+            {foto.src && srcset ? (
+              <a
+                class="cel-link"
+                href={groot}
+                data-srcset={srcset}
+                data-thumb={thumb}
+                data-alt={foto.alt}
+                data-onderschrift={foto.onderschrift ?? ''}
+                data-nummer={nummer}
+                aria-label={`Bekijk foto ${nummer} groot: ${foto.alt}`}
+              >
+                <Image src={foto.src} alt={foto.alt} width={800} height={Math.round((800 / foto.src.width) * foto.src.height)} loading="lazy" class="cel-beeld" />
+                {foto.onderschrift && <span class="cel-overlay" aria-hidden="true">{foto.onderschrift}</span>}
+              </a>
+            ) : (
+              <div class="cel-leeg" role="img" aria-label={foto.alt}>
+                <p class="m-0 max-w-[24ch] text-klein text-ink-soft">Foto volgt</p>
+              </div>
+            )}
+          </figure>
         ))}
       </div>
 
       <dialog id="galerij-dialoog" class="dialoog" aria-label="Fotoweergave">
-        <figure class="m-0">
-          <img id="dialoog-beeld" alt="" />
+        <figure class="dialoog-figuur m-0">
+          <div class="dialoog-doek">
+            <img id="dialoog-thumb" alt="" aria-hidden="true" />
+            <img id="dialoog-beeld" alt="" sizes="92vw" />
+            <div id="dialoog-spinner" class="dialoog-spinner" hidden aria-hidden="true" />
+          </div>
+          <p id="dialoog-fout" class="dialoog-fout" hidden>
+            De foto kon niet laden.
+            <button type="button" class="underline underline-offset-2" data-actie="opnieuw">Probeer opnieuw</button>
+          </p>
           <figcaption class="mt-3 flex items-baseline gap-3 text-klein text-paper-dim">
             <span id="dialoog-nummer" class="font-display font-semibold text-paper" />
             <span id="dialoog-tekst" class="italic" />
+            <span id="dialoog-teller" class="ms-auto tabular-nums" />
           </figcaption>
         </figure>
         <button type="button" class="dialoog-knop dialoog-sluit" data-actie="sluit" aria-label="Sluiten">
@@ -126,34 +120,88 @@ const maat = (type: Rij['type']) => (type === 'breed' ? { b: 3, h: 2 } : { b: 4,
 }
 
 <script>
-  // Lightbox als progressive enhancement: zonder JS linken de platen naar
-  // het beeldbestand; met JS opent het native <dialog>-element.
+  // Lightbox als progressive enhancement; zie de component-docstring.
   const dialoog = document.getElementById('galerij-dialoog') as HTMLDialogElement | null;
-  const spread = document.getElementById('galerij-spread');
+  const grid = document.getElementById('galerij-grid');
 
-  if (dialoog && spread && typeof dialoog.showModal === 'function') {
-    const links = Array.from(spread.querySelectorAll<HTMLAnchorElement>('.plaat-link'));
+  if (dialoog && grid && typeof dialoog.showModal === 'function') {
+    const links = Array.from(grid.querySelectorAll<HTMLAnchorElement>('.cel-link'));
     const beeld = document.getElementById('dialoog-beeld') as HTMLImageElement;
+    const thumb = document.getElementById('dialoog-thumb') as HTMLImageElement;
+    const spinner = document.getElementById('dialoog-spinner')!;
+    const fout = document.getElementById('dialoog-fout')!;
     const nummerEl = document.getElementById('dialoog-nummer')!;
     const tekstEl = document.getElementById('dialoog-tekst')!;
+    const tellerEl = document.getElementById('dialoog-teller')!;
     let huidig = 0;
+    let bezig = false;
     let herkomst: HTMLElement | null = null;
+    let wisselTeller = 0;
+    const voorgeladen = new Map<number, HTMLImageElement>();
 
-    const toon = (i: number) => {
+    const preload = (i: number) => {
+      const n = (i + links.length) % links.length;
+      if (voorgeladen.has(n)) return;
+      const im = new Image();
+      im.sizes = '92vw';
+      im.srcset = links[n].dataset.srcset ?? '';
+      voorgeladen.set(n, im);
+    };
+
+    const toon = async (i: number, richting = 0) => {
+      if (bezig) return; // dubbele inputs tijdens een wissel negeren
+      bezig = true;
+      const wissel = ++wisselTeller;
       huidig = (i + links.length) % links.length;
       const link = links[huidig];
-      beeld.src = link.dataset.groot ?? link.href;
-      beeld.alt = link.dataset.alt ?? '';
+
       nummerEl.textContent = `№ ${link.dataset.nummer}`;
       tekstEl.textContent = link.dataset.onderschrift ?? '';
+      tellerEl.textContent = `${huidig + 1} / ${links.length}`;
+      fout.hidden = true;
+
+      // Instant: de thumbnail (al in cache door het grid), licht geblurd.
+      thumb.src = link.dataset.thumb ?? '';
+      thumb.style.opacity = '1';
+      beeld.style.opacity = '0';
+      const beweegOk = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (richting !== 0 && beweegOk) {
+        beeld.parentElement!.animate(
+          [{ transform: `translateX(${richting * 16}px)`, opacity: 0.6 }, { transform: 'none', opacity: 1 }],
+          { duration: 180, easing: 'cubic-bezier(0.2, 0, 0, 1)' }
+        );
+      }
+
+      // Spinner alleen als het decoderen echt lang duurt.
+      const spinnerTimer = setTimeout(() => { spinner.hidden = false; }, 400);
+
+      beeld.alt = link.dataset.alt ?? '';
+      beeld.srcset = link.dataset.srcset ?? '';
+      try {
+        await beeld.decode();
+        if (wissel === wisselTeller) {
+          beeld.style.opacity = '1'; // cross-fade over de blur (150ms via CSS)
+          thumb.style.opacity = '0';
+        }
+      } catch {
+        if (wissel === wisselTeller) fout.hidden = false;
+      } finally {
+        clearTimeout(spinnerTimer);
+        spinner.hidden = true;
+        bezig = false;
+      }
+
+      // Buren voorladen; het venster schuift mee met de navigatie.
+      preload(huidig + 1);
+      preload(huidig - 1);
     };
 
     links.forEach((link, i) => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         herkomst = link;
-        toon(i);
         dialoog.showModal();
+        toon(i);
       });
     });
 
@@ -161,8 +209,9 @@ const maat = (type: Rij['type']) => (type === 'breed' ? { b: 3, h: 2 } : { b: 4,
       const doel = e.target as HTMLElement;
       const actie = doel.closest<HTMLElement>('[data-actie]')?.dataset.actie;
       if (actie === 'sluit') dialoog.close();
-      else if (actie === 'vorige') toon(huidig - 1);
-      else if (actie === 'volgende') toon(huidig + 1);
+      else if (actie === 'vorige') toon(huidig - 1, -1);
+      else if (actie === 'volgende') toon(huidig + 1, 1);
+      else if (actie === 'opnieuw') toon(huidig);
       // Klik op de achtergrond (het dialog-element zelf) sluit ook.
       else if (doel === dialoog) dialoog.close();
     });
@@ -170,11 +219,11 @@ const maat = (type: Rij['type']) => (type === 'breed' ? { b: 3, h: 2 } : { b: 4,
     dialoog.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
-        toon(huidig - 1);
+        toon(huidig - 1, -1);
       }
       if (e.key === 'ArrowRight') {
         e.preventDefault();
-        toon(huidig + 1);
+        toon(huidig + 1, 1);
       }
     });
 
@@ -186,11 +235,11 @@ const maat = (type: Rij['type']) => (type === 'breed' ? { b: 3, h: 2 } : { b: 4,
     dialoog.addEventListener('touchend', (e) => {
       if (beginX === null) return;
       const delta = e.changedTouches[0].clientX - beginX;
-      if (Math.abs(delta) > 40) toon(huidig + (delta < 0 ? 1 : -1));
+      if (Math.abs(delta) > 40) toon(huidig + (delta < 0 ? 1 : -1), delta < 0 ? 1 : -1);
       beginX = null;
     }, { passive: true });
 
-    // Focus keert terug naar de aangeklikte plaat.
+    // Focus keert terug naar de aangeklikte cel.
     dialoog.addEventListener('close', () => {
       herkomst?.focus();
     });
@@ -198,91 +247,127 @@ const maat = (type: Rij['type']) => (type === 'breed' ? { b: 3, h: 2 } : { b: 4,
 </script>
 
 <style>
-  .spread {
+  /* Quilted grid: dense flow, cellen krijgen hun maat via spans; het grid
+     zelf is de vormgeving — geen randen of schaduwen per foto. */
+  .grid-quilt {
     display: grid;
-    row-gap: clamp(2rem, 5vw, 3.5rem);
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: clamp(6.5rem, 22vw, 10rem);
+    grid-auto-flow: dense;
+    gap: 0.75rem;
   }
-
-  /* De spread is een volle pagina uit het boekje: vanaf het marge-grid
-     van Sectie (md) claimt hij de labelmarge terug, zodat de platen de
-     volledige boekbreedte krijgen in plaats van de smalle tekstkolom. */
   @media (min-width: 48rem) {
-    .spread {
+    .grid-quilt {
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: clamp(7rem, 11vw, 10.5rem);
+      gap: 1rem;
+    }
+    /* Vanaf het marge-grid van Sectie claimt het grid de labelmarge terug
+       voor volle boekbreedte. */
+    .grid-quilt {
       margin-inline-start: -12.5rem;
     }
   }
   @media (min-width: 64rem) {
-    .spread {
+    .grid-quilt {
       margin-inline-start: -14.5rem;
     }
   }
 
-  figure {
+  .cel {
     margin: 0;
+    overflow: hidden;
+    border-radius: 2px;
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+  .cel-groot {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .cel-staand {
+    grid-row: span 2;
+  }
+  .cel-liggend {
+    grid-column: span 2;
   }
 
-  figure :global(.foto) {
-    height: auto;
-    object-fit: cover;
-  }
-
-  .plaat-link {
+  .cel-link {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
     cursor: zoom-in;
   }
-
-  /* Mobiel: één kolom met een licht wisselende inspringing, zodat het
-     ritme van de spread voelbaar blijft. */
-  .rij-staand figure {
-    width: 86%;
-    margin-inline-start: auto;
+  .cel :global(.cel-beeld) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
-  .rij-paar {
+  .cel-leeg {
     display: grid;
-    row-gap: 2rem;
-  }
-  .rij-paar figure:nth-child(2) {
-    width: 86%;
+    place-items: center;
+    height: 100%;
+    background: var(--color-paper-deep);
+    border: 1px solid var(--color-rule);
+    border-radius: 2px;
+    text-align: center;
+    padding: 1rem;
   }
 
-  /* Vanaf sm: het 12-koloms spread-grid van het programmaboekje. */
-  @media (min-width: 40rem) {
-    .rij {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      column-gap: clamp(0.75rem, 2vw, 1.25rem);
+  /* Bijschrift als rustige overlay bij hover/focus. */
+  .cel-overlay {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    padding: 1.5rem 0.75rem 0.6rem;
+    font-size: var(--text-klein);
+    color: var(--color-paper);
+    background: linear-gradient(to top, rgb(35 26 28 / 0.65), transparent);
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+  }
+  .cel-link:hover .cel-overlay,
+  .cel-link:focus-visible .cel-overlay {
+    opacity: 1;
+  }
+
+  /* Micro-interactie: heel lichte scale binnen de cel. */
+  @media (prefers-reduced-motion: no-preference) {
+    .cel :global(.cel-beeld) {
+      transition: transform 350ms cubic-bezier(0.2, 0, 0, 1);
     }
-    .rij-breed figure {
-      grid-column: 1 / 10;
+    .cel-link:hover :global(.cel-beeld),
+    .cel-link:focus-visible :global(.cel-beeld) {
+      transform: scale(1.02);
     }
-    .rij-breed.spiegel figure {
-      grid-column: 4 / 13;
+  }
+
+  /* Reveal per cel met een kleine stagger; uit bij reduced-motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .cel {
+        animation: cel-op linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 40%;
+      }
+      .cel:nth-child(3n + 2) {
+        animation-range: entry 8% entry 48%;
+      }
+      .cel:nth-child(3n) {
+        animation-range: entry 16% entry 56%;
+      }
     }
-    .rij-staand figure {
-      grid-column: 7 / 12;
-      width: auto;
-      margin-inline-start: 0;
+  }
+  @keyframes cel-op {
+    from {
+      opacity: 0.25;
+      transform: translateY(0.75rem);
     }
-    .rij-staand.spiegel figure {
-      grid-column: 2 / 7;
-    }
-    .rij-paar {
-      row-gap: 0;
-    }
-    .rij-paar figure:nth-child(1) {
-      grid-column: 1 / 7;
-    }
-    .rij-paar figure:nth-child(2) {
-      grid-column: 8 / 13;
-      width: auto;
-      margin-top: clamp(1.5rem, 4vw, 3rem);
-    }
-    .rij-paar.spiegel figure:nth-child(1) {
-      grid-column: 1 / 6;
-      margin-top: clamp(1.5rem, 4vw, 3rem);
-    }
-    .rij-paar.spiegel figure:nth-child(2) {
-      grid-column: 7 / 13;
-      margin-top: 0;
+    to {
+      opacity: 1;
+      transform: none;
     }
   }
 
@@ -306,12 +391,52 @@ const maat = (type: Rij['type']) => (type === 'breed' ? { b: 3, h: 2 } : { b: 4,
   .dialoog::backdrop {
     background: color-mix(in srgb, #4a1219 94%, black);
   }
-  .dialoog img {
-    max-width: min(92vw, 70rem);
-    max-height: 80vh;
+  .dialoog-figuur {
+    width: min(92vw, 70rem);
+  }
+  .dialoog-doek {
+    position: relative;
+    display: grid;
+    place-items: center;
+  }
+  .dialoog-doek img {
+    grid-area: 1 / 1;
+    max-width: 100%;
+    max-height: 78vh;
     width: auto;
     height: auto;
     border-radius: 2px;
+  }
+  #dialoog-thumb {
+    filter: blur(6px);
+    transform: scale(1.01); /* verbergt de blur-rand */
+  }
+  #dialoog-beeld {
+    transition: opacity 150ms ease-out;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #dialoog-beeld {
+      transition: none;
+    }
+  }
+  .dialoog-spinner {
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 2px solid rgb(250 246 243 / 0.3);
+    border-top-color: var(--color-paper);
+    animation: dialoog-draai 800ms linear infinite;
+  }
+  @keyframes dialoog-draai {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+  .dialoog-fout {
+    margin-top: 0.75rem;
+    color: var(--color-paper);
+    font-size: var(--text-klein);
   }
   .dialoog-knop {
     position: fixed;
@@ -359,29 +484,6 @@ const maat = (type: Rij['type']) => (type === 'breed' ? { b: 3, h: 2 } : { b: 4,
         opacity: 1;
         transform: none;
       }
-    }
-  }
-
-  /* Eén geregisseerd moment: platen komen rustig op terwijl je er langs
-     scrolt. Alleen waar scroll-driven animaties bestaan en de bezoeker
-     geen reduced-motion heeft; anders staan ze er gewoon. */
-  @media (prefers-reduced-motion: no-preference) {
-    @supports (animation-timeline: view()) {
-      figure {
-        animation: plaat-op linear both;
-        animation-timeline: view();
-        animation-range: entry 0% entry 45%;
-      }
-    }
-  }
-  @keyframes plaat-op {
-    from {
-      opacity: 0.25;
-      transform: translateY(0.75rem);
-    }
-    to {
-      opacity: 1;
-      transform: none;
     }
   }
 </style>
