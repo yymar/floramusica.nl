@@ -17,7 +17,7 @@ import portret from '../assets/portret-christa.jpg';
 
 <section class="relative overflow-hidden bg-bordeaux-deep" data-vlak="bordeaux">
   {/* De partituurregel: van rand tot rand, achter de titel */}
-  <div class="absolute inset-x-0 top-[8.5rem] hidden text-bordeaux md:block" aria-hidden="true">
+  <div class="parallax-balk absolute inset-x-0 top-[8.5rem] hidden text-bordeaux md:block" aria-hidden="true">
     <PartituurRegel class="h-[clamp(8rem,19vw,13rem)]" />
   </div>
 
@@ -48,8 +48,38 @@ import portret from '../assets/portret-christa.jpg';
         breedte={640}
         hoogte={800}
         toon="bordeaux"
-        class="max-w-xs md:max-w-none"
+        class="max-w-xs md:max-w-none parallax-portret"
       />
     </div>
   </div>
 </section>
+
+<style>
+  /* Gelaagde parallax op de omslag: de partituurregel loopt merkbaar achter
+     op de scroll, het portret een fractie — twee lagen, klein gehouden
+     (~10% van de scrollafstand) zodat niets overlapt of afsnijdt. Alleen
+     transform, alleen waar scroll-driven animaties bestaan, en volledig
+     uit bij reduced-motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .parallax-balk {
+        animation: balk-lag linear both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 100%;
+      }
+      section :global(.parallax-portret) {
+        animation: portret-lag linear both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 100%;
+      }
+    }
+  }
+  @keyframes balk-lag {
+    from { transform: translateY(0); }
+    to { transform: translateY(3.5rem); }
+  }
+  @keyframes portret-lag {
+    from { transform: translateY(0); }
+    to { transform: translateY(1.25rem); }
+  }
+</style>

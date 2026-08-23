@@ -6,16 +6,29 @@
  * als bijschrift, zoals platen in een gedrukt programma.
  *
  * De rijen worden in de frontmatter uit src/data/fotos.ts opgebouwd; elke
- * cyclus spiegelt, zodat een langere reeks niet mechanisch oogt. Nul
- * JavaScript; de scroll-reveal is CSS-only en alleen actief waar
- * ondersteund én zonder reduced-motion.
+ * cyclus spiegelt, zodat een langere reeks niet mechanisch oogt.
+ *
+ * Lightbox: klik of Enter opent het native <dialog>-element met een groot
+ * beeld en het bijschrift; vorige/volgende via knoppen, pijltjestoetsen en
+ * swipe, sluiten met Esc of de knop, focus keert terug naar de aangeklikte
+ * plaat. Zonder JavaScript linkt elke plaat gewoon naar het beeldbestand.
  */
+import { getImage } from 'astro:assets';
 import Sectie from '../components/Sectie.astro';
 import Figuur from '../components/Figuur.astro';
 import { fotos } from '../data/fotos';
 import { galerij } from '../data/copy';
 
-type Rij = { type: 'breed' | 'staand' | 'paar'; spiegel: boolean; fotos: { nummer: number; foto: (typeof fotos)[number] }[] };
+type Rij = {
+  type: 'breed' | 'staand' | 'paar';
+  spiegel: boolean;
+  fotos: { nummer: number; foto: (typeof fotos)[number]; groot?: string }[];
+};
+
+// Grote varianten voor de lightbox (webp, 1600px breed).
+const groten = await Promise.all(
+  fotos.map((foto) => (foto.src ? getImage({ src: foto.src, width: 1600, format: 'webp' }) : null))
+);
 
 const ritme = ['breed', 'staand', 'paar'] as const;
 const rijen: Rij[] = [];
@@ -27,7 +40,9 @@ while (index < fotos.length) {
   rijen.push({
     type,
     spiegel: Math.floor(stap / 3) % 2 === 1,
-    fotos: fotos.slice(index, index + aantal).map((foto, j) => ({ nummer: index + j + 1, foto })),
+    fotos: fotos
+      .slice(index, index + aantal)
+      .map((foto, j) => ({ nummer: index + j + 1, foto, groot: groten[index + j]?.src })),
   });
   index += aantal;
   stap += 1;
@@ -40,21 +55,38 @@ const maat = (type: Rij['type']) => (type === 'breed' ? { b: 3, h: 2 } : { b: 4,
 {
   fotos.length > 0 && (
     <Sectie id="beelden" label="Beelden" kop={galerij.kop}>
-      <div class="spread">
+      <div class="spread" id="galerij-spread">
         {rijen.map((rij) => (
           <div class:list={['rij', `rij-${rij.type}`, rij.spiegel && 'spiegel']}>
-            {rij.fotos.map(({ nummer, foto }) => (
+            {rij.fotos.map(({ nummer, foto, groot }) => (
               <figure>
-                <Figuur
-                  src={foto.src}
-                  alt={foto.alt}
-                  breedte={foto.src?.width ?? maat(rij.type).b}
-                  hoogte={foto.src?.height ?? maat(rij.type).h}
-                  class:list={[
-                    'foto',
-                    rij.type === 'breed' ? 'aspect-[3/2]' : 'aspect-[4/5]',
-                  ]}
-                />
+                {groot ? (
+                  <a
+                    class="plaat-link block rounded-sm"
+                    href={groot}
+                    data-groot={groot}
+                    data-alt={foto.alt}
+                    data-onderschrift={foto.onderschrift ?? ''}
+                    data-nummer={nummer}
+                    aria-label={`Bekijk foto ${nummer} groot: ${foto.alt}`}
+                  >
+                    <Figuur
+                      src={foto.src}
+                      alt={foto.alt}
+                      breedte={foto.src?.width ?? maat(rij.type).b}
+                      hoogte={foto.src?.height ?? maat(rij.type).h}
+                      class:list={['foto', rij.type === 'breed' ? 'aspect-[3/2]' : 'aspect-[4/5]']}
+                    />
+                  </a>
+                ) : (
+                  <Figuur
+                    src={foto.src}
+                    alt={foto.alt}
+                    breedte={maat(rij.type).b}
+                    hoogte={maat(rij.type).h}
+                    class:list={['foto', rij.type === 'breed' ? 'aspect-[3/2]' : 'aspect-[4/5]']}
+                  />
+                )}
                 <figcaption class="mt-2 flex items-baseline gap-3 text-klein">
                   <span class="nummer font-display font-semibold text-bordeaux">№ {nummer}</span>
                   {foto.onderschrift && <span class="text-ink-soft italic">{foto.onderschrift}</span>}
@@ -64,9 +96,106 @@ const maat = (type: Rij['type']) => (type === 'breed' ? { b: 3, h: 2 } : { b: 4,
           </div>
         ))}
       </div>
+
+      <dialog id="galerij-dialoog" class="dialoog" aria-label="Fotoweergave">
+        <figure class="m-0">
+          <img id="dialoog-beeld" src="" alt="" />
+          <figcaption class="mt-3 flex items-baseline gap-3 text-klein text-paper-dim">
+            <span id="dialoog-nummer" class="font-display font-semibold text-paper" />
+            <span id="dialoog-tekst" class="italic" />
+          </figcaption>
+        </figure>
+        <button type="button" class="dialoog-knop dialoog-sluit" data-actie="sluit" aria-label="Sluiten">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+        <button type="button" class="dialoog-knop dialoog-vorige" data-actie="vorige" aria-label="Vorige foto">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <button type="button" class="dialoog-knop dialoog-volgende" data-actie="volgende" aria-label="Volgende foto">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+      </dialog>
     </Sectie>
   )
 }
+
+<script>
+  // Lightbox als progressive enhancement: zonder JS linken de platen naar
+  // het beeldbestand; met JS opent het native <dialog>-element.
+  const dialoog = document.getElementById('galerij-dialoog') as HTMLDialogElement | null;
+  const spread = document.getElementById('galerij-spread');
+
+  if (dialoog && spread && typeof dialoog.showModal === 'function') {
+    const links = Array.from(spread.querySelectorAll<HTMLAnchorElement>('.plaat-link'));
+    const beeld = document.getElementById('dialoog-beeld') as HTMLImageElement;
+    const nummerEl = document.getElementById('dialoog-nummer')!;
+    const tekstEl = document.getElementById('dialoog-tekst')!;
+    let huidig = 0;
+    let herkomst: HTMLElement | null = null;
+
+    const toon = (i: number) => {
+      huidig = (i + links.length) % links.length;
+      const link = links[huidig];
+      beeld.src = link.dataset.groot ?? link.href;
+      beeld.alt = link.dataset.alt ?? '';
+      nummerEl.textContent = `№ ${link.dataset.nummer}`;
+      tekstEl.textContent = link.dataset.onderschrift ?? '';
+    };
+
+    links.forEach((link, i) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        herkomst = link;
+        toon(i);
+        dialoog.showModal();
+      });
+    });
+
+    dialoog.addEventListener('click', (e) => {
+      const doel = e.target as HTMLElement;
+      const actie = doel.closest<HTMLElement>('[data-actie]')?.dataset.actie;
+      if (actie === 'sluit') dialoog.close();
+      else if (actie === 'vorige') toon(huidig - 1);
+      else if (actie === 'volgende') toon(huidig + 1);
+      // Klik op de achtergrond (het dialog-element zelf) sluit ook.
+      else if (doel === dialoog) dialoog.close();
+    });
+
+    dialoog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        toon(huidig - 1);
+      }
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        toon(huidig + 1);
+      }
+    });
+
+    // Swipe op touch; de knoppen blijven het alternatief.
+    let beginX: number | null = null;
+    dialoog.addEventListener('touchstart', (e) => {
+      beginX = e.touches[0].clientX;
+    }, { passive: true });
+    dialoog.addEventListener('touchend', (e) => {
+      if (beginX === null) return;
+      const delta = e.changedTouches[0].clientX - beginX;
+      if (Math.abs(delta) > 40) toon(huidig + (delta < 0 ? 1 : -1));
+      beginX = null;
+    }, { passive: true });
+
+    // Focus keert terug naar de aangeklikte plaat.
+    dialoog.addEventListener('close', () => {
+      herkomst?.focus();
+    });
+  }
+</script>
 
 <style>
   .spread {
@@ -95,6 +224,10 @@ const maat = (type: Rij['type']) => (type === 'breed' ? { b: 3, h: 2 } : { b: 4,
   figure :global(.foto) {
     height: auto;
     object-fit: cover;
+  }
+
+  .plaat-link {
+    cursor: zoom-in;
   }
 
   /* Mobiel: één kolom met een licht wisselende inspringing, zodat het
@@ -150,6 +283,82 @@ const maat = (type: Rij['type']) => (type === 'breed' ? { b: 3, h: 2 } : { b: 4,
     .rij-paar.spiegel figure:nth-child(2) {
       grid-column: 7 / 13;
       margin-top: 0;
+    }
+  }
+
+  /* Lightbox: donker bordeaux doek, beeld centraal, knoppen ruim (44px)
+     en altijd zichtbaar. */
+  .dialoog {
+    border: none;
+    padding: clamp(1rem, 4vw, 3rem);
+    background: transparent;
+    max-width: 100vw;
+    max-height: 100vh;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .dialoog[open] {
+    display: flex;
+  }
+  .dialoog::backdrop {
+    background: color-mix(in srgb, #4a1219 94%, black);
+  }
+  .dialoog img {
+    max-width: min(92vw, 70rem);
+    max-height: 80vh;
+    width: auto;
+    height: auto;
+    border-radius: 2px;
+  }
+  .dialoog-knop {
+    position: fixed;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 2px;
+    border: none;
+    color: var(--color-paper);
+    background: transparent;
+    cursor: pointer;
+  }
+  .dialoog-knop:hover {
+    background: color-mix(in srgb, var(--color-paper) 12%, transparent);
+  }
+  .dialoog-knop svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  .dialoog-sluit {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+  .dialoog-vorige {
+    left: 0.75rem;
+    top: 50%;
+    translate: 0 -50%;
+  }
+  .dialoog-volgende {
+    right: 0.75rem;
+    top: 50%;
+    translate: 0 -50%;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .dialoog[open] {
+      animation: dialoog-op 240ms cubic-bezier(0.2, 0, 0, 1);
+    }
+    @keyframes dialoog-op {
+      from {
+        opacity: 0;
+        transform: translateY(0.5rem);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
     }
   }
 

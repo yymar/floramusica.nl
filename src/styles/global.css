@@ -70,9 +70,18 @@ body {
   accent-color: var(--color-bordeaux);
 }
 
-/* Koppen breken gebalanceerd, niet met een los woord op de laatste regel. */
+/* Koppen breken gebalanceerd; lopende tekst zonder losse laatste woorden. */
 h1, h2, h3 {
   text-wrap: balance;
+}
+p, figcaption, dd, li {
+  text-wrap: pretty;
+}
+
+/* Het thema is bewust alleen licht; dit stuurt ook native UI (scrollbars,
+   formulier-controls) de lichte kant op. */
+:root {
+  color-scheme: light;
 }
 
 ::selection {
