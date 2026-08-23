@@ -1,0 +1,36 @@
+---
+/**
+ * Externe link: opent in een nieuw tabblad met rel="noopener noreferrer"
+ * en draagt een subtiel pijltje als affordance plus een sr-only-toelichting
+ * voor screenreaders. Interne links gebruiken dit component niet.
+ */
+interface Props {
+  href: string;
+  class?: string;
+}
+const { href, class: className } = Astro.props;
+---
+
+<a
+  href={href}
+  target="_blank"
+  rel="noopener noreferrer"
+  class:list={['text-bordeaux underline underline-offset-2 hover:text-bordeaux-deep', className]}
+>
+  <slot />
+  <svg
+    viewBox="0 0 12 12"
+    aria-hidden="true"
+    class="mb-0.5 ml-0.5 inline-block h-[0.6em] w-[0.6em]"
+  >
+    <path
+      d="M4 2h6v6M10 2 3 9"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+  <span class="sr-only">(opent in nieuw tabblad)</span>
+</a>

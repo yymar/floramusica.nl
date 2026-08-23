@@ -9,7 +9,7 @@ export interface Adres {
   plaats: string;
   provincie: string;
   land: string;
-  /** Gewone link naar een kaart, geen iframe. */
+  /** Gewone link naar Google Maps, geen iframe. */
   kaartUrl: string;
 }
 
@@ -40,8 +40,7 @@ export const site: SiteGegevens = {
     plaats: 'Oss',
     provincie: 'Noord-Brabant',
     land: 'NL',
-    kaartUrl:
-      'https://www.openstreetmap.org/search?query=Floraliastraat%2068%2C%20Oss',
+    kaartUrl: 'https://www.google.com/maps/search/?api=1&query=Floraliastraat+68,+Oss',
   },
   email: '', // TODO: e-mailadres
   telefoon: '', // TODO: telefoonnummer

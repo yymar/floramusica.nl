@@ -4,6 +4,7 @@
  * daaronder de organisaties als tekstuele lijst, geen logowall.
  */
 import Sectie from '../components/Sectie.astro';
+import ExterneLink from '../components/ExterneLink.astro';
 import { locatie } from '../data/copy';
 import { site } from '../data/site';
 import { organisaties } from '../data/organisaties';
@@ -15,13 +16,7 @@ import { organisaties } from '../data/organisaties';
   <p class="mt-4">
     <strong>{site.adres.straat}, {site.adres.plaats}</strong>
     <span class="mx-2 text-rule" aria-hidden="true">|</span>
-    <a
-      href={site.adres.kaartUrl}
-      rel="noopener"
-      class="text-bordeaux underline underline-offset-2 hover:text-bordeaux-deep"
-    >
-      {locatie.kaartLabel}
-    </a>
+    <ExterneLink href={site.adres.kaartUrl}>{locatie.kaartLabel}</ExterneLink>
   </p>
 
   <h3 class="mt-12 font-display text-subkop font-semibold text-ink">
@@ -33,13 +28,7 @@ import { organisaties } from '../data/organisaties';
       organisaties.map((organisatie) => (
         <li class="border-b border-rule pb-3">
           {organisatie.url ? (
-            <a
-              href={organisatie.url}
-              rel="noopener"
-              class="text-bordeaux underline underline-offset-2 hover:text-bordeaux-deep"
-            >
-              {organisatie.naam}
-            </a>
+            <ExterneLink href={organisatie.url}>{organisatie.naam}</ExterneLink>
           ) : (
             <span>{organisatie.naam}</span>
           )}
