@@ -17,8 +17,8 @@ import portret from '../assets/portret-christa.jpg';
 
 <section class="relative overflow-hidden bg-bordeaux-deep" data-vlak="bordeaux">
   {/* De partituurregel: van rand tot rand, achter de titel */}
-  <div class="parallax-balk absolute inset-x-0 top-[8.5rem] hidden text-bordeaux md:block" aria-hidden="true">
-    <PartituurRegel class="h-[clamp(8rem,19vw,13rem)]" />
+  <div class="parallax-balk absolute inset-x-0 top-[7rem] text-bordeaux md:top-[8.5rem]" aria-hidden="true">
+    <PartituurRegel class="h-[clamp(7rem,19vw,13rem)]" />
   </div>
 
   <div class="relative mx-auto max-w-5xl px-5 pt-14 pb-16 sm:px-8 sm:pt-20 sm:pb-24">
@@ -74,12 +74,24 @@ import portret from '../assets/portret-christa.jpg';
       }
     }
   }
+  /* Op mobiel is de scrollafstand korter en het scherm kleiner; de lagen
+     reizen daar verder, anders voel je ze niet. */
   @keyframes balk-lag {
     from { transform: translateY(0); }
-    to { transform: translateY(3.5rem); }
+    to { transform: translateY(5.5rem); }
   }
   @keyframes portret-lag {
     from { transform: translateY(0); }
-    to { transform: translateY(1.25rem); }
+    to { transform: translateY(3rem); }
+  }
+  @media (min-width: 48rem) {
+    @keyframes balk-lag {
+      from { transform: translateY(0); }
+      to { transform: translateY(3.5rem); }
+    }
+    @keyframes portret-lag {
+      from { transform: translateY(0); }
+      to { transform: translateY(1.25rem); }
+    }
   }
 </style>

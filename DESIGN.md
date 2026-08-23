@@ -10,7 +10,7 @@ De pagina is opgebouwd als een concertprogramma. De hero is de omslag: een diep 
 
 ## De bewuste esthetische keuze: de partituurregel
 
-De pagina is één partituurregel. Hij opent op de omslag met een toon-op-toon notenbalk die van rand tot rand loopt, met een echte solsleutel aan het begin (vanaf `md`; op mobiel blijft de omslag schoon), en hij sluit boven de footer af met dezelfde notenbalk mét eindstreep (dunne plus dikke streep, muzikaal correct). De sleutel is de G-sleutel uit Bravura, het professionele notatiefont van Steinberg (SIL Open Font License), als vectorpad overgenomen in `src/components/PartituurRegel.astro` zodat er geen notatiefont geladen wordt. Tussen opening en slot is de pagina gedisciplineerd stil: het marge-grid en het bordeaux vlak doen het werk. Geen verdere notatie-ornamenten strooien; het systeem is opening en slot, niets ertussen.
+De pagina is één partituurregel. Hij opent op de omslag met een toon-op-toon notenbalk die van rand tot rand loopt, met een echte solsleutel aan het begin (ook op mobiel, iets compacter, zodat de parallax daar voelbaar is), en hij sluit boven de footer af met dezelfde notenbalk mét eindstreep (dunne plus dikke streep, muzikaal correct). De sleutel is de G-sleutel uit Bravura, het professionele notatiefont van Steinberg (SIL Open Font License), als vectorpad overgenomen in `src/components/PartituurRegel.astro` zodat er geen notatiefont geladen wordt. Tussen opening en slot is de pagina gedisciplineerd stil: het marge-grid en het bordeaux vlak doen het werk. Geen verdere notatie-ornamenten strooien; het systeem is opening en slot, niets ertussen.
 
 ## Kleur
 
@@ -63,7 +63,7 @@ Typeschaal met `clamp()`, ratio ±1,25: `--text-omslag` (tot 5.5rem, alleen de h
 
 Beweging is een ontwerpbeslissing; de pagina kent drie geregisseerde momenten en verder niets. Alles is compositor-vriendelijk (alleen `transform`/`opacity`), CSS-only via scroll-driven animations achter `@supports (animation-timeline: view())`, en `prefers-reduced-motion: reduce` schakelt alles uit — content staat er dan gewoon, volledig zichtbaar. Geen animatiebibliotheken, geen scroll-listeners.
 
-1. **Parallax op de omslag** (`Hero.astro`): twee lagen die achterlopen op de scroll terwijl de omslag het beeld uit schuift — de partituurregel 3.5rem, het portret 1.25rem (~10% van de scrollafstand). Lineair aan de scroll gekoppeld (`animation-range: exit`), dus geen eigen duur of easing: de vinger van de bezoeker is de easing.
+1. **Parallax op de omslag** (`Hero.astro`): twee lagen die achterlopen op de scroll terwijl de omslag het beeld uit schuift — de partituurregel 3.5rem, het portret 1.25rem (~10% van de scrollafstand); op mobiel reizen ze verder (5.5rem en 3rem) omdat het scherm en de scrollafstand daar kleiner zijn. Lineair aan de scroll gekoppeld (`animation-range: exit`), dus geen eigen duur of easing: de vinger van de bezoeker is de easing.
 2. **Cel-reveal in de galerij** (`Galerij.astro`): opacity 0.25→1 plus 12px translate per cel, met een kleine stagger via verschoven `animation-range` per nth-child. Bewust niet herhaald op andere secties; één moment, geen entree-parade. Daarnaast een heel lichte hover-scale (1.02) van het beeld binnen de cel.
 3. **Lightbox-open** (`Galerij.astro`): 240ms `cubic-bezier(0.2, 0, 0, 1)` (uitgesproken uitloop), opacity plus 8px translate.
 
