@@ -89,8 +89,9 @@ import portret from '../assets/portret-christa.jpg';
     top: 7rem;
     color: var(--color-bordeaux);
   }
-  /* Het motief staat in de rechtermarge van de omslag, tegen de onderrand
-     aan, met één bewuste bleed: de beker duikt onder de sectierand door.
+  /* Het motief staat in de rechtermarge van de omslag, los boven de
+     onderrand: het instrument is volledig zichtbaar, inclusief de beker —
+     de stengel (StengelBaan.astro) meet de bekerpunt en groeit daar verder.
      Mondstuk, klepwerk en bloem blijven altijd heel — daarom is de breedte
      precies de marge tussen het portret en de vensterrand, en niet meer:
      het portret houdt de rechterkolom van de container, wat daarnaast
@@ -107,11 +108,10 @@ import portret from '../assets/portret-christa.jpg';
     /* Drie grenzen, de kleinste wint: een vaste bovengrens, de hoogte van
        de omslag zelf, en de breedte van de marge (omgerekend naar hoogte
        via de verhouding van het motief). Die laatste is wat het motief
-       heel houdt: mondstuk, klepwerk en bloem blijven binnen beeld, alleen
-       de beker duikt onder de omslagrand door. */
-    height: min(26rem, 76%, calc(((100vw - 64rem) / 2 + 1.5rem) * 1.4));
+       heel houdt: mondstuk, klepwerk, bloem én beker blijven binnen beeld. */
+    height: min(26rem, 72%, calc(((100vw - 64rem) / 2 + 1.5rem) * 1.4));
     right: 0.5rem;
-    bottom: -7%;
+    bottom: 2rem;
     /* Leesbaar op afstand: paper-dim op halve dekking — bloem en klepwerk
        moeten in één oogopslag te herkennen zijn, geen toon-op-toon-raadsel. */
     color: var(--color-paper-dim);
@@ -172,9 +172,9 @@ import portret from '../assets/portret-christa.jpg';
      minifier stuk zodra animation-timeline erbij staat. */
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
-      /* Het motief beweegt niet meer mee: de stengel begint direct onder de
-         omslagrand waar de beker onderduikt, en die aansluiting breekt zodra
-         het motief verschuift. De balk erachter beweegt wel. */
+      /* Het motief beweegt niet mee: de stengel groeit uit de beker, en
+         die aansluiting breekt zodra het motief verschuift. De balk
+         erachter beweegt wel. */
       .parallax-balk {
         animation-name: balk-lag;
         animation-timing-function: linear;
