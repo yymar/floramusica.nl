@@ -149,15 +149,23 @@ import Sprig from './Sprig.astro';
       // zodat de eindtangent exact vlak is en de vijf lijnen exact op de
       // balklijnen landen.
       const b0 = midden[midden.length - 1];
+      // De bocht eindigt 18px vóór de tegels; daarna volgt een exact
+      // horizontaal stukje dat 1px de eerste tegel in doorloopt (zoals de
+      // tegels onderling overlappen tegen antialiasing-naden). Zo staan
+      // de laatste normalen precies verticaal (geen minieme rotatie van de
+      // vijf uiteinden op de naad) en zit het lint zonder spleet aan de
+      // tegel vast.
+      const eindX = tegelStart - 18;
       for (let k = 1; k <= 26; k++) {
         const u = k / 26, w = 1 - u;
         const c1 = { x: landX, y: b0.y + (balkMidden - b0.y) * 0.55 };
-        const c2 = { x: tegelStart - (tegelStart - landX) * 0.45, y: balkMidden };
+        const c2 = { x: eindX - (eindX - landX) * 0.45, y: balkMidden };
         midden.push({
-          x: w * w * w * b0.x + 3 * w * w * u * c1.x + 3 * w * u * u * c2.x + u * u * u * tegelStart,
+          x: w * w * w * b0.x + 3 * w * w * u * c1.x + 3 * w * u * u * c2.x + u * u * u * eindX,
           y: w * w * w * b0.y + 3 * w * w * u * c1.y + 3 * w * u * u * c2.y + u * u * u * balkMidden,
         });
       }
+      midden.push({ x: tegelStart - 8, y: balkMidden }, { x: tegelStart + 1, y: balkMidden });
 
       samples = midden;
       cum = [0];
@@ -174,7 +182,9 @@ import Sprig from './Sprig.astro';
       // Normalen (centraal verschil) en de taper: constante breedte op de
       // hele route, alleen de laatste TAPER_PX naar footermaat (schaal 1).
       const spreiding = (i: number) => {
-        const rest = totaal - cum[i];
+        // De laatste 24px (het vlakke stukje op de naad) zijn al exact
+        // balkmaat; de taper rekent tot daar.
+        const rest = Math.max(0, totaal - cum[i] - 24);
         const s = rest >= TAPER_PX ? SCHAAL : 1 + (SCHAAL - 1) * (rest / TAPER_PX);
         return gapBalk * s;
       };
