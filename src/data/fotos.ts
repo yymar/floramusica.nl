@@ -30,6 +30,7 @@ import jongeKlarinettisten from '../assets/fotos/jonge-klarinettisten.jpg';
 import christaBuiten from '../assets/fotos/christa-buiten.jpg';
 import klarinetkring from '../assets/fotos/klarinetkring.jpg';
 import klepwerk from '../assets/fotos/klepwerk-zwartwit.jpg';
+import blokfluitKlarinet from '../assets/fotos/blokfluit-klarinet.jpg';
 
 export interface GalerijFoto {
   /** Geïmporteerde afbeelding; weglaten zolang de foto er nog niet is. */
@@ -69,6 +70,12 @@ export const fotos: GalerijFoto[] = [
     alt: 'Klarinet rechtop voor een besneeuwde deur',
   },
   {
+    src: blokfluitKlarinet,
+    formaat: 'middel',
+    alt: 'Een blokfluit en een klarinet liggen naast elkaar op de toetsen van een piano',
+    onderschrift: 'Blokfluit, klarinet en piano',
+  },
+  {
     src: jongeKlarinettisten,
     formaat: 'middel',
     alt: 'Twee jonge klarinettistes spelen samen in een industriële ruimte',
@@ -97,13 +104,13 @@ export const fotos: GalerijFoto[] = [
   },
   {
     src: klarinetkring,
-    formaat: 'klein',
+    formaat: 'middel',
     alt: 'Jonge klarinettisten in een kring, hun instrumenten naar het midden gericht, van bovenaf gezien',
     onderschrift: 'Samenspel in de klas',
   },
   {
     src: cdStapel,
-    formaat: 'klein',
+    formaat: 'middel',
     alt: 'Stapel cd\u2019s met een koptelefoon erbovenop',
   },
   {

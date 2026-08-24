@@ -25,17 +25,19 @@ Alles wat nog aangeleverd moet worden. Elke regel verwijst naar de plek in de co
 
 - [x] **Definitieve portretfoto** voor de hero (professionele serie, 4:5) · `src/assets/portret-christa.jpg`
 - [x] **Foto uit de lespraktijk** (Christa aan de piano, 3:4) · `src/assets/lespraktijk.jpg`
-- [x] **Galerij**: dertien foto's als quilted spread · `src/data/fotos.ts`, `src/sections/Galerij.astro`
+- [x] **Galerij**: veertien foto's als quilted spread · `src/data/fotos.ts`, `src/sections/Galerij.astro`
 - [ ] **Toestemming portretrecht** checken voor galerijfoto's met herkenbare personen · `src/data/fotos.ts`
   - № 3 — briefje met de voornaam van een leerling ("Luna")
-  - № 5 — twee jonge klarinettistes, beiden goed herkenbaar in beeld
-  - № 7 — het klarinetensemble
-  - № 8 — het optreden
-  - № 10 — de klarinetkring; vooral handen, maar enkele gezichten deels in beeld
-  - Let op: № 5 en № 10 zijn erbij gekomen in augustus 2026 en tonen (mogelijk
+  - № 6 — twee jonge klarinettistes, beiden goed herkenbaar in beeld
+  - № 8 — het klarinetensemble
+  - № 9 — het optreden
+  - № 11 — de klarinetkring; vooral handen, maar enkele gezichten deels in beeld
+  - Let op: № 6 en № 11 zijn erbij gekomen in augustus 2026 en tonen (mogelijk
     minderjarige) leerlingen. Voor een openbare site is dat het punt om
     expliciet af te tikken vóór de eerstvolgende deploy.
-- [ ] **Bijschriften galerij** aanvullen of corrigeren (nu № 3, 6, 7 en 10) · `src/data/fotos.ts`
+  - De nummers hierboven zijn posities in `fotos.ts`; ze schuiven mee als je
+    een foto tussenvoegt.
+- [ ] **Bijschriften galerij** aanvullen of corrigeren (nu № 3, 5, 7, 8 en 11) · `src/data/fotos.ts`
 - [ ] **Citaat voor de galerij** (optioneel): een kort tekstfragment voor een bordeaux cel in het grid, zodat het niet mechanisch voelt · `src/sections/Galerij.astro`
 - [x] **Logo / wordmark**: het fm-merk (forte-f + mezzo-m uit Bravura) staat in `Wordmark.astro`
 - [x] **Favicon**: forte-f op bordeaux tegel in `public/favicon.svg`
