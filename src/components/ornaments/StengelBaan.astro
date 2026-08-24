@@ -238,8 +238,14 @@ import Sprig from './Sprig.astro';
       const vh = innerHeight;
       const baanTop = baan.getBoundingClientRect().top + scrollY;
       const docH = document.documentElement.scrollHeight;
-      const extra = Math.max(0, scrollY + vh - (docH - 260));
-      return scrollY + 0.6 * vh + extra - baanTop;
+      const eind = Math.max(0, docH - vh);
+      // Op maximale scroll moet het front voorbij de eindstreep zijn; het
+      // tekort hangt van de vensterhoogte af (op hoge vensters is 40vh meer
+      // dan de hele footer) en loopt over de laatste 300px scroll in.
+      const doel = baanTop + balkY + 180;
+      const tekort = Math.max(0, doel - (eind + 0.6 * vh));
+      const aandeel = eind > 0 ? Math.max(0, Math.min(1, (scrollY - (eind - 300)) / 300)) : 1;
+      return scrollY + 0.6 * vh + tekort * aandeel - baanTop;
     };
 
     const LEAD = [0, 14, 26, 14, 0]; // organische tip: middellijn voorop
