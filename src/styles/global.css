@@ -54,6 +54,11 @@
   /* Overhang van het portret over de omslag/papier-grens. Onder 48rem is het
      scherm smaller en het portret kleiner, dus daar hangt het minder ver. */
   --overlap-hero: 2.5rem;
+  /* De enige elevatie in het ontwerp. Het portret kruist de grens tussen het
+     bordeaux vlak en het papier; zonder schaduw leest die overlap als een
+     plakfout in plaats van als diepte. Nergens anders schaduw: de pagina is
+     verder vlak (zie DESIGN.md). */
+  --schaduw-overhang: 0 1.5rem 3rem rgb(35 26 28 / 0.25);
   --z-achter: 0;
   --z-inhoud: 1;
   --z-accent: 2;

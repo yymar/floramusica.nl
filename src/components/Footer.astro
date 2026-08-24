@@ -13,20 +13,12 @@ import { footer } from '../data/copy';
 const gegevens = [site.email, site.telefoon, site.kvk].some(Boolean);
 ---
 
-<footer class="mt-sectie">
+<footer>
   {/* De finale: het lint tekent zichzelf vlak boven de eindstreep terwijl je
       naar de voet van de pagina scrolt. Centerline-variant (200 bytes, één
       streek) — de enige plek op de pagina waar de draad zichzelf trekt.
       Zonder scroll-driven animations of bij reduced motion staat hij er
       gewoon, volledig getekend. */}
-  <div class="mx-auto mb-6 flex justify-center px-5 sm:px-8" aria-hidden="true">
-    {/* Smal gehouden: de streekdikte schaalt mee met de breedte (viewBox 144
-        breed, stroke 1), dus over de volle kolom wordt de streek zwaarder dan
-        de eindstreep die hij aankondigt. Op 320px is hij ~2px, in dezelfde
-        orde als de notenbalk eronder. */}
-    <Ribbon name="a" variant="centerline" draw class="w-80 text-bordeaux opacity-60" />
-  </div>
-
   {/* Notenbalk met eindstreep: de pagina opende met de sleutel (hero) en sluit hier de partituurregel af.
       Eén SVG met crispEdges, zodat lijndikte en -afstand op elke schermschaal gelijk blijven.
 
@@ -35,8 +27,15 @@ const gegevens = [site.email, site.telefoon, site.kvk].some(Boolean);
       in. De timeline hangt aan de footer zelf (`view-timeline: --slot`) en
       niet aan de rects — een SVG-rect heeft geen eigen scrollpositie om aan
       te hangen. */}
-  <div aria-hidden="true">
-    <svg width="100%" height="41" shape-rendering="crispEdges" class="block text-bordeaux">
+  {/* De aanloop: het lint ligt strak op de notenbalk en tekent zichzelf op
+      dezelfde --slot-timeline, vlak vóór de lijnen. Smal gehouden, want de
+      streekdikte schaalt mee met de breedte en zou over de volle kolom
+      zwaarder worden dan de eindstreep die hij aankondigt. */}
+  <div class="slot" aria-hidden="true">
+    <div class="flex justify-center">
+      <Ribbon name="a" variant="centerline" draw class="w-80 text-bordeaux opacity-60" />
+    </div>
+    <svg width="100%" height="41" shape-rendering="crispEdges" class="slotbalk block text-bordeaux">
       {[0, 10, 20, 30, 40].map((y) => (
         <rect class="slotlijn" x="0" y={y} width="100%" height="1" fill="currentColor" />
       ))}
@@ -91,6 +90,17 @@ const gegevens = [site.email, site.telefoon, site.kvk].some(Boolean);
 </footer>
 
 <style>
+  /* De balk loopt van de linkerrand af (zoals de omslag) maar eindigt met een
+     inspringing, zodat de dubbele eindstreep leest als een bewuste afsluiting
+     in plaats van als afsnijding tegen de vensterrand. */
+  .slot {
+    padding-right: 2rem;
+  }
+  @media (min-width: 48rem) {
+    .slot {
+      padding-right: 3rem;
+    }
+  }
   .slotlijn {
     opacity: 0.55;
     transform-origin: left;
@@ -103,6 +113,10 @@ const gegevens = [site.email, site.telefoon, site.kvk].some(Boolean);
     @supports (animation-timeline: view()) {
       footer {
         view-timeline: --slot block;
+      }
+      :global(.ornament-draw path) {
+        animation-timeline: --slot;
+        animation-range: entry 0% entry 30%;
       }
       .slotlijn {
         animation-name: lijn-groei;

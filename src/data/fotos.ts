@@ -40,6 +40,13 @@ export interface GalerijFoto {
   /** Kort bijschrift; zichtbaar als overlay bij hover/focus en in de lightbox. */
   onderschrift?: string;
   /**
+   * Brandpunt van de uitsnede, als `object-position`. De cellen in het grid
+   * hebben een vaste vorm, dus elke foto wordt bijgesneden; hiermee bepaal je
+   * waar. Nodig zodra het onderwerp niet in het midden zit — een hoofd tegen
+   * de bovenrand overleeft een center-crop niet. Standaard het midden.
+   */
+  focus?: string;
+  /**
    * Formaat in het quilted grid: 'groot' is het anker (2×2), 'middel'
    * volgt de oriëntatie van de foto (staand 1×2, liggend 2×1),
    * 'klein' is 1×1. Het grid pakt zichzelf dicht (dense).
@@ -55,6 +62,7 @@ export const fotos: GalerijFoto[] = [
   },
   {
     src: christaBank,
+    focus: '50% 35%', // zit links-onder in het kader
     formaat: 'middel',
     alt: 'Christa ten Berg zit lachend op de bank met haar klarinet op schoot',
   },
@@ -77,6 +85,7 @@ export const fotos: GalerijFoto[] = [
   },
   {
     src: jongeKlarinettisten,
+    focus: '50% 30%', // twee hoofden hoog in beeld
     formaat: 'middel',
     alt: 'Twee jonge klarinettistes spelen samen in een industriële ruimte',
   },
@@ -88,6 +97,7 @@ export const fotos: GalerijFoto[] = [
   },
   {
     src: klarinetensemble,
+    focus: '50% 40%', // gezichten in de bovenste helft
     formaat: 'middel',
     alt: 'Klarinetensemble tijdens een optreden op een buitenpodium',
     onderschrift: 'Het klarinetensemble op het podium',
@@ -99,6 +109,7 @@ export const fotos: GalerijFoto[] = [
   },
   {
     src: christaBuiten,
+    focus: '50% 25%', // hoofd tegen de bovenrand
     formaat: 'middel',
     alt: 'Christa ten Berg buiten in het groen, met haar klarinet in haar handen',
   },

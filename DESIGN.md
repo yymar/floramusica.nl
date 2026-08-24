@@ -93,6 +93,14 @@ Eén bewuste afwijking van "alleen transform/opacity": het lint in de footer tek
 
 Native `<dialog>`: klik of Enter opent de plaat groot (webp, 1600px) op een donker bordeaux doek, met plaatnummer en bijschrift. Vorige/volgende via zichtbare knoppen (44px), pijltjestoetsen en swipe; sluiten met Esc, de knop of een klik op het doek. Focus-trap komt van `<dialog>` zelf; bij sluiten keert de focus terug naar de aangeklikte plaat. Zonder JavaScript linkt elke plaat gewoon naar het beeldbestand.
 
+## Elevatie
+
+De pagina is vlak: geen kaartschaduwen, geen diepte-effecten. Eén uitzondering, als token vastgelegd (`--schaduw-overhang`): het portret op de omslag hangt over de grens tussen het bordeaux vlak en het papier heen, en zonder schaduw leest die overlap als een plakfout in plaats van als diepte. Dezelfde waarde draagt de uitklap van de mobiele navigatie, die om dezelfde reden boven de pagina moet zweven. Verder nergens schaduw; een nieuwe schaduw hoort een token te zijn of niet te bestaan.
+
+## Navigatie
+
+Onder 40rem past de ankerlijst niet naast het woordmerk. Daar staat hij in een `<details>`-uitklap: native, dus toetsenbordbedienbaar en schermlezer-correct zonder eigen ARIA, en zichtbaar zonder JavaScript. De Contact-knop blijft altijd los zichtbaar — dat is de enige intentie van de pagina en die hoort niet achter een klik. Het enige script is één regel die de lade sluit nadat je een anker kiest.
+
 ## Thema
 
 Alleen licht. Het concept is een papier-referentie; een donker thema zou een tweede ontwerp zijn zonder aanwijsbare winst voor deze doelgroep, en de briefing koos expliciet licht. Het bordeaux hero-vlak is een sectietint binnen het lichte thema, geen thema-wissel.
@@ -107,7 +115,7 @@ Lege of nog niet aangeleverde gegevens worden weggelaten, nooit als zichtbare pl
 
 ## Beeld
 
-De foto's zijn aangeleverd (professionele serie plus praktijk-archief) en staan verkleind in `src/assets/`. `Figuur.astro` rendert Astro's `<Image>`; zonder `src` valt hij terug op een rustig placeholder-vlak.
+De foto's zijn aangeleverd (professionele serie plus praktijk-archief) en staan verkleind in `src/assets/`. Elk beeldkader heeft een vaste verhouding en snijdt bij met `object-fit: cover`; waar dat gebeurt bepaalt het `focus`-veld (`object-position`, standaard het midden). Zet het zodra het onderwerp niet centraal zit — een hoofd tegen de bovenrand overleeft een center-crop niet. Zo is een foto vervangen één regel, ook als de nieuwe een andere verhouding heeft. `Figuur.astro` rendert Astro's `<Image>`; zonder `src` valt hij terug op een rustig placeholder-vlak.
 
 1. Hero: staand portret 4:5 met klarinet (`portret-christa.jpg`).
 2. Over: Christa aan de piano, 3:4 (`lespraktijk.jpg`).

@@ -70,7 +70,7 @@ const cellen: Cel[] = await Promise.all(
                 data-nummer={nummer}
                 aria-label={`Bekijk foto ${nummer} groot: ${foto.alt}`}
               >
-                <Image src={foto.src} alt={foto.alt} width={800} height={Math.round((800 / foto.src.width) * foto.src.height)} loading="lazy" class="cel-beeld" />
+                <Image src={foto.src} alt={foto.alt} width={800} height={Math.round((800 / foto.src.width) * foto.src.height)} loading="lazy" class="cel-beeld" style={foto.focus ? `object-position: ${foto.focus};` : undefined} />
                 {foto.onderschrift && <span class="cel-overlay" aria-hidden="true">{foto.onderschrift}</span>}
               </a>
             ) : (
@@ -249,7 +249,13 @@ const cellen: Cel[] = await Promise.all(
 <style>
   /* Quilted grid: dense flow, cellen krijgen hun maat via spans; het grid
      zelf is de vormgeving — geen randen of schaduwen per foto. */
+  /* Eigen papieren ondergrond boven de maatstreep. De spread bloedt links
+     over de labelkolom heen en kruist daarmee de streep; zonder dit vlak
+     schemert die tussen de foto's door in de gaps. */
   .grid-quilt {
+    position: relative;
+    z-index: var(--z-inhoud);
+    background: var(--color-paper);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-auto-rows: clamp(6.5rem, 22vw, 10rem);

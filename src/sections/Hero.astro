@@ -64,6 +64,7 @@ import portret from '../assets/portret-christa.jpg';
           alt="Christa ten Berg met haar klarinet"
           breedte={640}
           hoogte={800}
+          focus="50% 18%"
           toon="bordeaux"
         />
       </div>
@@ -89,12 +90,19 @@ import portret from '../assets/portret-christa.jpg';
     top: 7rem;
     color: var(--color-bordeaux);
   }
+  /* De bleed is een keuze, geen bijproduct: precies een kwart van het motief
+     valt buiten de rechterrand, op elke breedte hetzelfde, doordat de
+     inspringing uit de eigen breedte wordt berekend. Verticaal staat het op
+     de onderrand, zodat de beker van de klarinet altijd heel in beeld is —
+     eerder sneed de vaste -4rem hem middenin de trechter af, op een plek die
+     per schermbreedte verschoof. */
   .parallax-motief {
+    --motief-breedte: 20rem;
     position: absolute;
-    right: -3rem;
-    bottom: -4rem;
     display: none;
-    width: 20rem;
+    width: var(--motief-breedte);
+    right: calc(var(--motief-breedte) * -0.25);
+    bottom: 0.5rem;
     color: var(--color-paper);
     opacity: 0.14;
     pointer-events: none;
@@ -113,7 +121,7 @@ import portret from '../assets/portret-christa.jpg';
     margin-bottom: calc(-1 * (var(--overlap-hero) + 4rem));
   }
   .parallax-portret :global(img) {
-    box-shadow: 0 1.5rem 3rem rgb(35 26 28 / 0.25);
+    box-shadow: var(--schaduw-overhang);
   }
   @media (min-width: 40rem) {
     .parallax-portret {
@@ -133,8 +141,7 @@ import portret from '../assets/portret-christa.jpg';
   }
   @media (min-width: 64rem) {
     .parallax-motief {
-      right: -1.5rem;
-      width: 24rem;
+      --motief-breedte: 24rem;
     }
   }
 

@@ -20,12 +20,20 @@ interface Props {
   alt: string;
   breedte: number;
   hoogte: number;
+  /**
+   * Brandpunt van de uitsnede, als `object-position`. Het kader heeft een
+   * vaste verhouding (breedte/hoogte), dus een foto met een andere verhouding
+   * wordt bijgesneden — hiermee bepaal je waar dat gebeurt. `'50% 20%'` houdt
+   * bijvoorbeeld een hoofd volledig in beeld waar het midden het zou afsnijden.
+   * Standaard het midden.
+   */
+  focus?: string;
   toon?: 'paper' | 'bordeaux';
   /** Korte omschrijving van de foto die hier nog komt. */
   todo?: string;
   class?: string;
 }
-const { src, alt, breedte, hoogte, toon = 'paper', todo, class: className } = Astro.props;
+const { src, alt, breedte, hoogte, focus = '50% 50%', toon = 'paper', todo, class: className } = Astro.props;
 ---
 
 {
@@ -36,7 +44,8 @@ const { src, alt, breedte, hoogte, toon = 'paper', todo, class: className } = As
       width={breedte}
       height={hoogte}
       loading="lazy"
-      class:list={['h-auto w-full rounded-sm object-cover', className]}
+      style={`aspect-ratio: ${breedte} / ${hoogte}; object-position: ${focus};`}
+      class:list={['h-full w-full rounded-sm object-cover', className]}
     />
   ) : (
     <div
