@@ -6,10 +6,12 @@
  *   1. Zet het bestand in src/assets/fotos/
  *   2. Importeer het hieronder en vul src, alt en eventueel onderschrift in.
  *
- * De volgorde in deze lijst is de volgorde op de pagina. De layout kent
- * zichzelf per positie een slot toe in een herhalend ritme (breed liggend,
- * staand, een paar naast elkaar); daar hoef je niets voor te doen.
- * Richtlijn: liggende foto's op posities 1 en 5, staande op de rest.
+ * De volgorde in deze lijst is de volgorde op de pagina; `formaat` bepaalt
+ * hoeveel ruimte een foto in het quilted grid krijgt. Het grid pakt zichzelf
+ * dicht (dense), dus gaten vullen zich vanzelf met de eerstvolgende foto die
+ * past. Richtlijn: hooguit twee 'groot' per spread als ankerpunten, en zet er
+ * geen twee liggende 'middel' direct achter elkaar — dan ontstaat een blok van
+ * twee volle rijen zonder ritme.
  *
  * De sectie verdwijnt vanzelf als deze lijst leeg is.
  */
@@ -23,6 +25,11 @@ import klarinetensemble from '../assets/fotos/klarinetensemble.jpg';
 import optreden from '../assets/fotos/optreden.jpg';
 import cdStapel from '../assets/fotos/cd-stapel.jpg';
 import roosBladmuziek from '../assets/fotos/roos-bladmuziek.jpg';
+import klarinetGroen from '../assets/fotos/klarinet-groen.jpg';
+import jongeKlarinettisten from '../assets/fotos/jonge-klarinettisten.jpg';
+import christaBuiten from '../assets/fotos/christa-buiten.jpg';
+import klarinetkring from '../assets/fotos/klarinetkring.jpg';
+import klepwerk from '../assets/fotos/klepwerk-zwartwit.jpg';
 
 export interface GalerijFoto {
   /** Geïmporteerde afbeelding; weglaten zolang de foto er nog niet is. */
@@ -62,6 +69,17 @@ export const fotos: GalerijFoto[] = [
     alt: 'Klarinet rechtop voor een besneeuwde deur',
   },
   {
+    src: jongeKlarinettisten,
+    formaat: 'middel',
+    alt: 'Twee jonge klarinettistes spelen samen in een industriële ruimte',
+  },
+  {
+    src: klarinetGroen,
+    formaat: 'groot',
+    alt: 'Klarinet liggend tussen de groene bladeren van een struik',
+    onderschrift: 'Flora en musica',
+  },
+  {
     src: klarinetensemble,
     formaat: 'middel',
     alt: 'Klarinetensemble tijdens een optreden op een buitenpodium',
@@ -73,9 +91,25 @@ export const fotos: GalerijFoto[] = [
     alt: 'Optreden met klarinet',
   },
   {
+    src: christaBuiten,
+    formaat: 'middel',
+    alt: 'Christa ten Berg buiten in het groen, met haar klarinet in haar handen',
+  },
+  {
+    src: klarinetkring,
+    formaat: 'klein',
+    alt: 'Jonge klarinettisten in een kring, hun instrumenten naar het midden gericht, van bovenaf gezien',
+    onderschrift: 'Samenspel in de klas',
+  },
+  {
     src: cdStapel,
     formaat: 'klein',
     alt: 'Stapel cd\u2019s met een koptelefoon erbovenop',
+  },
+  {
+    src: klepwerk,
+    formaat: 'klein',
+    alt: 'Close-up van het klepwerk van een klarinet, in zwart-wit',
   },
   {
     src: roosBladmuziek,
