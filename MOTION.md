@@ -103,3 +103,10 @@ waar de code van het prototype afwijkt:
    erbinnen tegen dát blok — dat nooit scrolt — in plaats van tegen de viewport.
    De notenbalk en het motief stonden daardoor stil terwijl de rest wél liep.
    Dezelfde reden als `overflow-x: clip` op het binnenwerk.
+
+Het scroll-prototype in het Claude Design-project is op beide punten
+bijgewerkt (aug 2026), zodat de referentie klopt met wat er draait. Gemeten
+vóór die fix: alle veertien animaties resolveden daar wél — de shorthand is
+in een los, niet-geminificeerd bestand geen probleem — maar `.parallax-balk`
+bleef op `translateY(0)` staan door de `overflow: hidden`-clip. Na de fix
+loopt hij tot 56px, gelijk aan de site.
