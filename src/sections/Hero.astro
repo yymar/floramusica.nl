@@ -112,8 +112,10 @@ import portret from '../assets/portret-christa.jpg';
     height: min(26rem, 76%, calc(((100vw - 64rem) / 2 + 1.5rem) * 1.4));
     right: 0.5rem;
     bottom: -7%;
-    color: var(--color-paper);
-    opacity: 0.2;
+    /* Leesbaar op afstand: paper-dim op halve dekking — bloem en klepwerk
+       moeten in één oogopslag te herkennen zijn, geen toon-op-toon-raadsel. */
+    color: var(--color-paper-dim);
+    opacity: 0.5;
     pointer-events: none;
   }
   .parallax-motief :global(svg) {
