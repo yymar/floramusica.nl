@@ -15,6 +15,7 @@
 import Figuur from '../components/Figuur.astro';
 import PartituurRegel from '../components/PartituurRegel.astro';
 import Motief from '../components/ornaments/Motief.astro';
+import Stengel from '../components/ornaments/Stengel.astro';
 import Wordmark from '../components/Wordmark.astro';
 import { hero } from '../data/copy';
 // Portret uit de professionele fotoserie, 4:5 zoals het omslagontwerp vraagt.
@@ -25,12 +26,15 @@ import portret from '../assets/portret-christa.jpg';
   {/* Eigen clip voor de achterste laag: de sectie zelf mag niet klippen,
       want het portret hoort er onderuit te steken. */}
   <div class="balk-clip" aria-hidden="true">
-    {/* Het sier-motief ligt het diepst en loopt dus het verst achter. */}
-    <div class="parallax-motief">
-      <Motief name="klarinet-bloei" class="w-full" />
-    </div>
+    {/* Schildervolgorde: eerst de balk (diepste laag), dan de stengel, dan
+        het motief — de bloem ligt bovenop de notenbalk, onder de tekst en
+        het portret. */}
     <div class="parallax-balk">
       <PartituurRegel class="h-[clamp(7rem,19vw,13rem)]" />
+    </div>
+    <Stengel deel="omslag" dekking={0.3} class="stengel-omslag" />
+    <div class="parallax-motief">
+      <Motief name="klarinet-bloei" class="w-full" />
     </div>
   </div>
 
@@ -107,13 +111,22 @@ import portret from '../assets/portret-christa.jpg';
     /* Drie grenzen, de kleinste wint: een vaste bovengrens, de hoogte van
        de omslag zelf, en de breedte van de marge (omgerekend naar hoogte
        via de verhouding van het motief). Die laatste is wat het motief
-       heel houdt. */
-    height: min(22rem, 62%, calc(((100vw - 64rem) / 2 + 1.5rem) * 1.4));
+       heel houdt: mondstuk, klepwerk en bloem blijven binnen beeld, alleen
+       de beker duikt onder de omslagrand door. */
+    height: min(26rem, 76%, calc(((100vw - 64rem) / 2 + 1.5rem) * 1.4));
     right: 0.5rem;
-    bottom: -6%;
+    bottom: -7%;
     color: var(--color-paper);
-    opacity: 0.14;
+    opacity: 0.2;
     pointer-events: none;
+  }
+  /* De stengel groeit uit de beker; op de omslag in papier, en steviger dan
+     in het binnenwerk, want dit is leeg donker vlak zonder tekst eronder.
+     z-index 0 in plaats van -1: hier moet hij bovenop de notenbalk liggen
+     (de DOM-volgorde regelt de rest), niet achter alles. */
+  .balk-clip :global(.stengel-omslag) {
+    color: var(--color-paper);
+    z-index: 0;
   }
   .parallax-motief :global(svg) {
     width: 100%;
@@ -169,13 +182,9 @@ import portret from '../assets/portret-christa.jpg';
      minifier stuk zodra animation-timeline erbij staat. */
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
-      .parallax-motief {
-        animation-name: motief-lag;
-        animation-timing-function: linear;
-        animation-fill-mode: both;
-        animation-timeline: view();
-        animation-range: exit 0% exit 100%;
-      }
+      /* Het motief beweegt niet meer mee: de stengel groeit uit de beker
+         en een stengelsegment kan niet verschuiven zonder de aansluiting
+         op de sectiegrens te breken. De balk erachter beweegt wel. */
       .parallax-balk {
         animation-name: balk-lag;
         animation-timing-function: linear;
@@ -202,10 +211,6 @@ import portret from '../assets/portret-christa.jpg';
 
   /* Op mobiel is de scrollafstand korter en het scherm kleiner; de lagen
      reizen daar verder, anders voel je ze niet. */
-  @keyframes motief-lag {
-    from { transform: translateY(0); }
-    to { transform: translateY(6.5rem); }
-  }
   @keyframes balk-lag {
     from { transform: translateY(0); }
     to { transform: translateY(5.5rem); }
@@ -219,10 +224,6 @@ import portret from '../assets/portret-christa.jpg';
     to { transform: translateY(-1.25rem); }
   }
   @media (min-width: 48rem) {
-    @keyframes motief-lag {
-      from { transform: translateY(0); }
-      to { transform: translateY(4.5rem); }
-    }
     @keyframes balk-lag {
       from { transform: translateY(0); }
       to { transform: translateY(3.5rem); }

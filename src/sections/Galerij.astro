@@ -16,7 +16,7 @@
 import { getImage } from 'astro:assets';
 import { Image } from 'astro:assets';
 import Sectie from '../components/Sectie.astro';
-import TextuurBand from '../components/ornaments/TextuurBand.astro';
+import Stengel from '../components/ornaments/Stengel.astro';
 import { fotos } from '../data/fotos';
 import { galerij } from '../data/copy';
 
@@ -57,10 +57,9 @@ const cellen: Cel[] = await Promise.all(
 {
   fotos.length > 0 && (
     <Sectie id="beelden" label="Beelden" kop={galerij.kop} sier="bloem-open" band>
-      {/* De bloeiband: dezelfde notenbalk als elders, maar met de blad- en
-          knoplaag erover. Hij hangt over de naad met Over heen en verbindt
-          de twee secties. */}
-      <TextuurBand slot="band" blad dekking={0.06} />
+      {/* De stengel neemt hier de verbindende rol; langs de buitenmarge
+          van het grid, nooit door de foto's. */}
+      <Stengel slot="band" deel="beelden" />
       <div class="grid-quilt" id="galerij-grid">
         {cellen.map(({ foto, nummer, span, thumb, srcset, groot }) => (
           <figure class:list={['cel', `cel-${span}`]}>

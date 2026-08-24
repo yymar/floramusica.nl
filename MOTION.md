@@ -165,7 +165,15 @@ na de fix loopt hij tot 56px, gelijk aan de site.
   links naar rechts. Dezelfde beweging, hetzelfde verhaal (lijn eerst,
   eindstreep laatst), ander middel. De ranges zijn iets opgeschoven omdat er nu
   drie fasen in plaats van twee in passen.
-- **Er zijn twee textuurbanden bij gekomen** (Over → Beelden en
-  Praktisch → Contact). Ze drijven verticaal ±1,25rem over `cover 0–100%`:
-  trage parallax, zodat de naad tussen twee secties diepte krijgt in plaats van
-  een streep te zijn. Bij reduced motion staan ze stil en gewoon zichtbaar.
+- **Er is één textuurband** (Praktisch → Contact). Hij drijft verticaal
+  ±1,25rem over `cover 0–100%`: trage parallax, zodat de naad diepte krijgt.
+  Bij reduced motion staat hij stil en gewoon zichtbaar.
+- **De stengel** (zie DESIGN.md, Ornamenten) tekent zichzelf per sectie van
+  boven naar beneden: `stroke-dashoffset` 1→0 op `entry 0% cover 40%`, de
+  vijf lijnen elk 2% na elkaar. Geen parallax op de stengel: een segment dat
+  verschuift breekt de aansluiting op de sectiegrens. Bij reduced motion
+  staat hij er compleet.
+- **Het omslagmotief beweegt niet meer mee** (was de vierde parallaxlaag):
+  de stengel groeit uit de beker, en de bloem kan niet schuiven zonder van
+  haar stengel los te raken. De notenbalk erachter beweegt nog wel — drie
+  lagen dus, zoals deze spec oorspronkelijk zei.

@@ -1,0 +1,103 @@
+---
+/**
+ * Eén sectie-segment van de stengel (zie lib/stengel.ts en data/stengel.ts):
+ * de vijflijnige notenbalk die als slingerpad door de pagina golft, van de
+ * bloem in de omslag naar de liggende balk in de footer.
+ *
+ * Achtergrondlaag: absoluut, inset 0, z-index -1, aria-hidden. De sectie
+ * eromheen moet een stapelcontext zijn (`<Sectie band>`). Haal het segment
+ * weg en er verschuift niets.
+ *
+ * Alleen vanaf 80rem: daaronder bestaan de marges niet waar de stengel
+ * doorheen slingert (het galerijgrid raakt daar bijna de vensterrand), en
+ * verdwijnt ook de bloem waar hij uit groeit.
+ *
+ * Het segment tekent zichzelf van boven naar beneden terwijl de sectie in
+ * beeld komt, de vijf lijnen een fractie na elkaar. Bij reduced motion of
+ * zonder scroll-driven animations staat hij er gewoon, compleet.
+ */
+import { stengelPaden } from '../../lib/stengel';
+import { stengel, type StengelDeel } from '../../data/stengel';
+import Sprig from './Sprig.astro';
+
+interface Props {
+  deel: StengelDeel;
+  /** Dekking van de lijnen; 0.08 onder tekstzones, hoger alleen op leeg vlak. */
+  dekking?: number;
+  class?: string;
+}
+const { deel, dekking = 0.08, class: className } = Astro.props;
+const segment = stengel[deel];
+const paden = stengelPaden(segment);
+---
+
+<div class:list={['stengel', className]} aria-hidden="true">
+  <svg viewBox="0 0 100 100" preserveAspectRatio="none" style={`opacity: ${dekking};`}>
+    {paden.map((d) => <path d={d} pathLength="1" vector-effect="non-scaling-stroke" />)}
+  </svg>
+  {
+    segment.loten?.map((loot) => (
+      <span class="loot" style={`left: ${loot.x}%; top: ${loot.y}%; --draai: ${loot.draai ?? 0}deg;`}>
+        <Sprig name={loot.naam} class="w-full" />
+      </span>
+    ))
+  }
+</div>
+
+<style>
+  .stengel {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    display: none;
+    color: var(--color-bordeaux);
+    pointer-events: none;
+  }
+  @media (min-width: 80rem) {
+    .stengel {
+      display: block;
+    }
+  }
+  .stengel svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .stengel path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+  }
+
+  /* Een loot groeit uit de stengel: gecentreerd op een waypoint, dus hij
+     raakt de lijn altijd, hoe de sectie ook rekt. */
+  .loot {
+    position: absolute;
+    width: 2.25rem;
+    translate: -50% -50%;
+    rotate: var(--draai);
+    opacity: 0.3;
+  }
+
+  /* Longhands, geen `animation:`-shorthand — zie global.css. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .stengel path {
+        stroke-dasharray: 1;
+        animation-name: stengel-groei;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 40%;
+      }
+      .stengel path:nth-child(2) { animation-range: entry 2% cover 42%; }
+      .stengel path:nth-child(3) { animation-range: entry 4% cover 44%; }
+      .stengel path:nth-child(4) { animation-range: entry 6% cover 46%; }
+      .stengel path:nth-child(5) { animation-range: entry 8% cover 48%; }
+    }
+  }
+  @keyframes stengel-groei {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+</style>

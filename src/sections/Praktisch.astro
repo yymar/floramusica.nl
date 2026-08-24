@@ -7,11 +7,13 @@
  * verschijnt de volledige lijst vanzelf.
  */
 import Sectie from '../components/Sectie.astro';
+import Stengel from '../components/ornaments/Stengel.astro';
 import { praktisch } from '../data/copy';
 import { tarieven } from '../data/tarieven';
 ---
 
-<Sectie id="praktisch" label="Praktisch" kop={praktisch.kop} tint>
+<Sectie id="praktisch" label="Praktisch" kop={praktisch.kop} tint band>
+  <Stengel slot="band" deel="praktisch" />
   <p class="rijs r2 max-w-[62ch]">
     {praktisch.intro}{' '}
     {praktisch.introVraagVoor}{' '}<a

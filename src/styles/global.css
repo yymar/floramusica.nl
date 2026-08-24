@@ -193,13 +193,20 @@ section[id] {
   overflow-x: clip;
 }
 
-/* De maatstreep: de rode draad die zich door het hele binnenwerk trekt.
+/* De maatstreep: de rode draad die zich door het binnenwerk trekt.
    Positie afgeleid uit het marge-grid, niet los gehardcodeerd — container
    64rem met 2rem padding, labelkolom 12rem, gap 2.5rem, dus het midden van
-   de gap ligt op 50% − 16.75rem. Alleen vanaf 64rem, want daaronder bestaat
-   de labelkolom niet. */
+   de gap ligt op 50% − 16.75rem. Alleen tussen 64 en 80rem: daaronder
+   bestaat de labelkolom niet, en daarboven neemt de stengel de rol van
+   rode draad over — twee verticale draden naast elkaar zou concurrentie
+   zijn. */
 .maatstreep {
   display: none;
+}
+@media (min-width: 80rem) {
+  .maatstreep {
+    display: none !important;
+  }
 }
 @media (min-width: 64rem) {
   .maatstreep {
