@@ -58,8 +58,9 @@ const cellen: Cel[] = await Promise.all(
   fotos.length > 0 && (
     <Sectie id="beelden" label="Beelden" kop={galerij.kop} sier="bloem-open" band>
       {/* De stengel neemt hier de verbindende rol; langs de buitenmarge
-          van het grid, nooit door de foto's. */}
-      <Stengel slot="band" deel="beelden" />
+          van het grid, nooit door de foto's. De marge is leeg vlak, dus
+          iets voller dan onder tekst. */}
+      <Stengel slot="band" deel="beelden" dekking={0.12} />
       <div class="grid-quilt" id="galerij-grid">
         {cellen.map(({ foto, nummer, span, thumb, srcset, groot }) => (
           <figure class:list={['cel', `cel-${span}`]}>
@@ -74,7 +75,7 @@ const cellen: Cel[] = await Promise.all(
                 data-nummer={nummer}
                 aria-label={`Bekijk foto ${nummer} groot: ${foto.alt}`}
               >
-                <Image src={foto.src} alt={foto.alt} width={800} height={Math.round((800 / foto.src.width) * foto.src.height)} loading="lazy" class="cel-beeld" style={foto.focus ? `object-position: ${foto.focus};` : undefined} />
+                <Image src={foto.src} alt={foto.alt} width={800} height={Math.round((800 / foto.src.width) * foto.src.height)} widths={[400, 800]} sizes="(min-width: 48rem) 26vw, 48vw" loading="lazy" class="cel-beeld" style={foto.focus ? `object-position: ${foto.focus};` : undefined} />
                 {foto.onderschrift && <span class="cel-overlay" aria-hidden="true">{foto.onderschrift}</span>}
               </a>
             ) : (

@@ -33,7 +33,10 @@ export const stengel: Record<StengelDeel, StengelSegment & { loten?: Loot[] }> =
       { x: 42, y: 86 },
       { x: 65, y: 100 },
     ],
-    loten: [{ x: 24, y: 66, naam: 'noten-blad', draai: -14 }],
+    loten: [
+      { x: 52, y: 26, naam: 'tak-blad', draai: 24 },
+      { x: 24, y: 66, naam: 'noten-blad', draai: -14 },
+    ],
   },
   // Achter de witruimte van de kop langs naar de buitenmarge van het grid.
   beelden: {
@@ -44,6 +47,7 @@ export const stengel: Record<StengelDeel, StengelSegment & { loten?: Loot[] }> =
       { x: 90, y: 72 },
       { x: 86, y: 100 },
     ],
+    loten: [{ x: 90, y: 72, naam: 'bloem-open', draai: -18 }],
   },
   // Boven het bordeaux vlak langs naar links, dan een rustige S omlaag.
   lessen: {

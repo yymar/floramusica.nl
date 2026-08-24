@@ -31,9 +31,25 @@ interface Props {
   toon?: 'paper' | 'bordeaux';
   /** Korte omschrijving van de foto die hier nog komt. */
   todo?: string;
+  /**
+   * `eager` voor beelden boven de vouw (het hero-portret is de LCP):
+   * lazy zou daar het portret pas na de eerste paint laten verschijnen —
+   * op trage verbindingen staat er dan een leeg vlak.
+   */
+  laden?: 'lazy' | 'eager';
   class?: string;
 }
-const { src, alt, breedte, hoogte, focus = '50% 50%', toon = 'paper', todo, class: className } = Astro.props;
+const {
+  src,
+  alt,
+  breedte,
+  hoogte,
+  focus = '50% 50%',
+  toon = 'paper',
+  todo,
+  laden = 'lazy',
+  class: className,
+} = Astro.props;
 ---
 
 {
@@ -43,7 +59,8 @@ const { src, alt, breedte, hoogte, focus = '50% 50%', toon = 'paper', todo, clas
       alt={alt}
       width={breedte}
       height={hoogte}
-      loading="lazy"
+      loading={laden}
+      fetchpriority={laden === 'eager' ? 'high' : undefined}
       style={`aspect-ratio: ${breedte} / ${hoogte}; object-position: ${focus};`}
       class:list={['h-full w-full rounded-sm object-cover', className]}
     />

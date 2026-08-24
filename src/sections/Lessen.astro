@@ -28,17 +28,20 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
 
   {
     hoofd && (
-      <article class="golf-plaat">
-        {/* De klarinet zelf — de instrumentlaag uit het sier-motief — staat
-            als hoge accentkolom tegen de rechterkant van het vlak en loopt
-            aan de bovenkant het vlak uit. Gecomponeerd op het blok, niet
-            erbovenop gelegd. */}
+      <div class="golf-houder">
+        <article class="golf-plaat">
+          <h3 class="font-display text-subkop font-semibold text-paper">{hoofd.naam}</h3>
+          <p class="mt-2 max-w-[52ch] text-paper-dim">{hoofd.omschrijving}</p>
+        </article>
+        {/* De klarinet — de instrumentlaag uit het sier-motief — staat als
+            hoge accentkolom in de rechterbovenhoek en bloeit over de rand
+            van het vlak heen. Buiten de plaat (die clipt zichzelf voor de
+            openings-animatie), in bordeaux: leesbaar op het vlak én op het
+            papier erboven. */}
         <div class="golf-klarinet" aria-hidden="true">
           <Motief name="klarinet-instrument" class="w-full" />
         </div>
-        <h3 class="font-display text-subkop font-semibold text-paper">{hoofd.naam}</h3>
-        <p class="mt-2 max-w-[52ch] text-paper-dim">{hoofd.omschrijving}</p>
-      </article>
+      </div>
     )
   }
 
@@ -78,37 +81,33 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
 </Sectie>
 
 <style>
-  /* Het golf-vlak bloedt rechts uit de container tot de paginarand; het
-     binnenwerk in index.astro vangt dat op met overflow-x: clip. */
-  /* Ornamenten hebben een anker nodig; deze twee hangen aan het vlak en aan
-     de kop, niet los in de witruimte.
-
-     De klarinet staat op de bodem van het vlak en is hoger dan het vlak
-     zelf, dus hij loopt er aan de bovenkant uit; `overflow: clip` op het
-     vlak maakt daar een bewuste snede van in plaats van een uitloper over
-     de tekst erboven. De viewBox heeft links en rechts lucht om het
-     instrument heen (het instrument zit op 33–66% van de breedte), vandaar
-     de negatieve rechteroffset: die zet het zichtbare instrument tegen de
-     rand, niet zijn lege kader. */
-  .golf-plaat :global(.golf-klarinet) {
+  /* De klarinet staat op de bodem van het vlak en is hoger dan het vlak
+     zelf, dus hij bloeit er aan de bovenkant overheen — daarom hangt hij
+     aan de houder en niet in de plaat, waar de clip van de
+     openings-animatie hem zou afsnijden. De viewBox heeft links en rechts
+     lucht om het instrument heen (het instrument zit op 33–66% van de
+     breedte), vandaar de negatieve rechteroffset: die zet het zichtbare
+     instrument tegen de rand van het vlak, niet zijn lege kader. */
+  .golf-houder :global(.golf-klarinet) {
     position: absolute;
     bottom: 0;
     right: -2.25rem;
-    height: calc(100% + 3.5rem);
+    /* De overloop blijft onder de introregel erboven: het accent bloeit
+       over de hoek, niet door de tekst. */
+    height: calc(100% + 2rem);
     aspect-ratio: 80 / 112;
-    opacity: 0.2;
-    color: var(--color-paper);
+    opacity: 0.3;
+    color: var(--color-bordeaux);
     pointer-events: none;
   }
-  .golf-plaat :global(.golf-klarinet svg) {
+  .golf-houder :global(.golf-klarinet svg) {
     width: 100%;
     height: 100%;
   }
   @media (min-width: 48rem) {
-    .golf-plaat :global(.golf-klarinet) {
+    .golf-houder :global(.golf-klarinet) {
       right: -1rem;
-      height: calc(100% + 4.5rem);
-      opacity: 0.22;
+      height: calc(100% + 3rem);
     }
   }
 
@@ -132,27 +131,20 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
     }
   }
 
-  /* Het vlak loopt door tot precies de vensterrand. `calc(50% - 50vw)` zou
-     dat alleen doen als het blok gecentreerd op de pagina stond; hier zit
-     het in de rechterkolom van het marge-grid, dus schoot het er 116px
-     overheen — onzichtbaar door de clip van het binnenwerk, maar het maakte
-     `right` op het ornament betekenisloos. Dit rekent de werkelijke afstand
-     uit: de halve marge buiten de container plus de eigen padding. */
-  .golf-plaat {
-    --bleed: calc(max(0px, (100vw - 64rem) / 2) + 1.25rem);
+  /* Het vlak houdt de contentbreedte, net als het instrumentengrid eronder:
+     geen bleed naar de vensterrand — daardoor liep het klarinet-accent uit
+     beeld. De houder draagt positie en z-orde; de plaat clipt alleen
+     zichzelf (voor de openings-animatie), niet het accent. */
+  .golf-houder {
     position: relative;
     z-index: var(--z-inhoud);
-    overflow: clip;
     margin-top: 0.75rem;
-    margin-right: calc(-1 * var(--bleed));
-    border-radius: 2px 0 0 2px;
+  }
+  .golf-plaat {
+    overflow: clip;
+    border-radius: 2px;
     background: var(--color-bordeaux-deep);
     padding: 2rem 1.5rem;
-  }
-  @media (min-width: 40rem) {
-    .golf-plaat {
-      --bleed: calc(max(0px, (100vw - 64rem) / 2) + 2rem);
-    }
   }
   @media (min-width: 48rem) {
     .golf-plaat {
