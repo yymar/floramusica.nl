@@ -82,6 +82,10 @@ Scroll-gekoppelde animaties zijn `linear` zonder duur: positie in de `animation-
 ### Footer — notenbalkslot tekent zichzelf
 - `view-timeline: --slot` op de footer; de vijf lijnen `scaleX 0→1` origin links, ranges `entry 0–45%` +6% per lijn; de eindstreep (dun+dik) fade `entry 45–80%`.
 - Reduced: balk staat er compleet.
+- **Gebouwd anders, zie Afwijkingen:** het slot is nu het geketende lint in
+  zijn volle behandeling. De aanloop (centerline) tekent zichzelf op
+  `entry 0–30%`, daarna schrijft de balk zich van links naar rechts met
+  `clip-path` op `entry 22–78%`, en valt de eindstreep in op `entry 72–95%`.
 
 ## Voor/na per sectie (wat het houterige oplost)
 
@@ -154,3 +158,14 @@ na de fix loopt hij tot 56px, gelijk aan de site.
   code volgt die twee stappen (NAW op `r2`, de rest op `r3`).
 - **De instrumentteksten staggeren `''`/`r2`/`r2`/`r3`** zoals het prototype,
   niet allemaal gelijk.
+- **Het notenbalkslot bestaat niet meer uit vijf losse rechte lijnen.** Het is
+  het geketende lint met noten en bladvlaggen geworden (zie DESIGN.md,
+  Ornamenten). Vijf `scaleX`-lijnen kunnen dat niet dragen — de balk van het
+  lint golft — dus schrijft de hele balk zich met één `clip-path: inset()` van
+  links naar rechts. Dezelfde beweging, hetzelfde verhaal (lijn eerst,
+  eindstreep laatst), ander middel. De ranges zijn iets opgeschoven omdat er nu
+  drie fasen in plaats van twee in passen.
+- **Er zijn twee textuurbanden bij gekomen** (Over → Beelden en
+  Praktisch → Contact). Ze drijven verticaal ±1,25rem over `cover 0–100%`:
+  trage parallax, zodat de naad tussen twee secties diepte krijgt in plaats van
+  een streep te zijn. Bij reduced motion staan ze stil en gewoon zichtbaar.

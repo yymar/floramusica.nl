@@ -1,0 +1,142 @@
+---
+/**
+ * Textuurband: een naadloos geketend lint dat als achtergrondlaag over een
+ * sectiegrens heen loopt. Dit is waar de herhaalbare linten voor gemaakt
+ * zijn — a en b sluiten aan de tegelrand exact op elkaar aan (beide staan
+ * daar met hun vijf lijnen vlak op y 8/10/12/14/16 van 24), dus a→b→a→b
+ * ketent zonder naad.
+ *
+ * De band is decoratie, geen inhoud: `aria-hidden`, `pointer-events: none`,
+ * `z-index: -1`. Hij hangt absoluut in zijn sectie en reserveert geen enkele
+ * layouthoogte — haal hem weg en er verschuift niets. De sectie eromheen
+ * moet daarvoor wel een stapelcontext zijn: `<Sectie band>` regelt dat.
+ *
+ * De band is altijd 100vw breed en er passen precies één, twee of drie
+ * paren in, dus de tegelranden — de enige plekken waar de golf vlak ligt —
+ * vallen samen met de vensterranden. Het aantal paren schaalt mee met de
+ * breedte, want het bepaalt ook de hoogte: één paar op een breed scherm
+ * zou een band van bijna tweehonderd pixel opleveren, en dat is geen
+ * textuur meer maar een illustratie. Zo blijft hij overal 30–70px.
+ *
+ * `blad` legt de blad/knop-laag uit het lagenpakket over de balk. Die laag
+ * deelt de viewBox met het lint, dus de blaadjes landen pixel-op-pixel op
+ * de plek waar ze getekend zijn.
+ */
+import { lintGebruik } from './svg';
+
+interface Props {
+  /** Legt de blad/knop-laag over de notenbalk. */
+  blad?: boolean;
+  /** Dekking van de balk (MANIFEST.md: quiet hoort op 5–15%). */
+  dekking?: number;
+  class?: string;
+}
+const { blad = false, dekking = 0.07, class: className } = Astro.props;
+
+// Drie paren in de HTML; CSS laat er één of twee weg op smallere schermen.
+const keten = (variant: 'quiet' | 'blad') =>
+  Array.from({ length: 3 }, () =>
+    lintGebruik('a', variant, 'tegel tegel-a') + lintGebruik('b', variant, 'tegel tegel-b')
+  ).join('');
+---
+
+<div class:list={['band', className]} aria-hidden="true" style={`--dekking: ${dekking};`}>
+  <div class="spoor" set:html={keten('quiet')} />
+  {blad && <div class="spoor spoor-blad" set:html={keten('blad')} />}
+</div>
+
+<style>
+  /* De band ligt met zijn hart op de sectiegrens: hij hangt de halve
+     bandhoogte omhoog. De hoogte is 100vw / (10 × paren), dus de helft
+     daarvan is 5vw, 2,5vw of 1⅔vw. */
+  .band {
+    --paren: 1;
+    --verhouding: 10 / 1;
+    position: absolute;
+    top: -5vw;
+    /* Volle vensterbreedte vanuit een container die smaller is. Het
+       binnenwerk klipt horizontaal, dus dit geeft geen scrollbalk. */
+    left: calc(50% - 50vw);
+    width: 100vw;
+    z-index: -1;
+    color: var(--color-bordeaux);
+    pointer-events: none;
+  }
+  .spoor {
+    display: flex;
+    width: 100%;
+    aspect-ratio: var(--verhouding);
+    opacity: var(--dekking);
+  }
+  /* De bladlaag ligt exact over de balk; zelfde geometrie, eigen dekking. */
+  .spoor-blad {
+    position: absolute;
+    inset: 0;
+    opacity: calc(var(--dekking) * 1.8);
+  }
+  /* Breedtes uitgerekend in plaats van uit de viewBox laten volgen: dan
+     telt de rij gegarandeerd op tot precies 100% en blijft er geen
+     subpixelnaad tussen twee tegels staan. */
+  .band :global(.tegel) {
+    height: 100%;
+    flex: none;
+  }
+  /* Elke tegel rendert een pixel breder dan hij opschuift, zodat de
+     naden overlappen. Zonder dat halveert de antialiasing de dekking van de
+     lijn precies op de tegelrand en staat er een lichte streep in de balk. */
+  .band :global(.tegel-a) {
+    width: calc(60% / var(--paren) + 1px);
+    margin-right: -1px;
+  }
+  .band :global(.tegel-b) {
+    width: calc(40% / var(--paren) + 1px);
+    margin-right: -1px;
+  }
+  /* De paren die op deze breedte niet meedoen. */
+  .band :global(.tegel:nth-child(n + 3)) {
+    display: none;
+  }
+  @media (min-width: 44rem) {
+    .band {
+      --paren: 2;
+      --verhouding: 20 / 1;
+      top: -2.5vw;
+    }
+    .band :global(.tegel:nth-child(3)),
+    .band :global(.tegel:nth-child(4)) {
+      display: block;
+    }
+    .band :global(.tegel:nth-child(n + 5)) {
+      display: none;
+    }
+  }
+  @media (min-width: 88rem) {
+    .band {
+      --paren: 3;
+      --verhouding: 30 / 1;
+      top: calc(-100vw / 60);
+    }
+    .band :global(.tegel:nth-child(n + 5)) {
+      display: block;
+    }
+  }
+
+  /* Trage parallax: de band loopt achter op de pagina terwijl je scrolt,
+     waardoor de naad tussen de twee secties diepte krijgt. Longhands, geen
+     `animation:`-shorthand — zie global.css. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .band {
+        animation-name: band-sleep;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: cover 0% cover 100%;
+      }
+    }
+  }
+  @keyframes band-sleep {
+    from { transform: translateY(-1.25rem); }
+    to { transform: translateY(1.25rem); }
+  }
+</style>

@@ -1,47 +1,67 @@
 ---
 /**
- * Footer met het notenbalk-motief als bovenrand: vijf bordeaux hairlines,
- * het enige decoratieve motief op de pagina. Daaronder de zakelijke
- * gegevens. Regel: lege gegevens worden weggelaten, nooit als
- * placeholder getoond; zie CONTENT-TODO.md voor wat er nog mist.
+ * Footer met het notenbalkslot als bovenrand: het lint in zijn volle
+ * behandeling — balk, noten en bladvlaggen — met een getekende aanloop en
+ * een dubbele eindstreep. Daaronder de zakelijke gegevens. Regel: lege
+ * gegevens worden weggelaten, nooit als placeholder getoond; zie
+ * CONTENT-TODO.md voor wat er nog mist.
  */
 import Ribbon from './ornaments/Ribbon.astro';
 import Wordmark from './Wordmark.astro';
+import { lintGebruik } from './ornaments/svg';
 import { site } from '../data/site';
 import { footer } from '../data/copy';
 
 const gegevens = [site.email, site.telefoon, site.kvk].some(Boolean);
+
+// De slotbalk is een geketend lint over de volle breedte: b→a, en vanaf
+// 48rem twee keer. Elke tegel begint en eindigt met zijn vijf lijnen vlak op
+// dezelfde hoogte, dus elke volgorde ketent naadloos; b staat vooraan omdat
+// die tegel de aanloop draagt en de smalste is — zo blijft er meer breedte
+// over voor de balk zelf. Op de plek van die eerste tegel staat een lege
+// plaatshouder; daar ligt de aanloop overheen (zie hieronder). Het tweede
+// paar staat altijd in de HTML en wordt onder 48rem door CSS weggelaten — op
+// die breedte zou het lint anders zo laag worden dat de balk dichtslibt.
+const keten = (variant: 'quiet' | 'noten' | 'blad') =>
+  '<span class="tegel tegel-b"></span>' +
+  lintGebruik('a', variant, 'tegel tegel-a') +
+  lintGebruik('b', variant, 'tegel tegel-b') +
+  lintGebruik('a', variant, 'tegel tegel-a');
 ---
 
 <footer>
-  {/* De finale: het lint tekent zichzelf vlak boven de eindstreep terwijl je
-      naar de voet van de pagina scrolt. Centerline-variant (200 bytes, één
-      streek) — de enige plek op de pagina waar de draad zichzelf trekt.
-      Zonder scroll-driven animations of bij reduced motion staat hij er
-      gewoon, volledig getekend. */}
-  {/* Notenbalk met eindstreep: de pagina opende met de sleutel (hero) en sluit hier de partituurregel af.
-      Eén SVG met crispEdges, zodat lijndikte en -afstand op elke schermschaal gelijk blijven.
+  {/* De finale. De pagina opende met een notenbalk en sluit hier af met
+      dezelfde, maar nu in de volle lintbehandeling: balk, noten en
+      bladvlaggen, opgebouwd uit de drie lagen van het lintpakket zodat ze
+      pixel-op-pixel over elkaar vallen.
 
-      Het slotakkoord (MOTION.md): de vijf lijnen schrijven zichzelf van links
-      naar rechts terwijl de footer in beeld komt, de eindstreep valt daarna
-      in. De timeline hangt aan de footer zelf (`view-timeline: --slot`) en
-      niet aan de rects — een SVG-rect heeft geen eigen scrollpositie om aan
-      te hangen. */}
-  {/* De aanloop: het lint ligt strak op de notenbalk en tekent zichzelf op
-      dezelfde --slot-timeline, vlak vóór de lijnen. Smal gehouden, want de
-      streekdikte schaalt mee met de breedte en zou over de volle kolom
-      zwaarder worden dan de eindstreep die hij aankondigt. */}
+      Links de aanloop: de centerline van datzelfde lint, die zichzelf
+      tekent terwijl de footer in beeld komt. Hij bezet precies de eerste
+      tegel en eindigt op y 12 van 24 — exact de middelste notenbalklijn op
+      een tegelrand, waar de golf vlak ligt. Zijn eindraaklijn valt dus samen
+      met het begin van de balk: de lijn loopt de notenbalk in.
+
+      Daarna schrijft de balk zichzelf van links naar rechts (MOTION.md), en
+      valt de dubbele eindstreep als laatste in. Die staat op de rechterrand
+      van de laatste tegel, waar de vijf lijnen weer vlak liggen, en springt
+      met de padding van .slot in van de vensterrand — anders leest hij als
+      afsnijding in plaats van als afsluiting.
+
+      Zonder scroll-driven animations of bij reduced motion staat het er
+      gewoon, compleet. */}
   <div class="slot" aria-hidden="true">
-    <div class="flex justify-center">
-      <Ribbon name="a" variant="centerline" draw class="w-80 text-bordeaux opacity-60" />
+    <div class="slot-balk">
+      <div class="spoor spoor-balk" set:html={keten('quiet')} />
+      <div class="spoor spoor-noten" set:html={keten('noten')} />
+      <div class="spoor spoor-blad" set:html={keten('blad')} />
+      <div class="slot-aanloop">
+        <Ribbon name="b" variant="centerline" draw class="w-full" />
+      </div>
+      <div class="eindstreep">
+        <span class="streep-dun"></span>
+        <span class="streep-dik"></span>
+      </div>
     </div>
-    <svg width="100%" height="41" shape-rendering="crispEdges" class="slotbalk block text-bordeaux">
-      {[0, 10, 20, 30, 40].map((y) => (
-        <rect class="slotlijn" x="0" y={y} width="100%" height="1" fill="currentColor" />
-      ))}
-      <rect class="eindstreep" x="100%" transform="translate(-8 0)" y="0" width="1" height="41" fill="currentColor" />
-      <rect class="eindstreep" x="100%" transform="translate(-4 0)" y="0" width="4" height="41" fill="currentColor" />
-    </svg>
   </div>
 
   <div class="mx-auto max-w-5xl px-5 py-12 sm:px-8">
@@ -101,12 +121,98 @@ const gegevens = [site.email, site.telefoon, site.kvk].some(Boolean);
       padding-right: 3rem;
     }
   }
-  .slotlijn {
-    opacity: 0.55;
-    transform-origin: left;
+
+  /* Eén a→b-paar op smalle schermen, twee vanaf 48rem. De verhouding zet de
+     hoogte: a is 6× en b 4× zo breed als hoog, dus een paar is precies 10×.
+     Daardoor passen de paren exact in de breedte en valt de rechterrand op
+     een tegelrand — de enige plek waar de golf vlak ligt en de eindstreep de
+     vijf lijnen haaks kruist. */
+  .slot-balk {
+    --paren: 1;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 10 / 1;
+    color: var(--color-bordeaux);
   }
+  @media (min-width: 48rem) {
+    .slot-balk {
+      --paren: 2;
+      aspect-ratio: 20 / 1;
+    }
+  }
+
+  .spoor {
+    position: absolute;
+    inset: 0;
+    display: flex;
+  }
+  .spoor-balk {
+    opacity: 0.5;
+  }
+  /* Noten en bladvlaggen liggen lichter dan de balk zelf, zoals in de rest
+     van de pagina: de lijn draagt, het ornament versiert. */
+  .spoor-noten,
+  .spoor-blad {
+    opacity: 0.32;
+  }
+  /* Breedtes uitgerekend, niet uit de viewBox afgeleid: dan telt de rij
+     gegarandeerd op tot 100% en blijft er geen subpixelnaad staan. */
+  .slot-balk :global(.tegel) {
+    height: 100%;
+    flex: none;
+    /* De noten steken boven en onder de viewBox van het lint uit; zonder dit
+       snijdt de tegel zijn eigen vlaggen af. */
+    overflow: visible;
+  }
+  /* Elke tegel rendert een pixel breder dan hij opschuift, zodat de
+     naden overlappen. Zonder dat halveert de antialiasing de dekking van de
+     lijn precies op de tegelrand en staat er een lichte streep in de balk. */
+  .slot-balk :global(.tegel-a) {
+    width: calc(60% / var(--paren) + 1px);
+    margin-right: -1px;
+  }
+  .slot-balk :global(.tegel-b) {
+    width: calc(40% / var(--paren) + 1px);
+    margin-right: -1px;
+  }
+  @media (max-width: 47.99rem) {
+    .spoor :global(.tegel:nth-child(n + 3)) {
+      display: none;
+    }
+  }
+
+  /* De aanloop bezet exact de eerste tegel. */
+  .slot-aanloop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: calc(40% / var(--paren));
+    opacity: 0.4;
+  }
+  .slot-aanloop :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* De vijf lijnen liggen op een tegelrand tussen 8 en 16 van 24. */
   .eindstreep {
+    position: absolute;
+    right: 0;
+    top: 33.333%;
+    height: 33.333%;
+    display: flex;
+    align-items: stretch;
+    gap: 3px;
     opacity: 0.7;
+  }
+  .streep-dun {
+    width: 1px;
+    background: currentColor;
+  }
+  .streep-dik {
+    width: 4px;
+    background: currentColor;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -114,32 +220,35 @@ const gegevens = [site.email, site.telefoon, site.kvk].some(Boolean);
       footer {
         view-timeline: --slot block;
       }
+      /* Eerst de aanloop: één streek die zichzelf trekt. */
       :global(.ornament-draw path) {
         animation-timeline: --slot;
         animation-range: entry 0% entry 30%;
       }
-      .slotlijn {
-        animation-name: lijn-groei;
+      /* Daarna schrijft de balk zichzelf van links naar rechts. clip-path en
+         geen breedte: zo verspringt er niets binnenin. */
+      .spoor {
+        animation-name: slot-schrijven;
         animation-timing-function: linear;
         animation-fill-mode: both;
         animation-timeline: --slot;
-        animation-range: entry 0% entry 45%;
+        animation-range: entry 22% entry 78%;
       }
-      .slotlijn:nth-child(2) { animation-range: entry 6% entry 51%; }
-      .slotlijn:nth-child(3) { animation-range: entry 12% entry 57%; }
-      .slotlijn:nth-child(4) { animation-range: entry 18% entry 63%; }
-      .slotlijn:nth-child(5) { animation-range: entry 24% entry 69%; }
       /* De eindstreep is het laatste wat er staat — pas als de balk er ligt. */
       .eindstreep {
         animation-name: eindstreep-op;
         animation-timing-function: linear;
         animation-fill-mode: both;
         animation-timeline: --slot;
-        animation-range: entry 45% entry 80%;
+        animation-range: entry 72% entry 95%;
       }
     }
   }
 
+  @keyframes slot-schrijven {
+    from { clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0 0 0 0); }
+  }
   @keyframes eindstreep-op {
     from { opacity: 0; }
     to { opacity: 0.7; }

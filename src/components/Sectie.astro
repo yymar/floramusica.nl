@@ -12,28 +12,41 @@
  * regel breekt is in statische CSS niet te weten. De choreografie loopt tot
  * vier stappen, dus alles vanaf het vierde woord blijft één span; koppen
  * hier zijn kort, dus dat valt in de praktijk nooit op.
+ *
+ * `sier` zet een klein plantaardig accent in de labelkolom: de marge van
+ * het programmaboekje, naast de kop waar het bij hoort. Accentmaat (32–40px),
+ * nooit in de tekstkolom.
+ *
+ * `band` maakt de sectie een stapelcontext, zodat een `<TextuurBand>` in de
+ * `band`-slot met `z-index: -1` achter alle inhoud kan liggen en over de
+ * sectiegrens heen mag hangen. Alleen op secties zonder eigen achtergrond;
+ * op een getinte sectie zou de band achter die tint verdwijnen.
  */
+import Sprig from './ornaments/Sprig.astro';
+import type { TakjeNaam } from './ornaments/svg';
+
 interface Props {
   id: string;
   label: string;
   kop: string;
   tint?: boolean;
+  sier?: TakjeNaam;
+  band?: boolean;
 }
-const { id, label, kop, tint = false } = Astro.props;
+const { id, label, kop, tint = false, sier, band = false } = Astro.props;
 
 const woorden = kop.split(' ').filter(Boolean);
 const delen = woorden.length > 4 ? [...woorden.slice(0, 3), woorden.slice(3).join(' ')] : woorden;
 ---
 
-<section id={id} class:list={[tint && 'bg-paper-deep']}>
+<section id={id} class:list={[tint && 'bg-paper-deep', band && 'draagt-band']}>
+  <slot name="band" />
   <div class="mx-auto max-w-5xl px-5 py-sectie sm:px-8">
     <div class="md:grid md:grid-cols-[10rem_1fr] md:gap-10 lg:grid-cols-[12rem_1fr]">
-      <p
-        class="mb-2 text-klein font-bold text-bordeaux md:mb-0 md:pt-[0.6em] md:text-right"
-        aria-hidden="true"
-      >
-        {label}
-      </p>
+      <div class="labelkolom mb-2 md:mb-0 md:pt-[0.6em]">
+        <p class="text-klein font-bold text-bordeaux" aria-hidden="true">{label}</p>
+        {sier && <Sprig name={sier} class="sier" />}
+      </div>
       <div>
         <h2 class="font-display text-kop font-semibold tracking-tight text-ink">
           {
@@ -52,3 +65,37 @@ const delen = woorden.length > 4 ? [...woorden.slice(0, 3), woorden.slice(3).joi
     </div>
   </div>
 </section>
+
+<style>
+  /* Alleen hier een stapelcontext, niet op elke sectie: anders zouden de
+     getinte secties over de maatstreep in het binnenwerk heen schilderen. */
+  .draagt-band {
+    position: relative;
+    z-index: 0;
+  }
+
+  /* Het accent staat in de marge naast het label. Op mobiel op dezelfde
+     regel (geen extra hoogte in de tekstkolom), vanaf het marge-grid
+     eronder, rechts uitgelijnd met het label. */
+  .labelkolom {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .labelkolom :global(.sier) {
+    width: 2rem;
+    flex: none;
+    color: var(--color-bordeaux);
+    opacity: 0.45;
+  }
+  @media (min-width: 48rem) {
+    .labelkolom {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+    .labelkolom :global(.sier) {
+      width: 2.5rem;
+    }
+  }
+</style>

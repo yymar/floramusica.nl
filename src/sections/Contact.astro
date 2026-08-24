@@ -1,11 +1,16 @@
 ---
 import Sectie from '../components/Sectie.astro';
 import ContactFormulier from '../components/ContactFormulier.astro';
+import TextuurBand from '../components/ornaments/TextuurBand.astro';
 import { contact } from '../data/copy';
 import { site } from '../data/site';
 ---
 
-<Sectie id="contact" label="Contact" kop={contact.kop}>
+<Sectie id="contact" label="Contact" kop={contact.kop} band>
+  {/* De draad die Praktisch en Contact aan elkaar knoopt: het lint naadloos
+      geketend over de volle vensterbreedte, half boven en half onder de
+      grens, achter beide achtergronden langs. */}
+  <TextuurBand slot="band" dekking={0.07} />
   <p class="rijs r2 max-w-[62ch]">{contact.intro}</p>
 
   <div class="mt-8">

@@ -9,12 +9,17 @@ transparent ground; PNGs are rasterized at 2048px on the longest side in bordeau
 | --- | --- | --- |
 | `assets/motifs/floramusica-motif-klarinet-bloei.svg` | `0 0 80 112` | foreground hero motif |
 | `assets/motifs/floramusica-motif-klarinet-bloei-quiet.svg` | `0 0 80 112` | background watermark (10–12% opacity) |
+| `assets/motifs/floramusica-motif-klarinet-instrument.svg` | `0 0 80 112` | instrument only, from the layer pack; tall accent column |
 | `assets/ribbons/floramusica-ribbon-a.svg` | `0 0 144 24` | foreground divider / frame |
 | `assets/ribbons/floramusica-ribbon-a-quiet.svg` | `0 0 144 24` | background watermark (10–12% opacity) |
 | `assets/ribbons/floramusica-ribbon-a-centerline.svg` | `0 0 144 24` | stroke-dasharray draw animation |
+| `assets/ribbons/floramusica-ribbon-a-noten.svg` | `0 0 144 24` | notes layer, registers on the staff |
+| `assets/ribbons/floramusica-ribbon-a-blad.svg` | `0 0 144 24` | leaves/buds layer, registers on the staff |
 | `assets/ribbons/floramusica-ribbon-b.svg` | `0 0 96 24` | foreground divider / frame |
 | `assets/ribbons/floramusica-ribbon-b-quiet.svg` | `0 0 96 24` | background watermark (10–12% opacity) |
 | `assets/ribbons/floramusica-ribbon-b-centerline.svg` | `0 0 96 24` | stroke-dasharray draw animation |
+| `assets/ribbons/floramusica-ribbon-b-noten.svg` | `0 0 96 24` | notes layer, registers on the staff |
+| `assets/ribbons/floramusica-ribbon-b-blad.svg` | `0 0 96 24` | leaves/buds layer, registers on the staff |
 | `assets/ribbons/floramusica-ribbon-c.svg` | `0 0 60 76` | foreground divider / frame |
 | `assets/ribbons/floramusica-ribbon-c-quiet.svg` | `0 0 60 76` | background watermark (10–12% opacity) |
 | `assets/ribbons/floramusica-ribbon-c-centerline.svg` | `0 0 60 76` | stroke-dasharray draw animation |

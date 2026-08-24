@@ -20,11 +20,11 @@
  * volledig. De CSS staat in `src/styles/global.css` onder `.ornament-draw`,
  * want scoped styles bereiken deze ingezette markup niet.
  */
-import { lintSvg, type LintNaam } from './svg';
+import { lintSvg, type LintNaam, type Variant } from './svg';
 
 interface Props {
   name: LintNaam;
-  variant?: 'full' | 'quiet' | 'centerline';
+  variant?: Variant;
   draw?: boolean;
   class?: string;
 }

@@ -7,7 +7,6 @@
  * verschijnt de volledige lijst vanzelf.
  */
 import Sectie from '../components/Sectie.astro';
-import Ribbon from '../components/ornaments/Ribbon.astro';
 import { praktisch } from '../data/copy';
 import { tarieven } from '../data/tarieven';
 ---
@@ -21,13 +20,9 @@ import { tarieven } from '../data/tarieven';
     >{praktisch.introVraagLink}</a>.
   </p>
 
-  {/* De draad: het lint als stil watermerk over de volle kolombreedte.
-      Quiet-variant op 12% — dat is de dekking waarvoor hij getekend is,
-      hoger gaat hij met de tekst concurreren. Zolang de tarieven nog niet
-      bekend zijn vult hij de ruimte die de tabel straks krijgt. */}
-  <div class="mt-10" aria-hidden="true">
-    <Ribbon name="a" variant="quiet" class="w-full text-bordeaux opacity-[0.12]" />
-  </div>
+  {/* Geen ornament in deze sectie: de draad loopt hier als textuurband over
+      de grens met Contact heen (zie Contact.astro). Een los lintsegment in
+      de tekstkolom zou een inhoudsplek innemen die het niet heeft. */}
 
   {
     tarieven.bekend && (

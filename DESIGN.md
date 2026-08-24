@@ -14,21 +14,43 @@ De pagina is één partituurregel. Hij opent op de omslag met een toon-op-toon n
 
 ## Ornamenten
 
-Naast de partituurregel draagt de pagina een kleine decoratieve set (Figma Make, `src/assets/`, beschreven in `MANIFEST.md`): een motief, linten en takjes, alle in één kleur via `currentColor`. Ze gaan inline de HTML in via de componenten in `src/components/ornaments/`, want alleen dan volgen ze de cascade en kosten ze geen extra request.
+Naast de partituurregel draagt de pagina een decoratieve set (Figma Make, `src/assets/`, beschreven in `MANIFEST.md`): een motief, linten en takjes, alle in één kleur via `currentColor`. Ze gaan inline de HTML in via de componenten in `src/components/ornaments/`, want alleen dan volgen ze de cascade en kosten ze geen extra request.
 
-De set is bewust spaarzaam ingezet — vijf ornamenten op de hele pagina, samen 48 kB inline (20 kB gzipped):
+Drie regels bepalen waar ze mogen staan.
 
-| Waar | Ornament | Rol |
+**1. Een ornament is nooit inhoud.** Het leeft in de achtergrond- of accentlaag van een sectie: `position: absolute` of een eigen band, achter de inhoud, `aria-hidden`. De inhoud loopt alsof het er niet is. Een ornament bezet nooit een inhoudsplek, vult nooit een kaartlichaam en reserveert geen layouthoogte. Verandert de layout als je het weghaalt, dan staat het verkeerd.
+
+**2. Drie maten, meer niet.**
+
+| Maat | Waar | Grootte |
 |---|---|---|
-| Omslag | `motif-klarinet-bloei` (full) | derde en achterste parallaxlaag, papier op 14%, bloedend over de rechteronderrand; onder 640px verborgen |
-| Lessen | `sprig-sol-sleutel` | opent het instrumentenprogramma boven de bordeaux regel |
-| Lessen | `sprig-noten-blad` | sluit de sectie af |
-| Praktisch | `ribbon-a-quiet` | de draad als stil watermerk op 12% |
-| Footer | `ribbon-a-centerline` | de finale, tekent zichzelf; zie Beweging |
+| Omslagmaat | uitsluitend het klarinetmotief op de omslag | het enige ornament op inhoudsschaal |
+| Accentmaat | naast een kop, op een kaarthoek, aan een sectierand | 32–72px, altijd verankerd |
+| Textuurmaat | volle-breedte banden uit naadloos geketende linten | 5–8% dekking, achter de inhoud, trage parallax |
 
-Drie varianten, elk met één doel: vol detail voor de voorgrond, `-quiet` uitsluitend als achtergrondwatermerk op 8–15% dekking, `-centerline` uitsluitend voor de draw-animatie. Een quiet-variant boven 15% wint van de tekst en hoort daar dus niet.
+**3. Elk ornament heeft een taak:** twee secties verbinden (een band over de naad), een kop markeren (accent), of de omslag componeren (het motief). Is de taak niet te benoemen, dan hoort het ornament er niet.
 
-Dit verruimt de eerdere regel "opening en slot, niets ertussen" bewust, maar houdt de geest ervan aan: geen ornament staat naast lopende tekst, alles is `aria-hidden` en niet focusbaar, en per sectie blijft het bij hoogstens twee. `src/assets/layers/` (de losse lagen om met de hand af te maken in Procreate) staat in `.gitignore` en komt nooit in de build; het omslagmotief staat op precies één plek in de code, zodat het later in één regel te vervangen is door een met de hand afgemaakte PNG.
+Wat er staat:
+
+| Waar | Ornament | Maat | Taak |
+|---|---|---|---|
+| Omslag | `motif-klarinet-bloei` | omslag | achterste parallaxlaag, papier op 14%, in de rechtermarge naast het portret, met één bewuste bleed onder de sectierand; onder 80rem verborgen |
+| Over | `sprig-tak-blad` | accent | drukkersornament in de labelmarge |
+| Over → Beelden | `ribbon-a/b-quiet` + `-blad` | textuur | bloeiband over de naad, 6% |
+| Beelden | `sprig-bloem-open` | accent | drukkersornament in de labelmarge |
+| Lessen | `motif-klarinet-instrument` | accent | hoge kolom tegen de rechterkant van het klarinetvlak, bloedt aan de bovenkant het vlak uit |
+| Lessen | `sprig-noten-blad` | accent | links van de kop "Voor wie" |
+| Locatie | `sprig-bloem-knop` | accent | drukkersornament in de labelmarge |
+| Praktisch → Contact | `ribbon-a/b-quiet` | textuur | de draad over de naad, 7% |
+| Footer | `ribbon-b-centerline` + `a/b-quiet`/`-noten`/`-blad` | textuur | het slot: getekende aanloop die de notenbalk in loopt, balk met noten en bladvlaggen, dubbele eindstreep; zie Beweging |
+
+Vijf varianten, elk met één doel: vol detail voor de voorgrond, `-quiet` uitsluitend als achtergrondwatermerk op 5–15% dekking, `-centerline` uitsluitend voor de draw-animatie, en `-noten`/`-blad` als losse lagen die pixel-op-pixel over de balk vallen. Een quiet-variant boven 15% wint van de tekst en hoort daar dus niet.
+
+De banden zijn geketend, niet herhaald als beeld: `a` en `b` staan aan hun tegelrand allebei met hun vijf lijnen vlak op dezelfde hoogte, dus a→b→a→b sluit naadloos aan. Het aantal paren schaalt met de breedte (één, twee of drie), zodat de bandhoogte overal tussen 30 en 70px blijft en de tegelranden — de enige plekken waar de golf vlak ligt — samenvallen met de vensterranden. Daar staat de eindstreep in de footer dus haaks op de vijf lijnen. Herhaalde tegels gaan via `<symbol>`/`<use>` (`LintDefs` in de layout); anders zou elke tegel zijn eigen padgegevens meedragen.
+
+**Gewicht.** De hele decoratieve set staat inline in `index.html`: 94 kB rauw, 34 kB gzipped. Dat is meer dan de richtlijn van ~60 kB uit de oorspronkelijke briefing. De oorzaak is de opdracht zelf — twee volle-breedte banden, een omslagmotief, een instrumentkolom en drie plantaardige accenten passen niet in 60 kB van deze set. Wat er nog af kan, in volgorde van opbrengst: het omslagmotief naar `-quiet` (−24 kB, maar dat is een gevuld silhouet in plaats van een lijntekening — zichtbaar minder), één van de drie plantaardige accenten weglaten (−10 kB), of de bloeiband laten vallen (−0 kB inline, die deelt zijn symbolen al). De padgegevens worden bij het inlezen al op twee decimalen afgerond; dat scheelde 13 kB en is op deze schaal onzichtbaar.
+
+`src/assets/layers/` (de losse lagen om met de hand af te maken in Procreate) staat in `.gitignore` en komt nooit in de build. Drie lagen die de site wél gebruikt — de instrumentlaag van het motief en de noten- en bladlaag van lint a en b — staan als gewoon bestand in `motifs/` en `ribbons/`, zodat de build niet van een genegeerde map afhangt.
 
 ## Kleur
 

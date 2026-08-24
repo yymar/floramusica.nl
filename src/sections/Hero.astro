@@ -25,8 +25,7 @@ import portret from '../assets/portret-christa.jpg';
   {/* Eigen clip voor de achterste laag: de sectie zelf mag niet klippen,
       want het portret hoort er onderuit te steken. */}
   <div class="balk-clip" aria-hidden="true">
-    {/* Het sier-motief ligt het diepst en loopt dus het verst achter.
-        Onder 48rem weg: daar is de omslag al vol. */}
+    {/* Het sier-motief ligt het diepst en loopt dus het verst achter. */}
     <div class="parallax-motief">
       <Motief name="klarinet-bloei" class="w-full" />
     </div>
@@ -90,22 +89,35 @@ import portret from '../assets/portret-christa.jpg';
     top: 7rem;
     color: var(--color-bordeaux);
   }
-  /* De bleed is een keuze, geen bijproduct: precies een kwart van het motief
-     valt buiten de rechterrand, op elke breedte hetzelfde, doordat de
-     inspringing uit de eigen breedte wordt berekend. Verticaal staat het op
-     de onderrand, zodat de beker van de klarinet altijd heel in beeld is —
-     eerder sneed de vaste -4rem hem middenin de trechter af, op een plek die
-     per schermbreedte verschoof. */
+  /* Het motief staat in de rechtermarge van de omslag, tegen de onderrand
+     aan, met één bewuste bleed: de beker duikt onder de sectierand door.
+     Mondstuk, klepwerk en bloem blijven altijd heel — daarom is de breedte
+     precies de marge tussen het portret en de vensterrand, en niet meer:
+     het portret houdt de rechterkolom van de container, wat daarnaast
+     overblijft is (100vw − containerbreedte) / 2 plus de eigen padding.
+     De hoogte hangt aan de hoogte van de omslag, niet aan de vensterbreedte.
+
+     Onder 80rem is die marge te smal voor iets van deze schaal; dan is er
+     geen plek waar het motief én heel is én niet achter het portret
+     verdwijnt, dus staat het er niet. Liever weg dan half. */
   .parallax-motief {
-    --motief-breedte: 20rem;
     position: absolute;
     display: none;
-    width: var(--motief-breedte);
-    right: calc(var(--motief-breedte) * -0.25);
-    bottom: 0.5rem;
+    aspect-ratio: 80 / 112;
+    /* Drie grenzen, de kleinste wint: een vaste bovengrens, de hoogte van
+       de omslag zelf, en de breedte van de marge (omgerekend naar hoogte
+       via de verhouding van het motief). Die laatste is wat het motief
+       heel houdt. */
+    height: min(22rem, 62%, calc(((100vw - 64rem) / 2 + 1.5rem) * 1.4));
+    right: 0.5rem;
+    bottom: -6%;
     color: var(--color-paper);
     opacity: 0.14;
     pointer-events: none;
+  }
+  .parallax-motief :global(svg) {
+    width: 100%;
+    height: 100%;
   }
   .hero-tekst {
     position: relative;
@@ -132,16 +144,13 @@ import portret from '../assets/portret-christa.jpg';
     .parallax-balk {
       top: 8.5rem;
     }
-    .parallax-motief {
-      display: block;
-    }
     .parallax-portret {
       max-width: none;
     }
   }
-  @media (min-width: 64rem) {
+  @media (min-width: 80rem) {
     .parallax-motief {
-      --motief-breedte: 24rem;
+      display: block;
     }
   }
 
