@@ -15,12 +15,12 @@ export const organisaties: Organisatie[] = [
     plaats: "Oss",
     url: "https://www.muzelinck.nl/",
   },
-  { naam: "MDM", plaats: "Vught", url: "https://www.mdm.nl/" },
+  { naam: "MDM", plaats: "Vught", url: "https://www.mdmvught.nl/" },
   { naam: "Medez", plaats: "Berlicum", url: "https://www.medez.nl/" },
   {
     naam: "Muziekvereniging EMM",
     plaats: "Boekel",
-    url: "https://www.muziekverenigingemm.nl/",
+    url: "https://www.emmcapelle.nl/",
   },
   {
     naam: "Muziekvereniging Zeelandia",
