@@ -34,6 +34,9 @@ Regels: bordeaux is de enige accentkleur (hover = `--fm-bordeaux-deep`, nooit pa
 - `Knop`: één intentie per pagina, label in gebiedende wijs ("Neem contact op"); `variant="paper"` op bordeaux.
 - `Veld`: foutmeldingen in het Nederlands, pas tonen na blur of submit.
 - `Figuur` zonder `src` is een net placeholder-slot; toon nooit "TODO" aan bezoekers.
+- `Motief`, `Lint` en `Takje` zijn de decoratieve set. Terughoudend: één `Motief` per pagina, hoogstens één of twee `Takje`s per sectie, en nooit tekst over een ornament zonder rustig vlak eronder. Ze zijn altijd `aria-hidden`.
+- Variant kiezen: geen achtervoegsel = voorgrond op vol detail; `quiet` uitsluitend als achtergrondwatermerk op 8–15% dekking (hoger en het wint van de tekst); `centerline` alleen voor de draw-animatie. Kleurparen: bordeaux op papier, papier op het bordeaux vlak.
+- Geef een ornament altijd een breedte mee; de viewBox levert de hoogte, zodat de layout niet verspringt.
 
 ## Waar de waarheid staat
 

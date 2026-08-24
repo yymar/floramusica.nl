@@ -13,3 +13,6 @@ ds-bundle/
 ds/node_modules/
 ds/dist/
 .impeccable/
+
+# Procreate-bronbestanden (hand-edit lagen). Groot en niet nodig voor de build.
+src/assets/layers/

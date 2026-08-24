@@ -8,6 +8,7 @@
  */
 import Figuur from '../components/Figuur.astro';
 import PartituurRegel from '../components/PartituurRegel.astro';
+import Motief from '../components/ornaments/Motief.astro';
 import Wordmark from '../components/Wordmark.astro';
 import { hero } from '../data/copy';
 import { site } from '../data/site';
@@ -19,6 +20,17 @@ import portret from '../assets/portret-christa.jpg';
   {/* De partituurregel: van rand tot rand, achter de titel */}
   <div class="parallax-balk absolute inset-x-0 top-[7rem] text-bordeaux md:top-[8.5rem]" aria-hidden="true">
     <PartituurRegel class="h-[clamp(7rem,19vw,13rem)]" />
+  </div>
+
+  {/* Het sier-motief van de omslag: klarinet met bloei, groot en toon-op-toon
+      aan de rechteronderhoek, bloedend over de rand. Derde en achterste
+      parallaxlaag, dus de traagste van de drie. Onder 640px weg: daar is de
+      omslag al vol en zou hij achter de tekst door lopen. */}
+  <div
+    class="parallax-motief pointer-events-none absolute right-[-3rem] bottom-[-4rem] hidden w-80 text-paper opacity-[0.14] sm:block lg:right-[-1.5rem] lg:w-96"
+    aria-hidden="true"
+  >
+    <Motief name="klarinet-bloei" class="w-full" />
   </div>
 
   <div class="relative mx-auto max-w-5xl px-5 pt-14 pb-16 sm:px-8 sm:pt-20 sm:pb-24">
@@ -63,12 +75,25 @@ import portret from '../assets/portret-christa.jpg';
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
       .parallax-balk {
-        animation: balk-lag linear both;
+        /* Longhands: de minifier vouwt animation-timeline anders in de
+           `animation:`-shorthand, en die vorm wijzen browsers af. */
+        animation-name: balk-lag;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
         animation-timeline: view();
         animation-range: exit 0% exit 100%;
       }
       section :global(.parallax-portret) {
-        animation: portret-lag linear both;
+        animation-name: portret-lag;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 100%;
+      }
+      .parallax-motief {
+        animation-name: motief-lag;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
         animation-timeline: view();
         animation-range: exit 0% exit 100%;
       }
@@ -84,6 +109,11 @@ import portret from '../assets/portret-christa.jpg';
     from { transform: translateY(0); }
     to { transform: translateY(3rem); }
   }
+  /* Het motief ligt het diepst, dus het loopt het verst achter. */
+  @keyframes motief-lag {
+    from { transform: translateY(0); }
+    to { transform: translateY(6.5rem); }
+  }
   @media (min-width: 48rem) {
     @keyframes balk-lag {
       from { transform: translateY(0); }
@@ -92,6 +122,10 @@ import portret from '../assets/portret-christa.jpg';
     @keyframes portret-lag {
       from { transform: translateY(0); }
       to { transform: translateY(1.25rem); }
+    }
+    @keyframes motief-lag {
+      from { transform: translateY(0); }
+      to { transform: translateY(4.5rem); }
     }
   }
 </style>

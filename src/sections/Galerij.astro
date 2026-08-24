@@ -348,7 +348,11 @@ const cellen: Cel[] = await Promise.all(
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
       .cel {
-        animation: cel-op linear both;
+        /* Longhands: de minifier vouwt animation-timeline anders in de
+           `animation:`-shorthand, en die vorm wijzen browsers af. */
+        animation-name: cel-op;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
         animation-timeline: view();
         animation-range: entry 0% entry 40%;
       }

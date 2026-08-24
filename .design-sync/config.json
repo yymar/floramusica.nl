@@ -17,6 +17,9 @@
     },
     "Veld": {
       "cardMode": "column"
+    },
+    "Motief": {
+      "cardMode": "column"
     }
   },
   "readmeHeader": ".design-sync/conventions.md"

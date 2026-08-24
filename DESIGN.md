@@ -10,7 +10,25 @@ De pagina is opgebouwd als een concertprogramma. De hero is de omslag: een diep 
 
 ## De bewuste esthetische keuze: de partituurregel
 
-De pagina is één partituurregel. Hij opent op de omslag met een toon-op-toon notenbalk die van rand tot rand loopt, met een echte solsleutel aan het begin (ook op mobiel, iets compacter, zodat de parallax daar voelbaar is), en hij sluit boven de footer af met dezelfde notenbalk mét eindstreep (dunne plus dikke streep, muzikaal correct). De sleutel is de G-sleutel uit Bravura, het professionele notatiefont van Steinberg (SIL Open Font License), als vectorpad overgenomen in `src/components/PartituurRegel.astro` zodat er geen notatiefont geladen wordt. Tussen opening en slot is de pagina gedisciplineerd stil: het marge-grid en het bordeaux vlak doen het werk. Geen verdere notatie-ornamenten strooien; het systeem is opening en slot, niets ertussen.
+De pagina is één partituurregel. Hij opent op de omslag met een toon-op-toon notenbalk die van rand tot rand loopt, met een echte solsleutel aan het begin (ook op mobiel, iets compacter, zodat de parallax daar voelbaar is), en hij sluit boven de footer af met dezelfde notenbalk mét eindstreep (dunne plus dikke streep, muzikaal correct). De sleutel is de G-sleutel uit Bravura, het professionele notatiefont van Steinberg (SIL Open Font License), als vectorpad overgenomen in `src/components/PartituurRegel.astro` zodat er geen notatiefont geladen wordt. Tussen opening en slot is de pagina gedisciplineerd stil: het marge-grid en het bordeaux vlak doen het werk. Geen verdere *notatie*-ornamenten strooien; als systeem is de partituurregel opening en slot, niets ertussen. Wat er sinds de assetset wél aan decoratie bij is gekomen, en met welke terughoudendheid, staat hieronder onder Ornamenten.
+
+## Ornamenten
+
+Naast de partituurregel draagt de pagina een kleine decoratieve set (Figma Make, `src/assets/`, beschreven in `MANIFEST.md`): een motief, linten en takjes, alle in één kleur via `currentColor`. Ze gaan inline de HTML in via de componenten in `src/components/ornaments/`, want alleen dan volgen ze de cascade en kosten ze geen extra request.
+
+De set is bewust spaarzaam ingezet — vijf ornamenten op de hele pagina, samen 48 kB inline (20 kB gzipped):
+
+| Waar | Ornament | Rol |
+|---|---|---|
+| Omslag | `motif-klarinet-bloei` (full) | derde en achterste parallaxlaag, papier op 14%, bloedend over de rechteronderrand; onder 640px verborgen |
+| Lessen | `sprig-sol-sleutel` | opent het instrumentenprogramma boven de bordeaux regel |
+| Lessen | `sprig-noten-blad` | sluit de sectie af |
+| Praktisch | `ribbon-a-quiet` | de draad als stil watermerk op 12% |
+| Footer | `ribbon-a-centerline` | de finale, tekent zichzelf; zie Beweging |
+
+Drie varianten, elk met één doel: vol detail voor de voorgrond, `-quiet` uitsluitend als achtergrondwatermerk op 8–15% dekking, `-centerline` uitsluitend voor de draw-animatie. Een quiet-variant boven 15% wint van de tekst en hoort daar dus niet.
+
+Dit verruimt de eerdere regel "opening en slot, niets ertussen" bewust, maar houdt de geest ervan aan: geen ornament staat naast lopende tekst, alles is `aria-hidden` en niet focusbaar, en per sectie blijft het bij hoogstens twee. `src/assets/layers/` (de losse lagen om met de hand af te maken in Procreate) staat in `.gitignore` en komt nooit in de build; het omslagmotief staat op precies één plek in de code, zodat het later in één regel te vervangen is door een met de hand afgemaakte PNG.
 
 ## Kleur
 
@@ -61,11 +79,12 @@ Typeschaal met `clamp()`, ratio ±1,25: `--text-omslag` (tot 5.5rem, alleen de h
 
 ## Beweging
 
-Beweging is een ontwerpbeslissing; de pagina kent drie geregisseerde momenten en verder niets. Alles is compositor-vriendelijk (alleen `transform`/`opacity`), CSS-only via scroll-driven animations achter `@supports (animation-timeline: view())`, en `prefers-reduced-motion: reduce` schakelt alles uit — content staat er dan gewoon, volledig zichtbaar. Geen animatiebibliotheken, geen scroll-listeners.
+Beweging is een ontwerpbeslissing; de pagina kent vier geregisseerde momenten en verder niets. Alles is compositor-vriendelijk (alleen `transform`/`opacity`, met als enige uitzondering de draw hieronder), CSS-only via scroll-driven animations achter `@supports (animation-timeline: view())`, en `prefers-reduced-motion: reduce` schakelt alles uit — content staat er dan gewoon, volledig zichtbaar. Geen animatiebibliotheken, geen scroll-listeners.
 
 1. **Parallax op de omslag** (`Hero.astro`): twee lagen die achterlopen op de scroll terwijl de omslag het beeld uit schuift — de partituurregel 3.5rem, het portret 1.25rem (~10% van de scrollafstand); op mobiel reizen ze verder (5.5rem en 3rem) omdat het scherm en de scrollafstand daar kleiner zijn. Lineair aan de scroll gekoppeld (`animation-range: exit`), dus geen eigen duur of easing: de vinger van de bezoeker is de easing.
 2. **Cel-reveal in de galerij** (`Galerij.astro`): opacity 0.25→1 plus 12px translate per cel, met een kleine stagger via verschoven `animation-range` per nth-child. Bewust niet herhaald op andere secties; één moment, geen entree-parade. Daarnaast een heel lichte hover-scale (1.02) van het beeld binnen de cel.
 3. **Lightbox-open** (`Galerij.astro`): 240ms `cubic-bezier(0.2, 0, 0, 1)` (uitgesproken uitloop), opacity plus 8px translate.
+4. **Het lint tekent zichzelf** (`Footer.astro`): de centerline-variant van `ribbon-a` trekt zich vlak boven de eindstreep, gekoppeld aan de scroll (`animation-range: entry 25% cover 50%`) via `stroke-dashoffset` op een pad met `pathLength="1"`. De finale van de partituurregel, en het enige moment op de pagina dat niet alleen `transform`/`opacity` gebruikt: een vorm valt niet met een transform te tekenen. Basisstaat is volledig getekend, dus zonder scroll-driven animations of bij reduced motion staat het lint er gewoon.
 
 Micro-interacties (hover op knoppen, links en formulier­velden) zijn kleurwissels via `transition-colors`, circa 150ms, binnen het bordeaux-palet.
 

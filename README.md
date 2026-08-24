@@ -37,6 +37,17 @@ Alle bewerkbare inhoud staat in `src/data/`; de layout hoef je daarvoor niet aan
 
 Openstaande punten staan in `CONTENT-TODO.md`. De ontwerpkeuzes (kleuren, contrast, typografie) staan in `DESIGN.md`. Logo en favicon zijn placeholders: vervang `src/components/Wordmark.astro` en `public/favicon.svg`.
 
+## Foto's en ornamenten
+
+Foto's staan in `src/assets/` en `src/assets/fotos/`; de decoratieve SVG-set in
+`src/assets/{motifs,ribbons,sprigs}`, beschreven in `src/assets/MANIFEST.md`.
+Zie `src/assets/README.md` voor de varianten (voorgrond / watermerk /
+draw-animatie) en de componenten in `src/components/ornaments/`.
+
+`src/assets/layers/` bestaat alleen lokaal (Procreate-bronbestanden, 1,6 MB) en
+staat in `.gitignore`. Wie het project vers uitcheckt mist die map; de site
+gebruikt er niets van.
+
 ## Contactformulier (Web3Forms)
 
 Het formulier verstuurt via [Web3Forms](https://web3forms.com); berichten komen binnen op het gekoppelde e-mailadres.

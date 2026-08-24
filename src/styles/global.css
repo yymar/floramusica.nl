@@ -103,3 +103,37 @@ p, figcaption, dd, li {
 section[id] {
   scroll-margin-top: 5.5rem;
 }
+
+/* Decoratieve ornamenten uit src/assets.
+   Ze gaan inline de HTML in (currentColor + cascade), dus scoped component-
+   styles bereiken die markup niet: de draw-animatie staat daarom hier.
+
+   Het lint tekent zichzelf terwijl het in beeld komt. `Ribbon` zet
+   pathLength="1" op het pad, zodat dasharray in eenheden van 1 rekent en de
+   echte padlengte niet uitmaakt. Basisstaat is volledig getekend; alleen waar
+   scroll-driven animations bestaan én de bezoeker beweging niet afwijst
+   begint hij leeg. Afwijking van de regel "alleen transform/opacity" in
+   DESIGN.md: stroke-dashoffset is een paint-property. Bewust, want het gaat
+   om één pad van 200 bytes en de vorm valt niet met transform te tekenen. */
+.ornament-draw path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .ornament-draw path {
+      /* Longhands, geen `animation:`-shorthand. De minifier vouwt
+         animation-timeline anders de shorthand in (`animation: ... view()`)
+         en die vorm wijzen browsers af, waarna er niets meer animeert. */
+      animation-name: ornament-tekenen;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 25% cover 50%;
+    }
+  }
+}
+@keyframes ornament-tekenen {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}

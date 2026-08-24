@@ -1,5 +1,10 @@
 import type { CSSProperties, InputHTMLAttributes, ReactNode } from 'react';
 import { forteF, mezzoM, solsleutel } from './glyphs';
+import {
+  motiefKlarinetBloei, motiefKlarinetBloeiQuiet,
+  lintA, lintAQuiet, lintACenterline,
+  takjeSolSleutel, takjeNotenBlad,
+} from './ornaments';
 
 export { forteF, mezzoM, solsleutel };
 
@@ -250,4 +255,56 @@ export function Galerij({ fotos }: { fotos: GalerijFoto[] }) {
       ))}
     </div>
   );
+}
+
+/* ── Ornamenten ────────────────────────────────────────────────────────────
+   De decoratieve set (motieven, linten, takjes). De SVG's gaan inline de
+   pagina in en niet via <img>: alleen dan volgen ze currentColor en de
+   cascade. Alles is decoratief, dus aria-hidden en niet focusbaar.
+
+   Varianten: 'full' voorgrond op vol detail, 'quiet' uitsluitend als
+   achtergrondwatermerk op 8–15% dekking, 'centerline' alleen voor de
+   draw-animatie. Kleur komt van de omgeving (bordeaux op papier, papier op
+   het bordeaux vlak); zet de dekking op de wrapper.
+
+   Terughoudend gebruiken: het concept houdt de pagina tussen omslag en slot
+   bewust stil. Eén motief per pagina, hoogstens één of twee takjes per
+   sectie, nooit tekst over een ornament zonder rustig vlak eronder. */
+
+function Ornament({ svg, breedte }: { svg: string; breedte: number | string }) {
+  return (
+    <span
+      aria-hidden="true"
+      style={{ display: 'block', width: breedte, lineHeight: 0 }}
+      dangerouslySetInnerHTML={{ __html: svg.replace('<svg', '<svg style="display:block;width:100%;height:auto"') }}
+    />
+  );
+}
+
+/** Het grote sier-motief van de omslag: klarinet met bloei. Eén per pagina. */
+export function Motief({ variant = 'full', breedte = 320 }: {
+  /** 'quiet' is het silhouet voor achtergrondgebruik op 8–15% dekking. */
+  variant?: 'full' | 'quiet';
+  /** Breedte van het ornament; de viewBox levert de hoogte. */
+  breedte?: number | string;
+}) {
+  return <Ornament svg={variant === 'quiet' ? motiefKlarinetBloeiQuiet : motiefKlarinetBloei} breedte={breedte} />;
+}
+
+/** Het lint: de doorlopende draad van notenbalk, noten en blad. */
+export function Lint({ variant = 'full', breedte = '100%' }: {
+  /** 'centerline' is één streek, uitsluitend bedoeld voor de draw-animatie. */
+  variant?: 'full' | 'quiet' | 'centerline';
+  breedte?: number | string;
+}) {
+  const svg = variant === 'quiet' ? lintAQuiet : variant === 'centerline' ? lintACenterline : lintA;
+  return <Ornament svg={svg} breedte={breedte} />;
+}
+
+/** Klein plantaardig accent in de marge of aan een sectiehoek. */
+export function Takje({ naam = 'sol-sleutel', breedte = 24 }: {
+  naam?: 'sol-sleutel' | 'noten-blad';
+  breedte?: number | string;
+}) {
+  return <Ornament svg={naam === 'noten-blad' ? takjeNotenBlad : takjeSolSleutel} breedte={breedte} />;
 }
