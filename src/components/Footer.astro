@@ -213,13 +213,15 @@ const keten = (variant: 'quiet' | 'noten' | 'blad') =>
     background: currentColor;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
+  /* Alleen onder 80rem: daarboven stuurt StengelBaan.astro het schrijven
+     van de balk, als voortzetting van hetzelfde reveal-front als de
+     stengel — twee losse tijdlijnen liepen zichtbaar uit de pas. */
+  @media (prefers-reduced-motion: no-preference) and (max-width: 79.99rem) {
     @supports (animation-timeline: view()) {
       footer {
         view-timeline: --slot block;
       }
-      /* De balk schrijft zichzelf van links naar rechts, nadat de stengel
-         zijn bocht heeft gedraaid (StengelBaan.astro). clip-path en geen
+      /* De balk schrijft zichzelf van links naar rechts. clip-path en geen
          breedte: zo verspringt er niets binnenin. */
       .spoor {
         animation-name: slot-schrijven;

@@ -71,7 +71,7 @@ export const route: Anker[] = [
   { deel: 'contact', x: 10, y: 14 },
   { deel: 'contact', x: 8, y: 40 },
   { deel: 'contact', x: 7, y: 64 },
-  { deel: 'contact', x: 6.5, y: 84 },
+  { deel: 'contact', x: 6.5, y: 78 },
 ];
 
 /**

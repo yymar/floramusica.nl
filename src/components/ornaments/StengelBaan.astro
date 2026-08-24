@@ -55,9 +55,13 @@ import Sprig from './Sprig.astro';
 
     let samples: P[] = [];
     let cum: number[] = [];
+    let yMono: number[] = [];
     let paden: { el: SVGPathElement; lengte: number }[] = [];
     let lootEls: { el: HTMLElement; s: number }[] = [];
     let totaal = 0;
+    let balkY = 0;
+    const sporen = document.querySelectorAll<HTMLElement>('.slot-balk .spoor');
+    const eindstreep = document.querySelector<HTMLElement>('.eindstreep');
 
     /** Catmull-Rom door de ankers, bemonsterd; tangenten centraal verschil. */
     const bemonster = (ankers: P[], perStuk = 22): P[] => {
@@ -86,7 +90,10 @@ import Sprig from './Sprig.astro';
       svg.replaceChildren();
       paden = [];
       lootEls = [];
-      if (!breed.matches) return;
+      if (!breed.matches) {
+        schrijfBalk(1); // onder 80rem schrijft de footer zichzelf via CSS
+        return;
+      }
 
       const baanRect = baan.getBoundingClientRect();
       const slot = document.querySelector('.slot-balk');
@@ -127,9 +134,15 @@ import Sprig from './Sprig.astro';
         }
       }
       // De landing: verticaal aanlopen boven de balk, dan de kwartbocht.
+      // De hulpankers moeten ónder het laatste route-anker blijven: een
+      // anker dat hoger uitkomt laat y even teruglopen, de raaklijn
+      // omklappen en de vijf offsets een lus draaien — de knoop die op
+      // brede schermen zichtbaar werd.
       const landX = 0.06 * vw;
-      const bocht = Math.min(150, balkMidden * 0.2 + 90);
-      ankers.push({ x: landX, y: balkMidden - bocht - 110 }, { x: landX, y: balkMidden - bocht });
+      const laatste = ankers[ankers.length - 1];
+      const bocht = Math.min(150, Math.max(80, balkMidden - laatste.y - 160));
+      const tussenY = Math.max(laatste.y + 50, balkMidden - bocht - 110);
+      ankers.push({ x: landX, y: tussenY }, { x: landX, y: Math.max(tussenY + 40, balkMidden - bocht) });
 
       const midden = bemonster(ankers);
       // Kwartbocht (ribbon-c-model): verticaal → horizontaal, apart bemonsterd
@@ -138,7 +151,7 @@ import Sprig from './Sprig.astro';
       const b0 = midden[midden.length - 1];
       for (let k = 1; k <= 26; k++) {
         const u = k / 26, w = 1 - u;
-        const c1 = { x: landX, y: balkMidden - bocht * 0.45 };
+        const c1 = { x: landX, y: b0.y + (balkMidden - b0.y) * 0.55 };
         const c2 = { x: tegelStart - (tegelStart - landX) * 0.45, y: balkMidden };
         midden.push({
           x: w * w * w * b0.x + 3 * w * w * u * c1.x + 3 * w * u * u * c2.x + u * u * u * tegelStart,
@@ -152,6 +165,11 @@ import Sprig from './Sprig.astro';
         cum.push(cum[i - 1] + Math.hypot(samples[i].x - samples[i - 1].x, samples[i].y - samples[i - 1].y));
       }
       totaal = cum[cum.length - 1];
+      // Lopend maximum van y: het reveal-front zoekt hierin, zodat een
+      // minieme lokale terugloop in y de volgorde nooit kan breken.
+      yMono = samples.map((p) => p.y);
+      for (let i = 1; i < yMono.length; i++) yMono[i] = Math.max(yMono[i - 1], yMono[i]);
+      balkY = balkMidden;
 
       // Normalen (centraal verschil) en de taper: constante breedte op de
       // hele route, alleen de laatste TAPER_PX naar footermaat (schaal 1).
@@ -226,28 +244,44 @@ import Sprig from './Sprig.astro';
 
     const LEAD = [0, 14, 26, 14, 0]; // organische tip: middellijn voorop
 
+    /** Voortzetting van hetzelfde front: de balk schrijft zichzelf pas
+        nadat de stengel geland is, over de laatste ~200px fronttravel. */
+    const schrijfBalk = (fractie: number) => {
+      for (const sp of sporen) {
+        sp.style.clipPath = fractie < 1 ? `inset(0 ${Math.round((1 - fractie) * 1000) / 10}% 0 0)` : '';
+      }
+      if (eindstreep) {
+        eindstreep.style.opacity =
+          fractie >= 1 ? '' : String(Math.round(Math.max(0, (fractie - 0.8) / 0.2) * 0.7 * 100) / 100);
+      }
+    };
+
     const teken = () => {
       if (!paden.length) return;
       if (rustig.matches) {
         for (const p of paden) p.el.removeAttribute('stroke-dasharray');
         for (const l of lootEls) l.el.classList.add('is-af');
+        schrijfBalk(1);
         return;
       }
       const fy = front();
-      // Laatste sample vóór het front (y is monotoon niet-dalend).
+      // Laatste sample vóór het front (yMono is monotoon niet-dalend).
       let lo = 0, hi = samples.length - 1;
       while (lo < hi) {
         const mid = (lo + hi + 1) >> 1;
-        if (samples[mid].y <= fy) lo = mid;
+        if (yMono[mid] <= fy) lo = mid;
         else hi = mid - 1;
       }
-      const s = samples[0].y > fy ? 0 : cum[lo];
+      const s = yMono[0] > fy ? 0 : cum[lo];
       paden.forEach((p, i) => {
         const zichtbaar = Math.max(0, Math.min(p.lengte, (s / totaal) * p.lengte + LEAD[i]));
         p.el.setAttribute('stroke-dasharray', `${p.lengte} ${p.lengte}`);
         p.el.setAttribute('stroke-dashoffset', String(Math.round((p.lengte - zichtbaar) * 10) / 10));
       });
       for (const l of lootEls) l.el.classList.toggle('is-af', l.s <= s);
+      // Eén doorlopend front: eerst de stengel tot en met de landing, dan
+      // de balk van links naar rechts, als voortzetting van dezelfde t.
+      schrijfBalk(s >= totaal - 1 ? Math.min(1, Math.max(0, (fy - balkY) / 160)) : 0);
     };
 
     let vlag = false;
