@@ -168,19 +168,15 @@ na de fix loopt hij tot 56px, gelijk aan de site.
 - **Er is één textuurband** (Praktisch → Contact). Hij drijft verticaal
   ±1,25rem over `cover 0–100%`: trage parallax, zodat de naad diepte krijgt.
   Bij reduced motion staat hij stil en gewoon zichtbaar.
-- **De stengel** (zie DESIGN.md, Ornamenten) tekent zichzelf per sectie van
-  boven naar beneden met een clip-wipe waarvan de teken-tip op 60% van de
-  viewporthoogte gepind is: `cover 40vh` → `cover calc(100% − 60vh)`
-  (het contact-segment eindigt op de 68%-lijn, want de footer eronder is
-  korter dan 40vh). Scroll-driven animations zijn afgeleide staat: ook na
-  End, een ankerlink of herladen halverwege staat alles boven de tip
-  getekend. Geen stroke-dash-draw: dasharray + pathLength +
-  non-scaling-stroke rendert in Chromium stuk, en de stengel loopt
-  vrijwel altijd omlaag, dus de wipe leest hetzelfde. In de footer wordt eerst de aanloopbocht gewiped
-  (`entry 0–25%` op de slot-timeline), daarna schrijft de balk zichzelf
-  (`entry 20–75%`). Geen parallax op de stengel: een segment dat
-  verschuift breekt de aansluiting op de sectiegrens. Bij reduced motion
-  staat hij er compleet.
+- **De stengel** (zie DESIGN.md, Ornamenten) tekent zichzelf als één
+  doorlopend front: de zichtbare lengte is een pure functie van de
+  scrollpositie (elk frame herberekend, dus ook na End, ankerlinks en
+  herladen), met de teken-tip op 60% van de viewporthoogte en een uitloop
+  naar de paginavoet zodat de landing op maximale scroll af is. De tip is
+  organisch: de middellijn loopt ~26px voor op de buitenste lijnen. Bij
+  reduced motion staat alles er volledig en statisch; de reveal gebruikt
+  gewone dashoffsets in pixelruimte (geen pathLength/non-scaling-stroke —
+  die combinatie rendert in Chromium stuk).
 - **Het omslagmotief beweegt niet meer mee** (was de vierde parallaxlaag):
   de stengel begint onder de omslagrand waar de beker onderduikt, en die
   aansluiting breekt zodra de bloem schuift. De notenbalk erachter beweegt nog wel — drie

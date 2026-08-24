@@ -1,0 +1,295 @@
+---
+/**
+ * De stengel als één object: één globaal pad van de beker in de omslag tot
+ * op de liggende footerbalk, runtime gegenereerd in pixels.
+ *
+ * Waarom runtime en niet build-time: de secties hebben variabele hoogtes,
+ * en een écht doorlopend lint — constante breedte (normaal-offsets, geen
+ * x-offsets die op diagonalen versmallen), gecontroleerde bochtstralen, één
+ * monotone reveal-parameter — bestaat alleen in gemeten pixelruimte. De
+ * per-sectie benadering met genormaliseerde viewBoxen kon secties laten
+ * verschillen; dit kan dat structureel niet meer.
+ *
+ * De reveal is een pure functie van scrollpositie, elk frame opnieuw
+ * (ook bij End, ankerlinks en herladen): alles vóór het front is getekend,
+ * alles erna niet — één front, in padvolgorde. De tip is organisch: de
+ * middelste lijn loopt iets voor, de buitenste iets achter.
+ *
+ * Zonder JavaScript is er geen stengel (pure decoratie); bij reduced motion
+ * staat hij er volledig en statisch. Onder 80rem bestaat hij niet: daar
+ * zijn de marges er niet, en de bloem ook niet.
+ */
+import { route, loten, SCHAAL, DIKTE, DEKKING, TAPER_PX } from '../../data/stengel';
+import Sprig from './Sprig.astro';
+---
+
+<div class="stengelbaan" aria-hidden="true" data-dekking={DEKKING}>
+  <svg></svg>
+  {
+    loten.map((loot) => (
+      <span
+        class="loot"
+        data-deel={loot.deel}
+        data-y={loot.y}
+        data-kant={loot.kant}
+        style={`--draai: ${loot.draai}deg;`}
+      >
+        <Sprig name={loot.naam} class="w-full" />
+      </span>
+    ))
+  }
+</div>
+
+<script>
+  import { route, SCHAAL, DIKTE, TAPER_PX } from '../../data/stengel';
+
+  type P = { x: number; y: number };
+
+  const baan = document.querySelector<HTMLElement>('.stengelbaan');
+  const svg = baan?.querySelector('svg');
+
+  if (baan && svg) {
+    const NS = 'http://www.w3.org/2000/svg';
+    const rustig = matchMedia('(prefers-reduced-motion: reduce)');
+    const breed = matchMedia('(min-width: 80rem)');
+
+    let samples: P[] = [];
+    let cum: number[] = [];
+    let paden: { el: SVGPathElement; lengte: number }[] = [];
+    let lootEls: { el: HTMLElement; s: number }[] = [];
+    let totaal = 0;
+
+    /** Catmull-Rom door de ankers, bemonsterd; tangenten centraal verschil. */
+    const bemonster = (ankers: P[], perStuk = 22): P[] => {
+      const t = ankers.map((_, i) => {
+        const a = ankers[Math.max(0, i - 1)];
+        const b = ankers[Math.min(ankers.length - 1, i + 1)];
+        return { x: (b.x - a.x) / 2, y: (b.y - a.y) / 2 };
+      });
+      const uit: P[] = [];
+      for (let i = 0; i < ankers.length - 1; i++) {
+        const p0 = ankers[i], p3 = ankers[i + 1];
+        const c1 = { x: p0.x + t[i].x / 3, y: p0.y + t[i].y / 3 };
+        const c2 = { x: p3.x - t[i + 1].x / 3, y: p3.y - t[i + 1].y / 3 };
+        for (let k = i === 0 ? 0 : 1; k <= perStuk; k++) {
+          const u = k / perStuk, w = 1 - u;
+          uit.push({
+            x: w * w * w * p0.x + 3 * w * w * u * c1.x + 3 * w * u * u * c2.x + u * u * u * p3.x,
+            y: w * w * w * p0.y + 3 * w * w * u * c1.y + 3 * w * u * u * c2.y + u * u * u * p3.y,
+          });
+        }
+      }
+      return uit;
+    };
+
+    const bouw = () => {
+      svg.replaceChildren();
+      paden = [];
+      lootEls = [];
+      if (!breed.matches) return;
+
+      const baanRect = baan.getBoundingClientRect();
+      const slot = document.querySelector('.slot-balk');
+      const tegel = document.querySelector<HTMLElement>('.slot-balk .tegel');
+      if (!slot || !tegel) return;
+      const slotRect = slot.getBoundingClientRect();
+      const vw = baanRect.width;
+
+      // De footerbalk is de bronwaarheid: lijnafstand en dikte gemeten.
+      const eenheid = slotRect.height / 24; // 1 tegel-eenheid in px
+      const gapBalk = eenheid * 2;
+      const dikte = eenheid * 0.5 * DIKTE;
+      const balkMidden = slotRect.top - baanRect.top + eenheid * 12;
+      const tegelStart = tegel.getBoundingClientRect().left - baanRect.left;
+
+      // Ankers naar pixels (x: % venster, y: % sectie, relatief aan de baan).
+      // Rechtermarge-ankers worden geklemd tussen contentkolom + 70px en de
+      // vensterrand: op 1280 is de marge te smal voor een vast percentage,
+      // op 2560 te breed.
+      const content = document.querySelector('#over > div')!.getBoundingClientRect();
+      const ankers: P[] = route.map((a) => {
+        const sectie = document.getElementById(a.deel)!;
+        const r = sectie.getBoundingClientRect();
+        let x = (a.x / 100) * vw;
+        if (a.klem === 'rechts') x = Math.min(vw - 60, Math.max(x, content.right - baanRect.left + 70));
+        return { x, y: r.top - baanRect.top + (a.y / 100) * r.height };
+      });
+      // De landing: verticaal aanlopen boven de balk, dan de kwartbocht.
+      const landX = 0.06 * vw;
+      const bocht = Math.min(150, balkMidden * 0.2 + 90);
+      ankers.push({ x: landX, y: balkMidden - bocht - 110 }, { x: landX, y: balkMidden - bocht });
+
+      const midden = bemonster(ankers);
+      // Kwartbocht (ribbon-c-model): verticaal → horizontaal, apart bemonsterd
+      // zodat de eindtangent exact vlak is en de vijf lijnen exact op de
+      // balklijnen landen.
+      const b0 = midden[midden.length - 1];
+      for (let k = 1; k <= 26; k++) {
+        const u = k / 26, w = 1 - u;
+        const c1 = { x: landX, y: balkMidden - bocht * 0.45 };
+        const c2 = { x: tegelStart - (tegelStart - landX) * 0.45, y: balkMidden };
+        midden.push({
+          x: w * w * w * b0.x + 3 * w * w * u * c1.x + 3 * w * u * u * c2.x + u * u * u * tegelStart,
+          y: w * w * w * b0.y + 3 * w * w * u * c1.y + 3 * w * u * u * c2.y + u * u * u * balkMidden,
+        });
+      }
+
+      samples = midden;
+      cum = [0];
+      for (let i = 1; i < samples.length; i++) {
+        cum.push(cum[i - 1] + Math.hypot(samples[i].x - samples[i - 1].x, samples[i].y - samples[i - 1].y));
+      }
+      totaal = cum[cum.length - 1];
+
+      // Normalen (centraal verschil) en de taper: constante breedte op de
+      // hele route, alleen de laatste TAPER_PX naar footermaat (schaal 1).
+      const spreiding = (i: number) => {
+        const rest = totaal - cum[i];
+        const s = rest >= TAPER_PX ? SCHAAL : 1 + (SCHAAL - 1) * (rest / TAPER_PX);
+        return gapBalk * s;
+      };
+
+      svg.setAttribute('width', String(vw));
+      svg.setAttribute('height', String(Math.ceil(balkMidden + 40)));
+      svg.setAttribute('viewBox', `0 0 ${vw} ${Math.ceil(balkMidden + 40)}`);
+
+      const rond = (n: number) => Math.round(n * 10) / 10;
+      for (let lijn = -2; lijn <= 2; lijn++) {
+        let d = '';
+        let lengte = 0;
+        let vx = 0, vy = 0;
+        for (let i = 0; i < samples.length; i++) {
+          const a = samples[Math.max(0, i - 1)];
+          const b = samples[Math.min(samples.length - 1, i + 1)];
+          const dx = b.x - a.x, dy = b.y - a.y;
+          const len = Math.hypot(dx, dy) || 1;
+          const nx = -dy / len, ny = dx / len;
+          const off = lijn * spreiding(i);
+          const x = samples[i].x + nx * off, y = samples[i].y + ny * off;
+          if (i === 0) d = `M${rond(x)},${rond(y)}`;
+          else {
+            d += `L${rond(x)},${rond(y)}`;
+            lengte += Math.hypot(x - vx, y - vy);
+          }
+          vx = x; vy = y;
+        }
+        const pad = document.createElementNS(NS, 'path');
+        pad.setAttribute('d', d);
+        pad.setAttribute('fill', 'none');
+        pad.setAttribute('stroke', 'currentColor');
+        pad.setAttribute('stroke-width', String(Math.round(dikte * 100) / 100));
+        paden.push({ el: pad, lengte });
+        svg.appendChild(pad);
+      }
+
+      // Loten op het pad: x volgt uit het pad op de gevraagde sectiehoogte.
+      baan.querySelectorAll<HTMLElement>('.loot').forEach((el) => {
+        const sectie = document.getElementById(el.dataset.deel!)!;
+        const r = sectie.getBoundingClientRect();
+        const doelY = r.top - baanRect.top + (Number(el.dataset.y) / 100) * r.height;
+        let i = samples.findIndex((p) => p.y >= doelY);
+        if (i < 0) i = samples.length - 1;
+        const kant = Number(el.dataset.kant);
+        const lootX = Math.min(vw - 26, samples[i].x + kant * (2 * spreiding(i) + 26));
+        el.style.left = `${rond(lootX)}px`;
+        el.style.top = `${rond(doelY)}px`;
+        lootEls.push({ el, s: cum[i] });
+      });
+
+      teken();
+    };
+
+    /**
+     * Het reveal-front: één monotone functie van scrollpositie. De tip ligt
+     * op 60% van de viewport; tegen de paginavoet schuift hij mee omlaag
+     * zodat het pad op maximale scroll gegarandeerd af is.
+     */
+    const front = () => {
+      const vh = innerHeight;
+      const baanTop = baan.getBoundingClientRect().top + scrollY;
+      const docH = document.documentElement.scrollHeight;
+      const extra = Math.max(0, scrollY + vh - (docH - 260));
+      return scrollY + 0.6 * vh + extra - baanTop;
+    };
+
+    const LEAD = [0, 14, 26, 14, 0]; // organische tip: middellijn voorop
+
+    const teken = () => {
+      if (!paden.length) return;
+      if (rustig.matches) {
+        for (const p of paden) p.el.removeAttribute('stroke-dasharray');
+        for (const l of lootEls) l.el.classList.add('is-af');
+        return;
+      }
+      const fy = front();
+      // Laatste sample vóór het front (y is monotoon niet-dalend).
+      let lo = 0, hi = samples.length - 1;
+      while (lo < hi) {
+        const mid = (lo + hi + 1) >> 1;
+        if (samples[mid].y <= fy) lo = mid;
+        else hi = mid - 1;
+      }
+      const s = samples[0].y > fy ? 0 : cum[lo];
+      paden.forEach((p, i) => {
+        const zichtbaar = Math.max(0, Math.min(p.lengte, (s / totaal) * p.lengte + LEAD[i]));
+        p.el.setAttribute('stroke-dasharray', `${p.lengte} ${p.lengte}`);
+        p.el.setAttribute('stroke-dashoffset', String(Math.round((p.lengte - zichtbaar) * 10) / 10));
+      });
+      for (const l of lootEls) l.el.classList.toggle('is-af', l.s <= s);
+    };
+
+    let vlag = false;
+    const plan = () => {
+      if (vlag) return;
+      vlag = true;
+      requestAnimationFrame(() => { vlag = false; teken(); });
+    };
+
+    addEventListener('scroll', plan, { passive: true });
+    rustig.addEventListener('change', teken);
+    breed.addEventListener('change', bouw);
+    // Herbouwen als de layout zet (fonts, late afbeeldingen, resize).
+    let herbouwTimer = 0;
+    const herbouw = () => { clearTimeout(herbouwTimer); herbouwTimer = window.setTimeout(bouw, 120); };
+    new ResizeObserver(herbouw).observe(baan);
+    addEventListener('resize', herbouw);
+    bouw();
+  }
+</script>
+
+<style>
+  .stengelbaan {
+    position: absolute;
+    inset: 0;
+    display: none;
+    color: var(--color-bordeaux);
+    pointer-events: none;
+  }
+  @media (min-width: 80rem) {
+    .stengelbaan {
+      display: block;
+    }
+  }
+  .stengelbaan svg {
+    display: block;
+    overflow: visible;
+    opacity: 0.5; /* DEKKING: de footerbalk zelf staat ook op 0.5 */
+  }
+  .loot {
+    position: absolute;
+    width: 2.5rem;
+    translate: -50% -50%;
+    rotate: var(--draai);
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-organic);
+  }
+  .loot.is-af {
+    opacity: 0.4;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .loot {
+      opacity: 0.4;
+      transition: none;
+    }
+  }
+</style>

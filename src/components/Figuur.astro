@@ -61,6 +61,8 @@ const {
       height={hoogte}
       loading={laden}
       fetchpriority={laden === 'eager' ? 'high' : undefined}
+      widths={[Math.round(breedte * 0.625), breedte]}
+      sizes={`(min-width: 40rem) ${breedte}px, 92vw`}
       style={`aspect-ratio: ${breedte} / ${hoogte}; object-position: ${focus};`}
       class:list={['h-full w-full rounded-sm object-cover', className]}
     />

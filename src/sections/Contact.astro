@@ -1,18 +1,11 @@
 ---
 import Sectie from '../components/Sectie.astro';
 import ContactFormulier from '../components/ContactFormulier.astro';
-import Stengel from '../components/ornaments/Stengel.astro';
 import { contact } from '../data/copy';
 import { site } from '../data/site';
 ---
 
-<Sectie id="contact" label="Contact" kop={contact.kop} band>
-  {/* De stengel draagt de overgang Praktisch → Contact alleen; een
-      textuurband erbij was hier te druk.
-      Het laatste segment loopt donkerder aan (verloop in Stengel.astro):
-      bovenin de tekstdekking, op de landing de volle dekking van de
-      footerbalk, zodat de overgang naadloos is. */}
-  <Stengel slot="band" deel="contact" dekking={0.5} dikte={1.15} class="stengel-verloop" />
+<Sectie id="contact" label="Contact" kop={contact.kop}>
   <p class="rijs r2 max-w-[62ch]">{contact.intro}</p>
 
   <div class="mt-8">

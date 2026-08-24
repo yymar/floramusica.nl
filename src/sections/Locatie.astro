@@ -7,15 +7,13 @@
  * dezelfde taal als de instrumentenlijst bij Lessen (MOTION.md).
  */
 import Sectie from '../components/Sectie.astro';
-import Stengel from '../components/ornaments/Stengel.astro';
 import ExterneLink from '../components/ExterneLink.astro';
 import { locatie } from '../data/copy';
 import { site } from '../data/site';
 import { organisaties } from '../data/organisaties';
 ---
 
-<Sectie id="locatie" label="Locatie" kop={locatie.kop} sier="bloem-knop" band>
-  <Stengel slot="band" deel="locatie" dikte={1.5} />
+<Sectie id="locatie" label="Locatie" kop={locatie.kop} sier="bloem-knop">
   <div class="rijs r2">
     <h3 class="font-display text-subkop font-semibold text-ink">{locatie.praktijkKop}</h3>
     <p class="mt-2 max-w-[62ch]">{locatie.praktijkTekst}</p>

@@ -25,20 +25,6 @@ const keten = (variant: 'quiet' | 'noten' | 'blad') =>
   lintGebruik('a', variant, 'tegel tegel-a') +
   lintGebruik('b', variant, 'tegel tegel-b');
 
-// De aanloop: vijf kwartbochten die de stengel op de balk laten landen. De
-// stengel verlaat Contact exact verticaal op x = 6% van de vensterbreedte
-// (data/stengel.ts); hier draait elke lijn een eigen concentrische bocht en
-// komt horizontaal uit op zijn balklijn (y 8–16 van 24), waarna de tegels
-// beginnen. De x-eenheden zijn vw, de y-eenheden die van de tegel-viewBox:
-// preserveAspectRatio="none" plakt beide assen op het element (16vw breed,
-// slot-hoogte hoog), dus beide uiteinden sluiten op elke breedte exact aan.
-// Buitenste stengelijn (links) → onderste balklijn, zoals in een echte bocht.
-const rond = (n: number) => Math.round(n * 100) / 100;
-const aanloop = [0, 1, 2, 3, 4].map((i) => {
-  const x0 = 6 + (i - 2) * (5 / 12);
-  const y = 16 - 2 * i;
-  return `M${rond(x0)},0 C${rond(x0)},${rond(y * 0.55)} ${rond(16 - (16 - x0) * 0.55)},${rond(y)} 16,${rond(y)}`;
-});
 ---
 
 <footer>
@@ -63,9 +49,6 @@ const aanloop = [0, 1, 2, 3, 4].map((i) => {
       gewoon, compleet. */}
   <div class="slot" aria-hidden="true">
     <div class="slot-balk">
-      <svg class="aanloop" viewBox="0 0 16 24" preserveAspectRatio="none">
-        {aanloop.map((d) => <path d={d} vector-effect="non-scaling-stroke" />)}
-      </svg>
       <div class="spoor spoor-balk" set:html={keten('quiet')} />
       <div class="spoor spoor-noten" set:html={keten('noten')} />
       <div class="spoor spoor-blad" set:html={keten('blad')} />
@@ -193,30 +176,11 @@ const aanloop = [0, 1, 2, 3, 4].map((i) => {
     }
   }
 
-  /* De aanloop bestaat alleen waar de stengel bestaat (≥80rem): daar
-     schuiven de tegels 16vw op en landt de stengel via de bocht op de balk.
-     De −1px op de marge overlapt de naad, zoals tussen de tegels onderling. */
-  .aanloop {
-    display: none;
-  }
-  .aanloop path {
-    fill: none;
-    stroke: currentColor;
-    /* Zelfde dikte als de stengel (Stengel.astro): de bocht is het
-       verbindingsstuk en mag aan geen van beide kanten verspringen. */
-    stroke-width: calc((100vw - 48px) / 960);
-  }
+  /* Vanaf 80rem (waar de stengel bestaat) schuiven de tegels 16vw op: de
+     stengelbaan tekent daar zijn eigen kwartbocht die exact op de vijf
+     balklijnen landt (StengelBaan.astro meet dit slot). Exacte marge, geen
+     overlap: een dubbel getekende lijn wordt donkerder op 0.5 dekking. */
   @media (min-width: 80rem) {
-    .aanloop {
-      display: block;
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 16vw;
-      height: 100%;
-      overflow: visible;
-      opacity: 0.5;
-    }
     .slot-balk :global(.tegel-a) {
       width: calc((100% - 16vw) * 0.3 + 1px);
     }
@@ -224,7 +188,7 @@ const aanloop = [0, 1, 2, 3, 4].map((i) => {
       width: calc((100% - 16vw) * 0.2 + 1px);
     }
     .spoor :global(.tegel:first-child) {
-      margin-left: calc(16vw - 1px);
+      margin-left: 16vw;
     }
   }
 
@@ -254,17 +218,9 @@ const aanloop = [0, 1, 2, 3, 4].map((i) => {
       footer {
         view-timeline: --slot block;
       }
-      /* Eerst draait de stengel de bocht om (wipe van links naar rechts —
-         de padrichting; geen dash-draw, zie Stengel.astro), dan schrijft de
-         balk zichzelf. clip-path en geen breedte: zo verspringt er niets
-         binnenin. */
-      .aanloop {
-        animation-name: slot-schrijven;
-        animation-timing-function: linear;
-        animation-fill-mode: both;
-        animation-timeline: --slot;
-        animation-range: entry 0% entry 25%;
-      }
+      /* De balk schrijft zichzelf van links naar rechts, nadat de stengel
+         zijn bocht heeft gedraaid (StengelBaan.astro). clip-path en geen
+         breedte: zo verspringt er niets binnenin. */
       .spoor {
         animation-name: slot-schrijven;
         animation-timing-function: linear;

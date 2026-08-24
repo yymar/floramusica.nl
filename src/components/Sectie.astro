@@ -16,12 +16,6 @@
  * `sier` zet een klein plantaardig accent in de labelkolom: de marge van
  * het programmaboekje, naast de kop waar het bij hoort. Accentmaat (32–40px),
  * nooit in de tekstkolom.
- *
- * `band` maakt de sectie een stapelcontext, zodat een `<Stengel>` in de
- * `band`-slot met `z-index: -1` achter alle inhoud kan
- * liggen en over de sectiegrens heen mag hangen. Werkt ook op getinte
- * secties: de eigen achtergrond van een stapelcontext schildert onder zijn
- * negatieve z-kinderen.
  */
 import Sprig from './ornaments/Sprig.astro';
 import type { TakjeNaam } from './ornaments/svg';
@@ -32,16 +26,14 @@ interface Props {
   kop: string;
   tint?: boolean;
   sier?: TakjeNaam;
-  band?: boolean;
 }
-const { id, label, kop, tint = false, sier, band = false } = Astro.props;
+const { id, label, kop, tint = false, sier } = Astro.props;
 
 const woorden = kop.split(' ').filter(Boolean);
 const delen = woorden.length > 4 ? [...woorden.slice(0, 3), woorden.slice(3).join(' ')] : woorden;
 ---
 
-<section id={id} class:list={[tint && 'bg-paper-deep', band && 'draagt-band']}>
-  <slot name="band" />
+<section id={id} class:list={[tint && 'bg-paper-deep']}>
   <div class="mx-auto max-w-5xl px-5 py-sectie sm:px-8">
     <div class="md:grid md:grid-cols-[10rem_1fr] md:gap-10 lg:grid-cols-[12rem_1fr]">
       <div class="labelkolom mb-2 md:mb-0 md:self-start md:pt-[0.6em]">
@@ -68,20 +60,6 @@ const delen = woorden.length > 4 ? [...woorden.slice(0, 3), woorden.slice(3).joi
 </section>
 
 <style>
-  /* De stapelcontext voor de band-slot. Op een getinte sectie alleen vanaf
-     80rem (waar de stengel bestaat): daaronder zou de tintachtergrond, die
-     dan boven de laag van het binnenwerk komt, de maatstreep afdekken. */
-  .draagt-band:not(.bg-paper-deep) {
-    position: relative;
-    z-index: 0;
-  }
-  @media (min-width: 80rem) {
-    .draagt-band {
-      position: relative;
-      z-index: 0;
-    }
-  }
-
   /* Het accent staat in de open goot links van het label, op de regel van
      de kop — niet eronder, waar het tegen de inhoud van de sectie aan kan
      lopen. Onder het marge-grid (48rem) bestaat die goot niet en is het

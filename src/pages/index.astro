@@ -7,6 +7,7 @@ import Lessen from '../sections/Lessen.astro';
 import Locatie from '../sections/Locatie.astro';
 import Praktisch from '../sections/Praktisch.astro';
 import Contact from '../sections/Contact.astro';
+import StengelBaan from '../components/ornaments/StengelBaan.astro';
 ---
 
 <Basis>
@@ -23,5 +24,9 @@ import Contact from '../sections/Contact.astro';
     <Locatie />
     <Praktisch />
     <Contact />
+    {/* De stengel: één runtime-gegenereerd pad over alle secties heen,
+        als laatste kind zodat hij boven de sectieachtergronden schildert
+        (pointer-events: none; de route blijft vrij van tekst en foto's). */}
+    <StengelBaan />
   </div>
 </Basis>

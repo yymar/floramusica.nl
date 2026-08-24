@@ -13,7 +13,6 @@
  */
 import Sectie from '../components/Sectie.astro';
 import Motief from '../components/ornaments/Motief.astro';
-import Stengel from '../components/ornaments/Stengel.astro';
 import Sprig from '../components/ornaments/Sprig.astro';
 import { instrumenten, doelgroepen } from '../data/instrumenten';
 import { lessen } from '../data/copy';
@@ -22,8 +21,7 @@ const hoofd = instrumenten.find((i) => i.hoofdinstrument);
 const overige = instrumenten.filter((i) => !i.hoofdinstrument);
 ---
 
-<Sectie id="lessen" label="Lessen" kop={lessen.kop} tint band>
-  <Stengel slot="band" deel="lessen" dekking={0.4} dikte={1.6} />
+<Sectie id="lessen" label="Lessen" kop={lessen.kop} tint>
   <p class="rijs r2 max-w-[62ch]">{lessen.intro}</p>
 
   {
@@ -33,11 +31,11 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
           <h3 class="font-display text-subkop font-semibold text-paper">{hoofd.naam}</h3>
           <p class="mt-2 max-w-[52ch] text-paper-dim">{hoofd.omschrijving}</p>
         </article>
-        {/* De klarinet — de instrumentlaag uit het sier-motief — staat als
-            hoge accentkolom in de rechterbovenhoek en bloeit over de rand
-            van het vlak heen. Buiten de plaat (die clipt zichzelf voor de
-            openings-animatie), in bordeaux: leesbaar op het vlak én op het
-            papier erboven. */}
+        {/* De klarinet — de instrumentlaag uit het sier-motief — hoort bij
+            de kaart, niet bij de sectie: rechts binnen de kaartrand, in
+            crème op het bordeaux, met alleen een kleine bewuste bleed van
+            het mondstuk over de eigen bovenhoek. Hij hangt aan de houder
+            omdat de plaat zichzelf clipt voor de openings-animatie. */}
         <div class="golf-klarinet" aria-hidden="true">
           <Motief name="klarinet-instrument" class="w-full" />
         </div>
@@ -81,34 +79,25 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
 </Sectie>
 
 <style>
-  /* De klarinet staat op de bodem van het vlak en is hoger dan het vlak
-     zelf, dus hij bloeit er aan de bovenkant overheen — daarom hangt hij
-     aan de houder en niet in de plaat, waar de clip van de
-     openings-animatie hem zou afsnijden. De viewBox heeft links en rechts
-     lucht om het instrument heen (het instrument zit op 33–66% van de
-     breedte), vandaar de negatieve rechteroffset: die zet het zichtbare
-     instrument tegen de rand van het vlak, niet zijn lege kader. */
+  /* De klarinet staat met de beker op de bodem van het vlak; alleen het
+     mondstuk steekt een klein stuk boven de bovenrand uit (bewuste bleed
+     over de eigen hoek). De viewBox heeft links en rechts lucht om het
+     instrument heen (het instrument zit op 33–66% van de breedte), vandaar
+     de negatieve rechteroffset: die zet het zichtbare instrument binnen de
+     kaartrand, niet zijn lege kader. */
   .golf-houder :global(.golf-klarinet) {
     position: absolute;
     bottom: 0;
-    right: -2.25rem;
-    /* De overloop blijft onder de introregel erboven: het accent bloeit
-       over de hoek, niet door de tekst. */
-    height: calc(100% + 2rem);
+    right: -2.5rem;
+    height: calc(100% + 1.25rem);
     aspect-ratio: 80 / 112;
-    opacity: 0.3;
-    color: var(--color-bordeaux);
+    opacity: 0.24;
+    color: var(--color-paper);
     pointer-events: none;
   }
   .golf-houder :global(.golf-klarinet svg) {
     width: 100%;
     height: 100%;
-  }
-  @media (min-width: 48rem) {
-    .golf-houder :global(.golf-klarinet) {
-      right: -1rem;
-      height: calc(100% + 3rem);
-    }
   }
 
   /* Drukkersornament: absoluut in de goot links van de kop, zodat de kop

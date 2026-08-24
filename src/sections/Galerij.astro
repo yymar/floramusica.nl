@@ -16,7 +16,6 @@
 import { getImage } from 'astro:assets';
 import { Image } from 'astro:assets';
 import Sectie from '../components/Sectie.astro';
-import Stengel from '../components/ornaments/Stengel.astro';
 import { fotos } from '../data/fotos';
 import { galerij } from '../data/copy';
 
@@ -56,11 +55,7 @@ const cellen: Cel[] = await Promise.all(
 
 {
   fotos.length > 0 && (
-    <Sectie id="beelden" label="Beelden" kop={galerij.kop} sier="bloem-open" band>
-      {/* De stengel neemt hier de verbindende rol; langs de buitenmarge
-          van het grid, nooit door de foto's. De marge is leeg vlak, dus
-          iets voller dan onder tekst. */}
-      <Stengel slot="band" deel="beelden" dekking={0.5} dikte={1.9} />
+    <Sectie id="beelden" label="Beelden" kop={galerij.kop} sier="bloem-open">
       <div class="grid-quilt" id="galerij-grid">
         {cellen.map(({ foto, nummer, span, thumb, srcset, groot }) => (
           <figure class:list={['cel', `cel-${span}`]}>
