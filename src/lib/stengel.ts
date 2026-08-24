@@ -52,10 +52,11 @@ const f = (n: number) => String(Math.round(n * 100) / 100);
 
 /**
  * De vijf paden van een segment, als d-strings. `tussen` is de lijnafstand in
- * x-eenheden (procent van de sectiebreedte); 0.33% spoort met de lijnafstand
- * van de footerbalk, die ook met de breedte meeschaalt.
+ * x-eenheden (procent van de sectiebreedte); 5/12% is exact de lijnafstand
+ * van de footerbalk (2 van 24 eenheden op een balk van breedte/20 hoog),
+ * zodat stengel en balk als één tekening lezen.
  */
-export function stengelPaden(segment: StengelSegment, lijnen = 5, tussen = 0.33): string[] {
+export function stengelPaden(segment: StengelSegment, lijnen = 5, tussen = 5 / 12): string[] {
   const p = segment.punten;
   const t = raaklijnen(p, segment.beginVrij ?? false, segment.eindVrij ?? false);
   const offsets = Array.from({ length: lijnen }, (_, i) => (i - (lijnen - 1) / 2) * tussen);

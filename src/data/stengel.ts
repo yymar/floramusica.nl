@@ -5,9 +5,10 @@
  * - elke sectiegrens wordt verticaal gekruist, en de uittree-x van een
  *   segment is exact de intree-x van het volgende (zie lib/stengel.ts);
  * - de stengel kruist nooit een foto of een gevuld vlak (daar zou hij als
- *   z-index -1 achter verdwijnen), wel lopende tekst — op 8% dekking;
- * - onder de bloem (het hero-motief) begint hij, op de liggende footerbalk
- *   mikt hij aan het eind.
+ *   z-index -1 achter verdwijnen), wel lopende tekst — op lage dekking;
+ * - hij begint onder de omslagrand, precies waar de beker van de klarinet
+ *   onderduikt (het motief wordt daar door .balk-clip afgesneden), en landt
+ *   aan het eind via de aanloop in de footer op de liggende balk.
  *
  * `loten` zijn de spaarzame uitlopers: een takje of noot dat op een waypoint
  * uit de stengel groeit. Op een waypoint, want daar gaat de kromme exact
@@ -17,25 +18,15 @@ import type { StengelSegment } from '../lib/stengel';
 import type { TakjeNaam } from '../components/ornaments/svg';
 
 export type Loot = { x: number; y: number; naam: TakjeNaam; draai?: number };
-export type StengelDeel = 'omslag' | 'over' | 'beelden' | 'lessen' | 'locatie' | 'praktisch' | 'contact';
+export type StengelDeel = 'over' | 'beelden' | 'lessen' | 'locatie' | 'praktisch' | 'contact';
 
 export const stengel: Record<StengelDeel, StengelSegment & { loten?: Loot[] }> = {
-  // Onder de beker van de klarinet vandaan, de omslagrand onder. Het
-  // beginpunt ligt binnen het vlak dat het motief op élke breedte beslaat
-  // (het motief schaalt met de marge), zodat de stengel altijd achter de
-  // bloem vandaan komt en er nooit overheen kruist.
-  omslag: {
-    punten: [
-      { x: 92.5, y: 74 },
-      { x: 90, y: 87 },
-      { x: 87, y: 100 },
-    ],
-    beginVrij: true,
-  },
-  // Naar links door de open linkerhelft, langs de open kant van de foto.
+  // Verticaal onder de beker vandaan (x 93 ligt op elke breedte binnen de
+  // bekervoet van het motief), dan naar links door de open linkerhelft,
+  // langs de open kant van de foto.
   over: {
     punten: [
-      { x: 87, y: 0 },
+      { x: 93, y: 0 },
       { x: 52, y: 26 },
       { x: 27, y: 48 },
       { x: 24, y: 66 },
@@ -83,18 +74,19 @@ export const stengel: Record<StengelDeel, StengelSegment & { loten?: Loot[] }> =
       { x: 78, y: 100 },
     ],
   },
-  // Langs de rechtergoot omlaag, dan de brede zwaai naar linksonder: de
-  // uitloop mikt op de linker intree van de liggende footerbalk.
+  // Langs de rechtergoot omlaag, dan de brede zwaai naar linksonder. Het
+  // einde is verticaal op x 6: exact waar de aanloop in de footer begint,
+  // die de vijf lijnen op de liggende balk laat landen (zie Footer.astro).
   contact: {
     punten: [
       { x: 78, y: 0 },
       { x: 87, y: 22 },
-      { x: 88, y: 52 },
-      { x: 60, y: 80 },
-      { x: 22, y: 93 },
+      { x: 88, y: 48 },
+      { x: 70, y: 70 },
+      { x: 36, y: 84 },
+      { x: 12, y: 92 },
       { x: 6, y: 100 },
     ],
-    eindVrij: true,
-    loten: [{ x: 88, y: 52, naam: 'tak-blad', draai: 12 }],
+    loten: [{ x: 88, y: 48, naam: 'tak-blad', draai: 12 }],
   },
 };

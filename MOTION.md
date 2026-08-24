@@ -169,11 +169,15 @@ na de fix loopt hij tot 56px, gelijk aan de site.
   ±1,25rem over `cover 0–100%`: trage parallax, zodat de naad diepte krijgt.
   Bij reduced motion staat hij stil en gewoon zichtbaar.
 - **De stengel** (zie DESIGN.md, Ornamenten) tekent zichzelf per sectie van
-  boven naar beneden: `stroke-dashoffset` 1→0 op `entry 0% cover 40%`, de
-  vijf lijnen elk 2% na elkaar. Geen parallax op de stengel: een segment dat
+  boven naar beneden: een clip-wipe op `entry 0% cover 40%`. Geen
+  stroke-dash-draw: dasharray + pathLength + non-scaling-stroke rendert in
+  Chromium stuk, en de stengel loopt vrijwel altijd omlaag, dus de wipe
+  leest hetzelfde. In de footer wordt eerst de aanloopbocht gewiped
+  (`entry 0–25%` op de slot-timeline), daarna schrijft de balk zichzelf
+  (`entry 20–75%`). Geen parallax op de stengel: een segment dat
   verschuift breekt de aansluiting op de sectiegrens. Bij reduced motion
   staat hij er compleet.
 - **Het omslagmotief beweegt niet meer mee** (was de vierde parallaxlaag):
-  de stengel groeit uit de beker, en de bloem kan niet schuiven zonder van
-  haar stengel los te raken. De notenbalk erachter beweegt nog wel — drie
+  de stengel begint onder de omslagrand waar de beker onderduikt, en die
+  aansluiting breekt zodra de bloem schuift. De notenbalk erachter beweegt nog wel — drie
   lagen dus, zoals deze spec oorspronkelijk zei.

@@ -22,18 +22,18 @@ import Sprig from './Sprig.astro';
 
 interface Props {
   deel: StengelDeel;
-  /** Dekking van de lijnen; 0.08 onder tekstzones, hoger alleen op leeg vlak. */
+  /** Dekking van de lijnen; 0.1 onder tekstzones, hoger alleen op leeg vlak. */
   dekking?: number;
   class?: string;
 }
-const { deel, dekking = 0.08, class: className } = Astro.props;
+const { deel, dekking = 0.1, class: className } = Astro.props;
 const segment = stengel[deel];
 const paden = stengelPaden(segment);
 ---
 
 <div class:list={['stengel', className]} aria-hidden="true">
   <svg viewBox="0 0 100 100" preserveAspectRatio="none" style={`opacity: ${dekking};`}>
-    {paden.map((d) => <path d={d} pathLength="1" vector-effect="non-scaling-stroke" />)}
+    {paden.map((d) => <path d={d} vector-effect="non-scaling-stroke" />)}
   </svg>
   {
     segment.loten?.map((loot) => (
@@ -66,7 +66,23 @@ const paden = stengelPaden(segment);
   .stengel path {
     fill: none;
     stroke: currentColor;
-    stroke-width: 1;
+    /* Dezelfde maat als de footerbalk: de lijnen daar zijn gevulde banden
+       van ~0.3–0.8 van een tegel-eenheid, en een eenheid is
+       (100vw − 3rem) / 480. Non-scaling-stroke rekent in schermpixels, dus
+       de dikte kan hier gewoon met de vensterbreedte meeschalen. */
+    stroke-width: calc((100vw - 48px) / 960);
+  }
+
+  /* Het contact-segment loopt naar de footerbalk toe donkerder aan: van de
+     tekstdekking bovenin (0.5 × 0.2 = 0.1) naar de volle balkdekking (0.5)
+     op de landing. Gebruik: dekking={0.5} + deze klasse. */
+  .stengel-verloop svg {
+    mask-image: linear-gradient(
+      to bottom,
+      rgb(0 0 0 / 0.2) 0%,
+      rgb(0 0 0 / 0.2) 45%,
+      rgb(0 0 0) 100%
+    );
   }
 
   /* Een loot groeit uit de stengel: gecentreerd op een waypoint, dus hij
@@ -79,25 +95,25 @@ const paden = stengelPaden(segment);
     opacity: 0.3;
   }
 
-  /* Longhands, geen `animation:`-shorthand — zie global.css. */
+  /* Het segment tekent zichzelf van boven naar beneden met een clip-wipe.
+     Geen stroke-dash-draw: de combinatie dasharray + pathLength +
+     non-scaling-stroke rendert in Chromium stuk (stippellijnen en afgekapte
+     einden, ook in de eindstand). De stengel loopt vrijwel altijd omlaag,
+     dus de wipe leest hetzelfde als tekenen langs het pad.
+     Longhands, geen `animation:`-shorthand — zie global.css. */
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
-      .stengel path {
-        stroke-dasharray: 1;
+      .stengel svg {
         animation-name: stengel-groei;
         animation-timing-function: linear;
         animation-fill-mode: both;
         animation-timeline: view();
         animation-range: entry 0% cover 40%;
       }
-      .stengel path:nth-child(2) { animation-range: entry 2% cover 42%; }
-      .stengel path:nth-child(3) { animation-range: entry 4% cover 44%; }
-      .stengel path:nth-child(4) { animation-range: entry 6% cover 46%; }
-      .stengel path:nth-child(5) { animation-range: entry 8% cover 48%; }
     }
   }
   @keyframes stengel-groei {
-    from { stroke-dashoffset: 1; }
-    to { stroke-dashoffset: 0; }
+    from { clip-path: inset(0 0 100% 0); }
+    to { clip-path: inset(0 0 0% 0); }
   }
 </style>

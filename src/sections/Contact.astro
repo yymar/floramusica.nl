@@ -12,7 +12,10 @@ import { site } from '../data/site';
       geketend over de volle vensterbreedte, half boven en half onder de
       grens, achter beide achtergronden langs. */}
   <TextuurBand slot="band" dekking={0.07} />
-  <Stengel slot="band" deel="contact" />
+  {/* Het laatste segment loopt donkerder aan (verloop in Stengel.astro):
+      bovenin de tekstdekking, op de landing de volle dekking van de
+      footerbalk, zodat de overgang naadloos is. */}
+  <Stengel slot="band" deel="contact" dekking={0.5} class="stengel-verloop" />
   <p class="rijs r2 max-w-[62ch]">{contact.intro}</p>
 
   <div class="mt-8">

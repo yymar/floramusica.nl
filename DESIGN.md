@@ -30,19 +30,19 @@ Drie regels bepalen waar ze mogen staan.
 
 **3. Elk ornament heeft een taak:** twee secties verbinden (de stengel of een band over de naad), een kop markeren (accent), of de omslag componeren (het motief). Is de taak niet te benoemen, dan hoort het ornament er niet.
 
-**De stengel.** De rode draad van de pagina, vanaf 80rem: een vijflijnige notenbalk die als slingerpad verticaal door alle secties golft — hij groeit onder de bloem van het omslagmotief vandaan en gaat onderaan liggen als de footerbalk. Hij wordt gegenereerd (`src/lib/stengel.ts`, route in `src/data/stengel.ts`), niet als asset geplaatst: de secties hebben variabele hoogtes, dus het pad past zich aan de echte layout aan. Elke sectiegrens wordt exact verticaal gekruist op een gedeelde x, waardoor de segmenten op elke schermbreedte naadloos aansluiten — het ketenprincipe van de linten, maar responsief. Dekking 8% (30% op het lege bordeaux van de omslag), nooit meer onder tekst; uit de stengel groeien drie kleine loten (takje, knop, noot) op waypoints, zodat ze de lijn altijd raken. De maatstreep vervalt vanaf 80rem — twee verticale draden naast elkaar zou concurrentie zijn; tussen 64 en 80rem staat hij er nog.
+**De stengel.** De rode draad van de pagina, vanaf 80rem: een vijflijnige notenbalk die als slingerpad verticaal door alle secties golft — hij groeit onder de bloem van het omslagmotief vandaan en gaat onderaan liggen als de footerbalk. Hij wordt gegenereerd (`src/lib/stengel.ts`, route in `src/data/stengel.ts`), niet als asset geplaatst: de secties hebben variabele hoogtes, dus het pad past zich aan de echte layout aan. Elke sectiegrens wordt exact verticaal gekruist op een gedeelde x, waardoor de segmenten op elke schermbreedte naadloos aansluiten — het ketenprincipe van de linten, maar responsief. Lijnafstand en -dikte zijn de maten van de footerbalk, zodat stengel en balk als één tekening lezen; het laatste segment loopt via een verloop donkerder aan en landt in de footer via een gegenereerde aanloopbocht letterlijk óp de balk. Dekking 10% onder tekst, oplopend tot de balkdekking (50%) op de landing; uit de stengel groeien drie kleine loten (takje, knop, noot) op waypoints, zodat ze de lijn altijd raken. De maatstreep vervalt vanaf 80rem — twee verticale draden naast elkaar zou concurrentie zijn; tussen 64 en 80rem staat hij er nog.
 
 Wat er staat:
 
 | Waar | Ornament | Maat | Taak |
 |---|---|---|---|
-| Hele pagina (≥80rem) | de stengel (gegenereerd) | textuur | de rode draad: van de bloem in de omslag naar de liggende balk in de footer |
-| Omslag | `motif-klarinet-bloei` | omslag | de bloem waar de stengel uit groeit; boven de notenbalk, onder tekst en portret, papier op 20%, in de rechtermarge met één bewuste bleed onder de sectierand; onder 80rem verborgen |
+| Hele pagina (≥80rem) | de stengel (gegenereerd) | textuur | de rode draad: hij begint onder de omslagrand waar de beker onderduikt en wordt in de footer de liggende balk |
+| Omslag | `motif-klarinet-bloei` | omslag | de bloem waar de stengel uit groeit (de stengel zelf begint pas onder de omslagrand, precies waar de beker onderduikt); boven de notenbalk, onder tekst en portret, papier op 20%, in de rechtermarge met één bewuste bleed onder de sectierand; onder 80rem verborgen |
 | Over / Beelden / Locatie | `tak-blad` / `bloem-open` / `bloem-knop` | accent | drukkersornament in de goot links van het sectielabel, op de kopregel (alleen vanaf 48rem) |
 | Lessen | `motif-klarinet-instrument` | accent | hoge kolom tegen de rechterkant van het klarinetvlak, bloedt aan de bovenkant het vlak uit |
 | Lessen | `sprig-noten-blad` | accent | absoluut in de goot links van de kop "Voor wie" — accenten verplaatsen nooit tekst |
 | Praktisch → Contact | `ribbon-a/b-quiet` | textuur | de enige horizontale band: half boven, half onder de naad, 7% |
-| Footer | `a/b-quiet`/`-noten`/`-blad` | textuur | het slot: de balk in volle behandeling van vensterrand tot dubbele eindstreep; de stengel zwaait er linksboven op aan |
+| Footer | `a/b-quiet`/`-noten`/`-blad` | textuur | het slot: vanaf 80rem landt de stengel via de aanloopbocht op de balk (één doorlopende tekening) en beginnen de tegels pas na de landing; daaronder loopt de balk van de vensterrand tot de dubbele eindstreep |
 
 Vijf varianten, elk met één doel: vol detail voor de voorgrond, `-quiet` uitsluitend als achtergrondwatermerk op 5–15% dekking, `-centerline` uitsluitend voor de draw-animatie, en `-noten`/`-blad` als losse lagen die pixel-op-pixel over de balk vallen. Een quiet-variant boven 15% wint van de tekst en hoort daar dus niet.
 

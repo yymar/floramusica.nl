@@ -15,7 +15,6 @@
 import Figuur from '../components/Figuur.astro';
 import PartituurRegel from '../components/PartituurRegel.astro';
 import Motief from '../components/ornaments/Motief.astro';
-import Stengel from '../components/ornaments/Stengel.astro';
 import Wordmark from '../components/Wordmark.astro';
 import { hero } from '../data/copy';
 // Portret uit de professionele fotoserie, 4:5 zoals het omslagontwerp vraagt.
@@ -26,13 +25,9 @@ import portret from '../assets/portret-christa.jpg';
   {/* Eigen clip voor de achterste laag: de sectie zelf mag niet klippen,
       want het portret hoort er onderuit te steken. */}
   <div class="balk-clip" aria-hidden="true">
-    {/* Schildervolgorde: eerst de balk (diepste laag), dan de stengel, dan
-        het motief — de bloem ligt bovenop de notenbalk, onder de tekst en
-        het portret. */}
     <div class="parallax-balk">
       <PartituurRegel class="h-[clamp(7rem,19vw,13rem)]" />
     </div>
-    <Stengel deel="omslag" dekking={0.3} class="stengel-omslag" />
     <div class="parallax-motief">
       <Motief name="klarinet-bloei" class="w-full" />
     </div>
@@ -120,14 +115,6 @@ import portret from '../assets/portret-christa.jpg';
     opacity: 0.2;
     pointer-events: none;
   }
-  /* De stengel groeit uit de beker; op de omslag in papier, en steviger dan
-     in het binnenwerk, want dit is leeg donker vlak zonder tekst eronder.
-     z-index 0 in plaats van -1: hier moet hij bovenop de notenbalk liggen
-     (de DOM-volgorde regelt de rest), niet achter alles. */
-  .balk-clip :global(.stengel-omslag) {
-    color: var(--color-paper);
-    z-index: 0;
-  }
   .parallax-motief :global(svg) {
     width: 100%;
     height: 100%;
@@ -182,9 +169,9 @@ import portret from '../assets/portret-christa.jpg';
      minifier stuk zodra animation-timeline erbij staat. */
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
-      /* Het motief beweegt niet meer mee: de stengel groeit uit de beker
-         en een stengelsegment kan niet verschuiven zonder de aansluiting
-         op de sectiegrens te breken. De balk erachter beweegt wel. */
+      /* Het motief beweegt niet meer mee: de stengel begint direct onder de
+         omslagrand waar de beker onderduikt, en die aansluiting breekt zodra
+         het motief verschuift. De balk erachter beweegt wel. */
       .parallax-balk {
         animation-name: balk-lag;
         animation-timing-function: linear;
