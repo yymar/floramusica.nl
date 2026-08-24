@@ -13,6 +13,15 @@ npm run build      # productie-build naar dist/
 npm run preview    # de build lokaal bekijken
 ```
 
+De dev-server staat vast op 4321 met `strictPort`, want er draaien meer
+projecten naast elkaar op dezelfde machine (`me` op 3000, `yoim` op 3001,
+`holopay` op 5173). De volledige poorttabel staat in `HANDOVER.md` van `yoim`.
+Is 4321 bezet, dan start Astro niet en zegt alleen "Dev server process exited
+before becoming ready": `npx astro dev logs` toont dan de echte reden.
+
+Het contactformulier heeft een Web3Forms-key nodig, zie hieronder. Zonder key
+draait de site gewoon; alleen het formulier meldt dat het nog niet is ingesteld.
+
 ## Waar staat welke content
 
 Alle bewerkbare inhoud staat in `src/data/`; de layout hoef je daarvoor niet aan te raken.
