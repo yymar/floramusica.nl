@@ -42,7 +42,7 @@ const { labels, fouten, status, concept } = formulier;
   </p>
 
   <div class="space-y-5">
-    <div>
+    <div class="rijs r2">
       <label for="veld-naam" class="mb-1 block font-bold">{labels.naam}</label>
       <input
         type="text"
@@ -56,7 +56,7 @@ const { labels, fouten, status, concept } = formulier;
       <p id="fout-naam" hidden class="mt-1 text-klein font-bold text-bordeaux"></p>
     </div>
 
-    <div>
+    <div class="rijs r2">
       <label for="veld-email" class="mb-1 block font-bold">{labels.email}</label>
       <input
         type="email"
@@ -70,7 +70,7 @@ const { labels, fouten, status, concept } = formulier;
       <p id="fout-email" hidden class="mt-1 text-klein font-bold text-bordeaux"></p>
     </div>
 
-    <div>
+    <div class="rijs r2">
       <label for="veld-telefoon" class="mb-1 block font-bold">{labels.telefoon}</label>
       <input
         type="tel"
@@ -81,7 +81,7 @@ const { labels, fouten, status, concept } = formulier;
       />
     </div>
 
-    <div>
+    <div class="rijs r3">
       <label for="veld-instrument" class="mb-1 block font-bold">{labels.instrument}</label>
       <select
         id="veld-instrument"
@@ -95,7 +95,7 @@ const { labels, fouten, status, concept } = formulier;
       </select>
     </div>
 
-    <fieldset aria-describedby="fout-voor-wie">
+    <fieldset class="rijs r3" aria-describedby="fout-voor-wie">
       <legend class="mb-1 font-bold">{labels.voorWie}</legend>
       <div class="flex flex-wrap gap-x-6 gap-y-2">
         <label class="inline-flex items-center gap-2">
@@ -110,7 +110,7 @@ const { labels, fouten, status, concept } = formulier;
       <p id="fout-voor-wie" hidden class="mt-1 text-klein font-bold text-bordeaux"></p>
     </fieldset>
 
-    <div>
+    <div class="rijs r3">
       <label for="veld-bericht" class="mb-1 block font-bold">{labels.bericht}</label>
       <textarea
         id="veld-bericht"
@@ -126,7 +126,7 @@ const { labels, fouten, status, concept } = formulier;
   <button
     type="submit"
     data-bezig={labels.bezig}
-    class="mt-7 rounded-sm bg-bordeaux px-6 py-3 font-bold text-paper transition-colors hover:bg-bordeaux-deep disabled:cursor-not-allowed disabled:opacity-60"
+    class="rijs r3 mt-7 rounded-sm bg-bordeaux px-6 py-3 font-bold text-paper transition-colors hover:bg-bordeaux-deep disabled:cursor-not-allowed disabled:opacity-60"
   >
     {labels.versturen}
   </button>

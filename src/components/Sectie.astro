@@ -6,6 +6,12 @@
  *
  * `tint` geeft de sectie een iets dieper papier als achtergrond,
  * voor rustige afwisseling binnen hetzelfde lichte thema.
+ *
+ * De kop wordt in woorden gesplitst (`.wrd`), zodat hij bij het inscrollen
+ * per woord opbouwt — zie MOTION.md. Woorden en geen regels, want waar een
+ * regel breekt is in statische CSS niet te weten. De choreografie loopt tot
+ * vier stappen, dus alles vanaf het vierde woord blijft één span; koppen
+ * hier zijn kort, dus dat valt in de praktijk nooit op.
  */
 interface Props {
   id: string;
@@ -14,6 +20,9 @@ interface Props {
   tint?: boolean;
 }
 const { id, label, kop, tint = false } = Astro.props;
+
+const woorden = kop.split(' ').filter(Boolean);
+const delen = woorden.length > 4 ? [...woorden.slice(0, 3), woorden.slice(3).join(' ')] : woorden;
 ---
 
 <section id={id} class:list={[tint && 'bg-paper-deep']}>
@@ -27,7 +36,14 @@ const { id, label, kop, tint = false } = Astro.props;
       </p>
       <div>
         <h2 class="font-display text-kop font-semibold tracking-tight text-ink">
-          {kop}
+          {
+            delen.map((woord, i) => (
+              <>
+                {i > 0 && ' '}
+                <span class="wrd">{woord}</span>
+              </>
+            ))
+          }
         </h2>
         <div class="mt-6">
           <slot />

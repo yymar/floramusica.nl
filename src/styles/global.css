@@ -38,6 +38,32 @@
   --spacing-sectie: clamp(3.5rem, 2.25rem + 4.5vw, 6.5rem);
 }
 
+/*
+ * Motion-tokens (additief op de tokens hierboven; zie MOTION.md).
+ * Scroll-gekoppelde animaties zijn `linear` zonder eigen duur: de positie
+ * in de animation-range ís de voortgang, de vinger van de bezoeker is de
+ * easing. Alleen micro-interacties hebben een duur en een curve.
+ */
+:root {
+  --ease-organic: cubic-bezier(0.2, 0, 0, 1);
+  --dur-s: 150ms;  /* kleurwissels */
+  --dur-m: 240ms;  /* onderstreping, pijl */
+  --dur-l: 350ms;  /* beeld-scale in galerijcellen */
+  --schuif-m: 1rem;      /* reveal-afstand tekstblokken en koppen */
+  --drift-galerij: 1.5rem;
+  /* Overhang van het portret over de omslag/papier-grens. Onder 48rem is het
+     scherm smaller en het portret kleiner, dus daar hangt het minder ver. */
+  --overlap-hero: 2.5rem;
+  --z-achter: 0;
+  --z-inhoud: 1;
+  --z-accent: 2;
+}
+@media (min-width: 48rem) {
+  :root {
+    --overlap-hero: 4rem;
+  }
+}
+
 /* Fonts zijn zelf-gehost via @fontsource; imports staan in Basis.astro. */
 
 html {
@@ -136,4 +162,141 @@ section[id] {
 @keyframes ornament-tekenen {
   from { stroke-dashoffset: 1; }
   to { stroke-dashoffset: 0; }
+}
+
+/* =============================================================
+   Scroll-choreografie (MOTION.md) — de gedeelde laag.
+
+   Deze klassen worden in meerdere secties gebruikt, dus ze staan hier
+   en niet in een scoped <style>: Astro's scoping bereikt geen markup uit
+   een ander component. Alles zit achter dezelfde dubbele guard, en de
+   basisstaat is altijd "gewoon zichtbaar" — zonder scroll-driven
+   animations of bij reduced motion staat de pagina er compleet.
+
+   Longhands, geen `animation:`-shorthand: de minifier vouwt
+   animation-timeline anders de shorthand in en browsers wijzen die vorm af.
+   ============================================================= */
+
+/* Het binnenwerk vangt wat links (galerij) en rechts (de golf) buiten de
+   container bloedt. `clip` en niet `hidden`: hidden zou hier een
+   scrollcontainer maken en dat sloopt zowel de sticky header als de
+   view()-timelines. Nooit op html/body — daar maakt het de viewport
+   onscrollbaar. Verticaal blijft alles zichtbaar, want het portret hangt
+   met opzet over de bovenrand heen. */
+.binnenwerk {
+  position: relative;
+  overflow-x: clip;
+}
+
+/* De maatstreep: de rode draad die zich door het hele binnenwerk trekt.
+   Positie afgeleid uit het marge-grid, niet los gehardcodeerd — container
+   64rem met 2rem padding, labelkolom 12rem, gap 2.5rem, dus het midden van
+   de gap ligt op 50% − 16.75rem. Alleen vanaf 64rem, want daaronder bestaat
+   de labelkolom niet. */
+.maatstreep {
+  display: none;
+}
+@media (min-width: 64rem) {
+  .maatstreep {
+    --maat-container: 64rem;
+    --maat-padding: 2rem;
+    --maat-label: 12rem;
+    --maat-gap: 2.5rem;
+    display: block;
+    position: absolute;
+    top: var(--spacing-sectie);
+    bottom: var(--spacing-sectie);
+    left: calc(
+      50% - (var(--maat-container) / 2) + var(--maat-padding) + var(--maat-label) + (var(--maat-gap) / 2)
+    );
+    width: 2px;
+    background: var(--color-bordeaux);
+    opacity: 0.3;
+    transform-origin: top;
+    pointer-events: none;
+  }
+}
+
+/* Entree-utility: opacity 0→1 plus een rem omhoog. r2/r3 verschuiven de
+   range, zodat blokken binnen een sectie na elkaar binnenkomen in plaats
+   van als parade tegelijk. */
+.wrd {
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .maatstreep {
+      animation-name: maat-teken;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 85%;
+    }
+
+    .rijs {
+      animation-name: rijs-op;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 38%;
+    }
+    .rijs.r2 {
+      animation-range: entry 8% entry 46%;
+    }
+    .rijs.r3 {
+      animation-range: entry 16% entry 54%;
+    }
+
+    /* Koppen bouwen per woord op. Woorden, niet regels: regels zijn in
+       statische CSS responsief onvoorspelbaar. */
+    .wrd {
+      animation-name: rijs-op;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 30%;
+    }
+    .wrd:nth-child(2) {
+      animation-range: entry 6% entry 36%;
+    }
+    .wrd:nth-child(3) {
+      animation-range: entry 12% entry 42%;
+    }
+    .wrd:nth-child(4) {
+      animation-range: entry 18% entry 48%;
+    }
+
+    /* Mobiel soberder: de woorden komen samen en de staggers halveren,
+       want het scrollvenster is daar korter. */
+    @media (max-width: 47.99rem) {
+      .wrd,
+      .wrd:nth-child(2),
+      .wrd:nth-child(3),
+      .wrd:nth-child(4) {
+        animation-range: entry 0% entry 30%;
+      }
+      .rijs.r2 {
+        animation-range: entry 4% entry 42%;
+      }
+      .rijs.r3 {
+        animation-range: entry 8% entry 46%;
+      }
+    }
+  }
+}
+
+@keyframes maat-teken {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+@keyframes rijs-op {
+  from { opacity: 0; transform: translateY(var(--schuif-m)); }
+  to { opacity: 1; transform: none; }
+}
+/* Groeiende hairline, gedeeld door de instrumentlijnen, de organisatielijst
+   en de vijf lijnen van het notenbalkslot. */
+@keyframes lijn-groei {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }

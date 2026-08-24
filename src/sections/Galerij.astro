@@ -362,17 +362,45 @@ const cellen: Cel[] = await Promise.all(
       .cel:nth-child(3n) {
         animation-range: entry 16% entry 56%;
       }
+
+      @media (min-width: 48rem) {
+        .cel:nth-child(odd) .cel-link {
+          animation-name: drift-op;
+          animation-timing-function: linear;
+          animation-fill-mode: both;
+          animation-timeline: view();
+          animation-range: cover 0% cover 100%;
+        }
+        .cel:nth-child(even) .cel-link {
+          animation-name: drift-neer;
+          animation-timing-function: linear;
+          animation-fill-mode: both;
+          animation-timeline: view();
+          animation-range: cover 0% cover 100%;
+        }
+      }
     }
   }
   @keyframes cel-op {
     from {
-      opacity: 0.25;
+      opacity: 0;
       transform: translateY(0.75rem);
     }
     to {
       opacity: 1;
       transform: none;
     }
+  }
+  /* Micro-parallax: naburige cellen drijven tegengesteld, waardoor de spread
+     bladert in plaats van staat. Alleen vanaf 48rem — op mobiel staat alles
+     onder elkaar en zou het alleen maar onrustig zijn. */
+  @keyframes drift-op {
+    from { transform: translateY(var(--drift-galerij)); }
+    to { transform: translateY(calc(-1 * var(--drift-galerij))); }
+  }
+  @keyframes drift-neer {
+    from { transform: translateY(calc(-1 * var(--drift-galerij))); }
+    to { transform: translateY(var(--drift-galerij)); }
   }
 
   /* Lightbox: donker bordeaux doek, beeld centraal, knoppen ruim (44px)

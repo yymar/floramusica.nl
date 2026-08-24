@@ -1,41 +1,43 @@
 ---
 /**
- * De omslag van het programmaboekje, nu als eerste maat van een partituur:
+ * De omslag van het programmaboekje, als eerste maat van een partituur:
  * een toon-op-toon notenbalk met solsleutel loopt achter de titel langs,
  * de footer sluit de pagina af met de eindstreep. De naam van de praktijk
  * staat groot in display; de ondertitel draagt de zoekintentie en zit mee
- * in de h1. Rechts het portretfoto-slot als rustige tonale outline.
+ * in de h1. Rechts het portret.
+ *
+ * Drie parallaxlagen (MOTION.md): achter de notenbalk met het sier-motief,
+ * midden het tekstblok, voor het portret. Het portret loopt als enige tégen
+ * de scroll in en hangt bovendien statisch over de bordeaux/papier-grens
+ * heen. Die overhang is layout, geen animatie, en blijft dus ook staan bij
+ * reduced motion — hij is wat de omslag en het binnenwerk aan elkaar knoopt.
  */
 import Figuur from '../components/Figuur.astro';
 import PartituurRegel from '../components/PartituurRegel.astro';
 import Motief from '../components/ornaments/Motief.astro';
 import Wordmark from '../components/Wordmark.astro';
 import { hero } from '../data/copy';
-import { site } from '../data/site';
 // Portret uit de professionele fotoserie, 4:5 zoals het omslagontwerp vraagt.
 import portret from '../assets/portret-christa.jpg';
 ---
 
-<section class="relative overflow-hidden bg-bordeaux-deep" data-vlak="bordeaux">
-  {/* De partituurregel: van rand tot rand, achter de titel */}
-  <div class="parallax-balk absolute inset-x-0 top-[7rem] text-bordeaux md:top-[8.5rem]" aria-hidden="true">
-    <PartituurRegel class="h-[clamp(7rem,19vw,13rem)]" />
-  </div>
-
-  {/* Het sier-motief van de omslag: klarinet met bloei, groot en toon-op-toon
-      aan de rechteronderhoek, bloedend over de rand. Derde en achterste
-      parallaxlaag, dus de traagste van de drie. Onder 640px weg: daar is de
-      omslag al vol en zou hij achter de tekst door lopen. */}
-  <div
-    class="parallax-motief pointer-events-none absolute right-[-3rem] bottom-[-4rem] hidden w-80 text-paper opacity-[0.14] sm:block lg:right-[-1.5rem] lg:w-96"
-    aria-hidden="true"
-  >
-    <Motief name="klarinet-bloei" class="w-full" />
+<section class="relative bg-bordeaux-deep" data-vlak="bordeaux">
+  {/* Eigen clip voor de achterste laag: de sectie zelf mag niet klippen,
+      want het portret hoort er onderuit te steken. */}
+  <div class="balk-clip" aria-hidden="true">
+    {/* Het sier-motief ligt het diepst en loopt dus het verst achter.
+        Onder 48rem weg: daar is de omslag al vol. */}
+    <div class="parallax-motief">
+      <Motief name="klarinet-bloei" class="w-full" />
+    </div>
+    <div class="parallax-balk">
+      <PartituurRegel class="h-[clamp(7rem,19vw,13rem)]" />
+    </div>
   </div>
 
   <div class="relative mx-auto max-w-5xl px-5 pt-14 pb-16 sm:px-8 sm:pt-20 sm:pb-24">
     <div class="grid items-end gap-10 md:grid-cols-[3fr_2fr] md:gap-16">
-      <div>
+      <div class="hero-tekst">
         <h1 class="text-paper">
           <span class="block text-omslag">
             <Wordmark toon="paper" />
@@ -49,47 +51,108 @@ import portret from '../assets/portret-christa.jpg';
         </p>
         <a
           href="#contact"
-          class="mt-8 inline-block rounded-sm bg-paper px-6 py-3 font-bold text-bordeaux-deep transition-colors hover:bg-paper-dim"
+          class="knop mt-8 inline-flex items-center gap-2 rounded-sm bg-paper px-6 py-3 font-bold text-bordeaux-deep transition-colors hover:bg-paper-dim"
         >
           {hero.cta}
+          <span class="pijl" aria-hidden="true">→</span>
         </a>
       </div>
-      <Figuur
-        src={portret}
-        alt="Christa ten Berg met haar klarinet"
-        breedte={640}
-        hoogte={800}
-        toon="bordeaux"
-        class="max-w-xs md:max-w-none parallax-portret"
-      />
+
+      <div class="parallax-portret">
+        <Figuur
+          src={portret}
+          alt="Christa ten Berg met haar klarinet"
+          breedte={640}
+          hoogte={800}
+          toon="bordeaux"
+        />
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  /* Gelaagde parallax op de omslag: de partituurregel loopt merkbaar achter
-     op de scroll, het portret een fractie — twee lagen, klein gehouden
-     (~10% van de scrollafstand) zodat niets overlapt of afsnijdt. Alleen
-     transform, alleen waar scroll-driven animaties bestaan, en volledig
-     uit bij reduced-motion. */
+  /* `clip` en niet `hidden`: hidden maakt hiervan een scrollcontainer, en dan
+     resolvet de view()-timeline van de lagen hierbinnen tegen dít blok — dat
+     nooit scrolt — in plaats van tegen de viewport. De parallax staat dan
+     stil terwijl alles er verder goed uitziet. Zelfde reden als bij
+     .binnenwerk in global.css. */
+  .balk-clip {
+    position: absolute;
+    inset: 0;
+    overflow: clip;
+    z-index: var(--z-achter);
+  }
+  .parallax-balk {
+    position: absolute;
+    inset-inline: 0;
+    top: 7rem;
+    color: var(--color-bordeaux);
+  }
+  .parallax-motief {
+    position: absolute;
+    right: -3rem;
+    bottom: -4rem;
+    display: none;
+    width: 20rem;
+    color: var(--color-paper);
+    opacity: 0.14;
+    pointer-events: none;
+  }
+  .hero-tekst {
+    position: relative;
+    z-index: var(--z-inhoud);
+  }
+  /* Het portret ligt vooraan én hangt over de grens met het binnenwerk. De
+     negatieve marge moet ook de padding-bottom van de omslag overbruggen,
+     anders slikt die de overhang op. */
+  .parallax-portret {
+    position: relative;
+    z-index: var(--z-accent);
+    max-width: 20rem;
+    margin-bottom: calc(-1 * (var(--overlap-hero) + 4rem));
+  }
+  .parallax-portret :global(img) {
+    box-shadow: 0 1.5rem 3rem rgb(35 26 28 / 0.25);
+  }
+  @media (min-width: 40rem) {
+    .parallax-portret {
+      margin-bottom: calc(-1 * (var(--overlap-hero) + 6rem));
+    }
+  }
+  @media (min-width: 48rem) {
+    .parallax-balk {
+      top: 8.5rem;
+    }
+    .parallax-motief {
+      display: block;
+    }
+    .parallax-portret {
+      max-width: none;
+    }
+  }
+  @media (min-width: 64rem) {
+    .parallax-motief {
+      right: -1.5rem;
+      width: 24rem;
+    }
+  }
+
+  /* Micro-interactie: het pijltje loopt vooruit op hover en focus. */
+  .knop .pijl {
+    transition: transform var(--dur-m) var(--ease-organic);
+  }
+  .knop:hover .pijl,
+  .knop:focus-visible .pijl {
+    transform: translateX(4px);
+  }
+
+  /* De lagen, lineair aan de scroll gekoppeld (`exit`) terwijl de omslag het
+     beeld uit schuift. Geen eigen duur of easing: de vinger van de bezoeker
+     is de easing. Longhands, geen `animation:`-shorthand — die vouwt de
+     minifier stuk zodra animation-timeline erbij staat. */
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
-      .parallax-balk {
-        /* Longhands: de minifier vouwt animation-timeline anders in de
-           `animation:`-shorthand, en die vorm wijzen browsers af. */
-        animation-name: balk-lag;
-        animation-timing-function: linear;
-        animation-fill-mode: both;
-        animation-timeline: view();
-        animation-range: exit 0% exit 100%;
-      }
-      section :global(.parallax-portret) {
-        animation-name: portret-lag;
-        animation-timing-function: linear;
-        animation-fill-mode: both;
-        animation-timeline: view();
-        animation-range: exit 0% exit 100%;
-      }
       .parallax-motief {
         animation-name: motief-lag;
         animation-timing-function: linear;
@@ -97,35 +160,64 @@ import portret from '../assets/portret-christa.jpg';
         animation-timeline: view();
         animation-range: exit 0% exit 100%;
       }
+      .parallax-balk {
+        animation-name: balk-lag;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 100%;
+      }
+      .hero-tekst {
+        animation-name: tekst-lag;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 100%;
+      }
+      .parallax-portret {
+        animation-name: portret-lead;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 100%;
+      }
     }
   }
+
   /* Op mobiel is de scrollafstand korter en het scherm kleiner; de lagen
      reizen daar verder, anders voel je ze niet. */
-  @keyframes balk-lag {
-    from { transform: translateY(0); }
-    to { transform: translateY(5.5rem); }
-  }
-  @keyframes portret-lag {
-    from { transform: translateY(0); }
-    to { transform: translateY(3rem); }
-  }
-  /* Het motief ligt het diepst, dus het loopt het verst achter. */
   @keyframes motief-lag {
     from { transform: translateY(0); }
     to { transform: translateY(6.5rem); }
   }
+  @keyframes balk-lag {
+    from { transform: translateY(0); }
+    to { transform: translateY(5.5rem); }
+  }
+  @keyframes tekst-lag {
+    from { transform: translateY(0); }
+    to { transform: translateY(1.25rem); }
+  }
+  @keyframes portret-lead {
+    from { transform: translateY(0); }
+    to { transform: translateY(-1.25rem); }
+  }
   @media (min-width: 48rem) {
+    @keyframes motief-lag {
+      from { transform: translateY(0); }
+      to { transform: translateY(4.5rem); }
+    }
     @keyframes balk-lag {
       from { transform: translateY(0); }
       to { transform: translateY(3.5rem); }
     }
-    @keyframes portret-lag {
+    @keyframes tekst-lag {
       from { transform: translateY(0); }
-      to { transform: translateY(1.25rem); }
+      to { transform: translateY(0.9rem); }
     }
-    @keyframes motief-lag {
+    @keyframes portret-lead {
       from { transform: translateY(0); }
-      to { transform: translateY(4.5rem); }
+      to { transform: translateY(-1.5rem); }
     }
   }
 </style>

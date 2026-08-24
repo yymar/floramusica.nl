@@ -11,10 +11,17 @@ import Contact from '../sections/Contact.astro';
 
 <Basis>
   <Hero />
-  <Over />
-  <Galerij />
-  <Lessen />
-  <Locatie />
-  <Praktisch />
-  <Contact />
+  {/* Het binnenwerk: alles na de omslag. De wrapper draagt de maatstreep en
+      klipt wat links (de galerij-spread) en rechts (de bordeaux golf) buiten
+      de container bloedt. De omslag staat er bewust buiten, want het portret
+      moet juist over de grens hangen. */}
+  <div class="binnenwerk">
+    <div class="maatstreep" aria-hidden="true"></div>
+    <Over />
+    <Galerij />
+    <Lessen />
+    <Locatie />
+    <Praktisch />
+    <Contact />
+  </div>
 </Basis>

@@ -2,6 +2,9 @@
 /**
  * De eigen lespraktijk voorop (daar neemt ze zelf leerlingen aan),
  * daaronder de organisaties als tekstuele lijst, geen logowall.
+ *
+ * De lijst bouwt zich hairline voor hairline op bij het inscrollen —
+ * dezelfde taal als de instrumentenlijst bij Lessen (MOTION.md).
  */
 import Sectie from '../components/Sectie.astro';
 import ExterneLink from '../components/ExterneLink.astro';
@@ -11,22 +14,27 @@ import { organisaties } from '../data/organisaties';
 ---
 
 <Sectie id="locatie" label="Locatie" kop={locatie.kop}>
-  <h3 class="font-display text-subkop font-semibold text-ink">{locatie.praktijkKop}</h3>
-  <p class="mt-2 max-w-[62ch]">{locatie.praktijkTekst}</p>
-  <p class="mt-4">
-    <strong>{site.adres.straat}, {site.adres.plaats}</strong>
-    <span class="mx-2 text-rule" aria-hidden="true">|</span>
-    <ExterneLink href={site.adres.kaartUrl}>{locatie.kaartLabel}</ExterneLink>
-  </p>
+  <div class="rijs r2">
+    <h3 class="font-display text-subkop font-semibold text-ink">{locatie.praktijkKop}</h3>
+    <p class="mt-2 max-w-[62ch]">{locatie.praktijkTekst}</p>
+    <p class="mt-4">
+      <strong>{site.adres.straat}, {site.adres.plaats}</strong>
+      <span class="mx-2 text-rule" aria-hidden="true">|</span>
+      <ExterneLink href={site.adres.kaartUrl} class="kaartlink">{locatie.kaartLabel}</ExterneLink>
+    </p>
+  </div>
 
-  <h3 class="mt-12 font-display text-subkop font-semibold text-ink">
-    {locatie.organisatiesKop}
-  </h3>
-  <p class="mt-2 max-w-[62ch]">{locatie.organisatiesTekst}</p>
-  <ul class="mt-5 grid gap-x-10 gap-y-3 sm:grid-cols-2">
+  <div class="rijs r3 mt-12">
+    <h3 class="font-display text-subkop font-semibold text-ink">
+      {locatie.organisatiesKop}
+    </h3>
+    <p class="mt-2 max-w-[62ch]">{locatie.organisatiesTekst}</p>
+  </div>
+
+  <ul class="org-lijst">
     {
       organisaties.map((organisatie) => (
-        <li class="border-b border-rule pb-3">
+        <li>
           {organisatie.url ? (
             <ExterneLink href={organisatie.url}>{organisatie.naam}</ExterneLink>
           ) : (
@@ -38,3 +46,62 @@ import { organisaties } from '../data/organisaties';
     }
   </ul>
 </Sectie>
+
+<style>
+  .org-lijst {
+    margin-top: 1.25rem;
+    display: grid;
+    column-gap: 2.5rem;
+    row-gap: 0.75rem;
+    list-style: none;
+    padding: 0;
+  }
+  @media (min-width: 40rem) {
+    .org-lijst {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  /* Pseudo-element in plaats van border-bottom, zodat de lijn van links kan
+     aangroeien. */
+  .org-lijst li {
+    position: relative;
+    padding-bottom: 0.75rem;
+  }
+  .org-lijst li::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--color-rule);
+    transform-origin: left;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .org-lijst li::after {
+        animation-name: lijn-groei;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 35%;
+      }
+      .org-lijst li:nth-child(2)::after {
+        animation-range: entry 6% entry 41%;
+      }
+      .org-lijst li:nth-child(3)::after {
+        animation-range: entry 12% entry 47%;
+      }
+      .org-lijst li:nth-child(4)::after {
+        animation-range: entry 18% entry 53%;
+      }
+      .org-lijst li:nth-child(5)::after {
+        animation-range: entry 24% entry 59%;
+      }
+      .org-lijst li:nth-child(6)::after {
+        animation-range: entry 30% entry 65%;
+      }
+    }
+  }
+</style>

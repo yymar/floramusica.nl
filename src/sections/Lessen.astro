@@ -1,9 +1,15 @@
 ---
 /**
- * Lesaanbod als programma: het hoofdinstrument (klarinet) opent groot met
- * een bordeaux regel erboven, de overige instrumenten volgen als rustige
- * lijst op hairlines — dezelfde taal als de organisatielijst bij Locatie.
- * Geen kaartjes; het programmaboekje zet zijn repertoire onder elkaar.
+ * Lesaanbod als programma. Het hoofdinstrument (klarinet) opent als een
+ * bordeaux vlak dat rechts uit de container bloedt tot de paginarand en
+ * zich bij het inscrollen links-naar-rechts opent — de crescendo uit
+ * MOTION.md. De overige instrumenten volgen als rustige lijst op hairlines
+ * die per item aangroeien, dezelfde taal als de organisatielijst bij
+ * Locatie. Geen kaartjes; het programmaboekje zet zijn repertoire onder
+ * elkaar.
+ *
+ * Vlak en tekst komen samen op, dus er is geen moment waarop lichte tekst
+ * op licht papier staat.
  */
 import Sectie from '../components/Sectie.astro';
 import Sprig from '../components/ornaments/Sprig.astro';
@@ -15,47 +21,53 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
 ---
 
 <Sectie id="lessen" label="Lessen" kop={lessen.kop} tint>
-  <p class="max-w-[62ch]">{lessen.intro}</p>
+  <p class="rijs r2 max-w-[62ch]">{lessen.intro}</p>
 
   {/* De solsleutel opent het instrumentenprogramma, rechts uitgelijnd boven
-      de bordeaux regel van het hoofdinstrument. Decoratief en klein; hij
-      staat naast niets, dus hij kan geen tekst verdringen. */}
+      het golf-vlak. Decoratief en klein; hij staat naast niets, dus hij kan
+      geen tekst verdringen. */}
   <div class="mt-10 flex justify-end" aria-hidden="true">
     <Sprig name="sol-sleutel" class="w-6 text-bordeaux opacity-70" />
   </div>
 
   {
     hoofd && (
-      <article class="mt-3 border-t-2 border-bordeaux pt-5">
-        <h3 class="font-display text-subkop font-semibold text-bordeaux">{hoofd.naam}</h3>
-        <p class="mt-2 max-w-[52ch]">{hoofd.omschrijving}</p>
+      <article class="golf-plaat">
+        <h3 class="font-display text-subkop font-semibold text-paper">{hoofd.naam}</h3>
+        <p class="mt-2 max-w-[52ch] text-paper-dim">{hoofd.omschrijving}</p>
       </article>
     )
   }
 
-  <div class="mt-8 grid gap-x-10 sm:grid-cols-2">
+  <div class="instr-grid">
     {
-      overige.map((instrument) => (
-        <article class="border-t border-rule py-4">
-          <h3 class="font-display text-[1.1rem] leading-snug font-semibold text-ink">
-            {instrument.naam}
-          </h3>
-          <p class="mt-1 text-klein text-ink-soft">{instrument.omschrijving}</p>
+      overige.map((instrument, i) => (
+        <article class="instr">
+          {/* De tekst rijst mee met de lijn erboven; per paar een stap later,
+              zodat de lijst zich opbouwt in plaats van in één klap te staan. */}
+          <div class:list={['rijs', ['', 'r2', 'r2', 'r3'][i] || 'r3']}>
+            <h3 class="font-display text-[1.1rem] leading-snug font-semibold text-ink">
+              {instrument.naam}
+            </h3>
+            <p class="mt-1 text-klein text-ink-soft">{instrument.omschrijving}</p>
+          </div>
         </article>
       ))
     }
   </div>
 
-  <h3 class="mt-10 font-display text-subkop font-semibold text-ink">{lessen.doelgroepLabel}</h3>
-  <p class="mt-2 max-w-[62ch]">{lessen.doelgroepTekst}</p>
-  <p class="mt-3 text-klein text-ink-soft" aria-label="Doelgroepen">
-    {doelgroepen.map((groep, i) => (
-      <>
-        <span class="capitalize">{groep}</span>
-        {i < doelgroepen.length - 1 && <span aria-hidden="true"> · </span>}
-      </>
-    ))}
-  </p>
+  <div class="rijs mt-10">
+    <h3 class="font-display text-subkop font-semibold text-ink">{lessen.doelgroepLabel}</h3>
+    <p class="mt-2 max-w-[62ch]">{lessen.doelgroepTekst}</p>
+    <p class="mt-3 text-klein text-ink-soft" aria-label="Doelgroepen">
+      {doelgroepen.map((groep, i) => (
+        <>
+          <span class="capitalize">{groep}</span>
+          {i < doelgroepen.length - 1 && <span aria-hidden="true"> · </span>}
+        </>
+      ))}
+    </p>
+  </div>
 
   {/* Noten-blad sluit de sectie af. Tweede en laatste takje hier: DESIGN.md
       houdt de pagina tussen omslag en slot bewust stil. */}
@@ -63,3 +75,84 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
     <Sprig name="noten-blad" class="w-20 text-bordeaux opacity-60" />
   </div>
 </Sectie>
+
+<style>
+  /* Het golf-vlak bloedt rechts uit de container tot de paginarand; het
+     binnenwerk in index.astro vangt dat op met overflow-x: clip. */
+  .golf-plaat {
+    position: relative;
+    z-index: var(--z-inhoud);
+    margin-top: 0.75rem;
+    margin-right: calc(50% - 50vw);
+    border-radius: 2px 0 0 2px;
+    background: var(--color-bordeaux-deep);
+    padding: 2rem 1.5rem;
+  }
+  @media (min-width: 48rem) {
+    .golf-plaat {
+      padding: 2.5rem 3rem 2.5rem 2.5rem;
+    }
+  }
+
+  .instr-grid {
+    margin-top: 2rem;
+    display: grid;
+    column-gap: 2.5rem;
+  }
+  @media (min-width: 40rem) {
+    .instr-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  /* De hairline is een pseudo-element en geen border: alleen zo kan hij van
+     links aangroeien in plaats van er in één keer staan. */
+  .instr {
+    position: relative;
+    padding-block: 1rem;
+  }
+  .instr::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--color-rule);
+    transform-origin: left;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      /* clip-path en niet width: zo herflowt de tekst binnenin niet terwijl
+         het vlak opengaat. */
+      .golf-plaat {
+        animation-name: golf-open;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: entry 10% entry 70%;
+      }
+      .instr::before {
+        animation-name: lijn-groei;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 35%;
+      }
+      .instr:nth-child(2)::before {
+        animation-range: entry 7% entry 42%;
+      }
+      .instr:nth-child(3)::before {
+        animation-range: entry 14% entry 49%;
+      }
+      .instr:nth-child(4)::before {
+        animation-range: entry 21% entry 56%;
+      }
+    }
+  }
+
+  @keyframes golf-open {
+    from { clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0 0 0 0); }
+  }
+</style>

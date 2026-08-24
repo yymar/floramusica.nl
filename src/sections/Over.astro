@@ -1,4 +1,8 @@
 ---
+/**
+ * Tekst en foto komen na de kop binnen, in die volgorde (r2, dan r3) —
+ * zie MOTION.md.
+ */
 import Sectie from '../components/Sectie.astro';
 import Figuur from '../components/Figuur.astro';
 import { over } from '../data/copy';
@@ -7,15 +11,17 @@ import lespraktijk from '../assets/lespraktijk.jpg';
 
 <Sectie id="over" label="Over" kop={over.kop}>
   <div class="grid gap-8 sm:grid-cols-[2fr_1fr] sm:gap-10">
-    <div class="max-w-[62ch] space-y-4">
+    <div class="rijs r2 max-w-[62ch] space-y-4">
       {over.alineas.map((alinea) => <p>{alinea}</p>)}
     </div>
-    <Figuur
-      src={lespraktijk}
-      alt={over.fotoAlt}
-      breedte={600}
-      hoogte={800}
-      class="max-w-[16rem] sm:max-w-none"
-    />
+    <div class="rijs r3">
+      <Figuur
+        src={lespraktijk}
+        alt={over.fotoAlt}
+        breedte={600}
+        hoogte={800}
+        class="max-w-[16rem] sm:max-w-none"
+      />
+    </div>
   </div>
 </Sectie>

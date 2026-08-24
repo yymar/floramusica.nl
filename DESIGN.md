@@ -79,16 +79,15 @@ Typeschaal met `clamp()`, ratio ±1,25: `--text-omslag` (tot 5.5rem, alleen de h
 
 ## Beweging
 
-Beweging is een ontwerpbeslissing; de pagina kent vier geregisseerde momenten en verder niets. Alles is compositor-vriendelijk (alleen `transform`/`opacity`, met als enige uitzondering de draw hieronder), CSS-only via scroll-driven animations achter `@supports (animation-timeline: view())`, en `prefers-reduced-motion: reduce` schakelt alles uit — content staat er dan gewoon, volledig zichtbaar. Geen animatiebibliotheken, geen scroll-listeners.
+Beweging is een ontwerpbeslissing. De volledige choreografie staat in **MOTION.md** (concept "Crescendo"); hieronder alleen het principe en waar het vandaan komt.
 
-1. **Parallax op de omslag** (`Hero.astro`): twee lagen die achterlopen op de scroll terwijl de omslag het beeld uit schuift — de partituurregel 3.5rem, het portret 1.25rem (~10% van de scrollafstand); op mobiel reizen ze verder (5.5rem en 3rem) omdat het scherm en de scrollafstand daar kleiner zijn. Lineair aan de scroll gekoppeld (`animation-range: exit`), dus geen eigen duur of easing: de vinger van de bezoeker is de easing.
-2. **Cel-reveal in de galerij** (`Galerij.astro`): opacity 0.25→1 plus 12px translate per cel, met een kleine stagger via verschoven `animation-range` per nth-child. Bewust niet herhaald op andere secties; één moment, geen entree-parade. Daarnaast een heel lichte hover-scale (1.02) van het beeld binnen de cel.
-3. **Lightbox-open** (`Galerij.astro`): 240ms `cubic-bezier(0.2, 0, 0, 1)` (uitgesproken uitloop), opacity plus 8px translate.
-4. **Het lint tekent zichzelf** (`Footer.astro`): de centerline-variant van `ribbon-a` trekt zich vlak boven de eindstreep, gekoppeld aan de scroll (`animation-range: entry 25% cover 50%`) via `stroke-dashoffset` op een pad met `pathLength="1"`. De finale van de partituurregel, en het enige moment op de pagina dat niet alleen `transform`/`opacity` gebruikt: een vorm valt niet met een transform te tekenen. Basisstaat is volledig getekend, dus zonder scroll-driven animations of bij reduced motion staat het lint er gewoon.
+De pagina is één partituurregel en de scroll is de uitvoering. Een maatstreep tekent zich van Over tot Contact in de labelmarge; elk onderdeel krijgt één korte entree op het moment dat het in beeld komt; het klarinet-hart opent als een bordeaux vlak dat links-naar-rechts opengaat en tot de paginarand bloedt; de footer schrijft zijn eigen notenbalk als slotakkoord.
 
-Micro-interacties (hover op knoppen, links en formulier­velden) zijn kleurwissels via `transition-colors`, circa 150ms, binnen het bordeaux-palet.
+Alles is scroll-gekoppeld en `linear` zonder eigen duur: de positie in de `animation-range` ís de voortgang, dus de vinger van de bezoeker is de easing. Alleen micro-interacties (hover op links, knoppen en velden) hebben een duur en een curve — `--dur-s`/`--dur-m` met `--ease-organic`. Uitsluitend `transform`, `opacity` en `clip-path`; CSS-only via scroll-driven animations, geen animatiebibliotheek en geen scroll-listeners.
 
-Bewuste afwijkingen van de briefing: geen IntersectionObserver-fallback (waar scroll-driven animations ontbreken staat content er direct — rustiger dan een tweede codepad voor hetzelfde effect), en geen reveal op elke sectie (dat wordt een parade; het marge-grid draagt de pagina).
+Twee guards, altijd samen: `@media (prefers-reduced-motion: no-preference)` en `@supports (animation-timeline: view())`. Daarbuiten staat alle content er direct en volledig — koppen zichtbaar, lijnen getrokken, het golf-vlak open. De enige beweging die géén animatie is en dus altijd blijft staan, is de overhang van het portret over de omslag/papier-grens: dat is layout, en het is wat de omslag aan het binnenwerk knoopt.
+
+Eén bewuste afwijking van "alleen transform/opacity": het lint in de footer tekent zichzelf met `stroke-dashoffset` (een paint-property). Een vorm valt niet met een transform te tekenen, en het gaat om één pad van ruim driehonderd bytes.
 
 ## Galerij-lightbox
 

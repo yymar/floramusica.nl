@@ -28,14 +28,20 @@ const gegevens = [site.email, site.telefoon, site.kvk].some(Boolean);
   </div>
 
   {/* Notenbalk met eindstreep: de pagina opende met de sleutel (hero) en sluit hier de partituurregel af.
-      Eén SVG met crispEdges, zodat lijndikte en -afstand op elke schermschaal gelijk blijven. */}
+      Eén SVG met crispEdges, zodat lijndikte en -afstand op elke schermschaal gelijk blijven.
+
+      Het slotakkoord (MOTION.md): de vijf lijnen schrijven zichzelf van links
+      naar rechts terwijl de footer in beeld komt, de eindstreep valt daarna
+      in. De timeline hangt aan de footer zelf (`view-timeline: --slot`) en
+      niet aan de rects — een SVG-rect heeft geen eigen scrollpositie om aan
+      te hangen. */}
   <div aria-hidden="true">
     <svg width="100%" height="41" shape-rendering="crispEdges" class="block text-bordeaux">
       {[0, 10, 20, 30, 40].map((y) => (
-        <rect x="0" y={y} width="100%" height="1" fill="currentColor" opacity="0.55" />
+        <rect class="slotlijn" x="0" y={y} width="100%" height="1" fill="currentColor" />
       ))}
-      <rect x="100%" transform="translate(-8 0)" y="0" width="1" height="41" fill="currentColor" opacity="0.7" />
-      <rect x="100%" transform="translate(-4 0)" y="0" width="4" height="41" fill="currentColor" opacity="0.7" />
+      <rect class="eindstreep" x="100%" transform="translate(-8 0)" y="0" width="1" height="41" fill="currentColor" />
+      <rect class="eindstreep" x="100%" transform="translate(-4 0)" y="0" width="4" height="41" fill="currentColor" />
     </svg>
   </div>
 
@@ -83,3 +89,45 @@ const gegevens = [site.email, site.telefoon, site.kvk].some(Boolean);
     <p class="mt-10 text-klein text-ink-soft">{footer.colofon}</p>
   </div>
 </footer>
+
+<style>
+  .slotlijn {
+    opacity: 0.55;
+    transform-origin: left;
+  }
+  .eindstreep {
+    opacity: 0.7;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      footer {
+        view-timeline: --slot block;
+      }
+      .slotlijn {
+        animation-name: lijn-groei;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --slot;
+        animation-range: entry 0% entry 45%;
+      }
+      .slotlijn:nth-child(2) { animation-range: entry 6% entry 51%; }
+      .slotlijn:nth-child(3) { animation-range: entry 12% entry 57%; }
+      .slotlijn:nth-child(4) { animation-range: entry 18% entry 63%; }
+      .slotlijn:nth-child(5) { animation-range: entry 24% entry 69%; }
+      /* De eindstreep is het laatste wat er staat — pas als de balk er ligt. */
+      .eindstreep {
+        animation-name: eindstreep-op;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --slot;
+        animation-range: entry 45% entry 80%;
+      }
+    }
+  }
+
+  @keyframes eindstreep-op {
+    from { opacity: 0; }
+    to { opacity: 0.7; }
+  }
+</style>
