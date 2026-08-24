@@ -26,20 +26,17 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
 
   {
     hoofd && (
-      <div class="golf-houder">
-        <article class="golf-plaat">
-          <h3 class="font-display text-subkop font-semibold text-paper">{hoofd.naam}</h3>
-          <p class="mt-2 max-w-[52ch] text-paper-dim">{hoofd.omschrijving}</p>
-        </article>
-        {/* De klarinet — de instrumentlaag uit het sier-motief — hoort bij
-            de kaart, niet bij de sectie: rechts binnen de kaartrand, in
-            crème op het bordeaux, met alleen een kleine bewuste bleed van
-            het mondstuk over de eigen bovenhoek. Hij hangt aan de houder
-            omdat de plaat zichzelf clipt voor de openings-animatie. */}
+      <article class="golf-plaat">
+        {/* De klarinet — de instrumentlaag uit het sier-motief — staat als
+            hoge accentkolom tegen de rechterkant van het vlak en loopt aan
+            de bovenkant het vlak uit; de clip van het vlak maakt daar een
+            bewuste snede van. Gecomponeerd op het blok, niet erbovenop. */}
         <div class="golf-klarinet" aria-hidden="true">
           <Motief name="klarinet-instrument" class="w-full" />
         </div>
-      </div>
+        <h3 class="font-display text-subkop font-semibold text-paper">{hoofd.naam}</h3>
+        <p class="mt-2 max-w-[52ch] text-paper-dim">{hoofd.omschrijving}</p>
+      </article>
     )
   }
 
@@ -79,25 +76,32 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
 </Sectie>
 
 <style>
-  /* De klarinet staat met de beker op de bodem van het vlak; alleen het
-     mondstuk steekt een klein stuk boven de bovenrand uit (bewuste bleed
-     over de eigen hoek). De viewBox heeft links en rechts lucht om het
-     instrument heen (het instrument zit op 33–66% van de breedte), vandaar
-     de negatieve rechteroffset: die zet het zichtbare instrument binnen de
-     kaartrand, niet zijn lege kader. */
-  .golf-houder :global(.golf-klarinet) {
+  /* De klarinet staat op de bodem van het vlak en is hoger dan het vlak
+     zelf, dus hij loopt er aan de bovenkant uit; `overflow: clip` op het
+     vlak maakt daar een bewuste snede van. De viewBox heeft links en
+     rechts lucht om het instrument heen (het instrument zit op 33–66% van
+     de breedte), vandaar de negatieve rechteroffset: die zet het zichtbare
+     instrument tegen de rand, niet zijn lege kader. */
+  .golf-plaat :global(.golf-klarinet) {
     position: absolute;
     bottom: 0;
-    right: -2.5rem;
-    height: calc(100% + 1.25rem);
+    right: -2.25rem;
+    height: calc(100% + 3.5rem);
     aspect-ratio: 80 / 112;
-    opacity: 0.24;
+    opacity: 0.2;
     color: var(--color-paper);
     pointer-events: none;
   }
-  .golf-houder :global(.golf-klarinet svg) {
+  .golf-plaat :global(.golf-klarinet svg) {
     width: 100%;
     height: 100%;
+  }
+  @media (min-width: 48rem) {
+    .golf-plaat :global(.golf-klarinet) {
+      right: -1rem;
+      height: calc(100% + 4.5rem);
+      opacity: 0.22;
+    }
   }
 
   /* Drukkersornament: absoluut in de goot links van de kop, zodat de kop
@@ -120,20 +124,25 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
     }
   }
 
-  /* Het vlak houdt de contentbreedte, net als het instrumentengrid eronder:
-     geen bleed naar de vensterrand — daardoor liep het klarinet-accent uit
-     beeld. De houder draagt positie en z-orde; de plaat clipt alleen
-     zichzelf (voor de openings-animatie), niet het accent. */
-  .golf-houder {
+  /* Het vlak bloedt rechts uit de container tot de paginarand en schuift
+     zich bij het inscrollen naar rechts open (golf-open) — de crescendo
+     uit MOTION.md. `calc(50% - 50vw)` zou alleen kloppen voor een
+     gecentreerd blok; dit rekent de echte marge uit. */
+  .golf-plaat {
+    --bleed: calc(max(0px, (100vw - 64rem) / 2) + 1.25rem);
     position: relative;
     z-index: var(--z-inhoud);
-    margin-top: 0.75rem;
-  }
-  .golf-plaat {
     overflow: clip;
-    border-radius: 2px;
+    margin-top: 0.75rem;
+    margin-right: calc(-1 * var(--bleed));
+    border-radius: 2px 0 0 2px;
     background: var(--color-bordeaux-deep);
     padding: 2rem 1.5rem;
+  }
+  @media (min-width: 40rem) {
+    .golf-plaat {
+      --bleed: calc(max(0px, (100vw - 64rem) / 2) + 2rem);
+    }
   }
   @media (min-width: 48rem) {
     .golf-plaat {
