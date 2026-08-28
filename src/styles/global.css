@@ -179,13 +179,16 @@ section[id] {
     animation-delay: -2.6s, -4.1s;
   }
 }
+/* De tekeningen hier zijn klein (2-3rem), dus de hoek mag ruimer dan op
+   de omslag om überhaupt zichtbaar te zijn: 4 graden op een takje van
+   40px beweegt de top ~3px, plus de zweef van ~7px totaal. */
 @keyframes orn-wiegen {
-  from { rotate: -1.6deg; }
-  to { rotate: 1.7deg; }
+  from { rotate: -4deg; }
+  to { rotate: 4.4deg; }
 }
 @keyframes orn-zweven {
-  from { translate: 0 1px; }
-  to { translate: 0 -2.5px; }
+  from { translate: 0 2px; }
+  to { translate: 0 -5px; }
 }
 
 /* =============================================================
