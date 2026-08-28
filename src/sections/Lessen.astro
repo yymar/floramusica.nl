@@ -1,9 +1,9 @@
 ---
 /**
  * Lesaanbod als programma. Het hoofdinstrument (klarinet) opent als een
- * bordeaux vlak op de contentkolom (rechterrand gelijk aan het
- * instrumentengrid eronder) dat zich bij het inscrollen links-naar-rechts
- * opent — de crescendo uit MOTION.md. De overige instrumenten volgen als rustige lijst op hairlines
+ * bordeaux vlak dat rechts uit de container bloedt tot de paginarand en
+ * zich bij het inscrollen links-naar-rechts opent — de crescendo uit
+ * MOTION.md. De overige instrumenten volgen als rustige lijst op hairlines
  * die per item aangroeien, dezelfde taal als de organisatielijst bij
  * Locatie. Geen kaartjes; het programmaboekje zet zijn repertoire onder
  * elkaar.
@@ -124,17 +124,25 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
     }
   }
 
-  /* Het vlak eindigt op de contentkolom: de rechterrand lijnt uit met het
-     instrumentengrid eronder. Het schuift zich bij het inscrollen
-     links-naar-rechts open (golf-open) — de crescendo uit MOTION.md. */
+  /* Het vlak bloedt rechts uit de container tot de paginarand en schuift
+     zich bij het inscrollen naar rechts open (golf-open) — de crescendo
+     uit MOTION.md. `calc(50% - 50vw)` zou alleen kloppen voor een
+     gecentreerd blok; dit rekent de echte marge uit. */
   .golf-plaat {
+    --bleed: calc(max(0px, (100vw - 64rem) / 2) + 1.25rem);
     position: relative;
     z-index: var(--z-inhoud);
     overflow: clip;
     margin-top: 0.75rem;
-    border-radius: 2px;
+    margin-right: calc(-1 * var(--bleed));
+    border-radius: 2px 0 0 2px;
     background: var(--color-bordeaux-deep);
     padding: 2rem 1.5rem;
+  }
+  @media (min-width: 40rem) {
+    .golf-plaat {
+      --bleed: calc(max(0px, (100vw - 64rem) / 2) + 2rem);
+    }
   }
   @media (min-width: 48rem) {
     .golf-plaat {
