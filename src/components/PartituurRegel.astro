@@ -16,7 +16,9 @@ interface Props {
 const { class: className } = Astro.props;
 import sleutelImke from '../assets/imke-sleutel-bordeaux.png';
 // Hoogte in font-units; breedte volgt de verhouding van de tekening.
-const H = 1300;
+// Bijna de volle viewBox-hoogte (1756): de sleutel mag ruim boven en
+// onder de balk uitsteken, zoals een echte solsleutel.
+const H = 1550;
 const W = Math.round((H * sleutelImke.width) / sleutelImke.height);
 ---
 
@@ -31,7 +33,7 @@ const W = Math.round((H * sleutelImke.width) / sleutelImke.height);
       <line x1="0" y1={y} x2="40000" y2={y} stroke="currentColor" stroke-width="14" opacity="0.75" />
     ))}
   </g>
-  {/* De krul van de tekening ligt rond 60% van de hoogte; die hoort op de
-      G-lijn (schermcoordinaat -250), vandaar de verticale plaatsing. */}
-  <image href={sleutelImke.src} x="200" y={-250 - Math.round(H * 0.6)} width={W} height={H} />
+  {/* Iets vrij van de linkerrand, verticaal net onder de viewBox-top zodat
+      de krul (op ~60% van de tekening) rond de onderste balklijnen valt. */}
+  <image href={sleutelImke.src} x="450" y="-1068" width={W} height={H} />
 </svg>

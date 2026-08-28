@@ -130,10 +130,15 @@ import Sprig from './Sprig.astro';
       if (motief) {
         const m = motief.getBoundingClientRect();
         if (m.height > 0) {
-          // Onder de volledige tekenbox: de flare-rand en het blad lopen
-          // aan de zijkanten dieper door dan het midden, dus alleen hier
-          // is nul overlap gegarandeerd — de klarinet blijft voorgrond.
-          ankers.unshift({ x: m.left - baanRect.left + m.width * 0.52, y: m.bottom - baanRect.top + 2 });
+          // Onder de volledige tekenbox, plus de halve linthoogte: het pad
+          // vertrekt hier vrijwel horizontaal, dus de buitenste van de vijf
+          // lijnen ligt ~2 lijnafstanden bóven het middenpad. Zonder die
+          // marge snijden ze de bekerrand en de rank van de tekening aan.
+          // De extra ~34px is voor de zwaai naar rechts direct na de start:
+          // die loopt onder de bloem rechtsonder langs, en de bovenste lijn
+          // stijgt daar licht boven het middenpad uit.
+          const halfLint = gapBalk * SCHAAL * 2;
+          ankers.unshift({ x: m.left - baanRect.left + m.width * 0.52, y: m.bottom - baanRect.top + halfLint + 34 });
         }
       }
       // De landing: verticaal aanlopen boven de balk, dan de kwartbocht.
