@@ -100,6 +100,17 @@ const andereTaal = taal === 'en' ? 'nl' : 'en';
       (document.querySelector('.menu') as HTMLDetailsElement).open = false;
     }
   });
+
+  // De taalknop is een expliciete keuze: bewaren, zodat de automatische
+  // taalcheck (Basis.astro) er nooit meer overheen stuurt.
+  const taalLink = document.querySelector<HTMLAnchorElement>('.taal-link');
+  taalLink?.addEventListener('click', () => {
+    try {
+      localStorage.setItem('fm:taal', taalLink.getAttribute('hreflang') ?? 'nl');
+    } catch {
+      /* geen opslag beschikbaar */
+    }
+  });
 </script>
 
 <style>
