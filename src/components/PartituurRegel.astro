@@ -84,6 +84,82 @@ const plekken = bezetting.map((p) => {
   {plekken.map((p) => <image class="orn" {...p} />)}
 </svg>
 
+<script>
+  // Wind: strijkt de muis langs de regel, dan buigen de ornamenten mee en
+  // veren gedempt terug. Elke tekening is een veer (hoek + hoeksnelheid);
+  // een muisbeweging in de buurt geeft een impuls die schaalt met de
+  // muissnelheid en meeduwt in de bewegingsrichting. De uitslag gaat via
+  // de `transform`-property en componeert dus met de trage wieg/zweef
+  // (individuele rotate/translate) — zelfde voet als draaipunt.
+  const ornamenten = [...document.querySelectorAll<SVGImageElement>('.partituur .orn')];
+  const rustig = matchMedia('(prefers-reduced-motion: reduce)');
+  if (ornamenten.length) {
+    const STIJF = 32; // veerconstante (1/s²) → slingerperiode ~1.1s
+    const DEMP = 2.6; // demping: een paar keer naveren, dan stil
+    const BEREIK = 150; // px rond de muis waarbinnen de wind vat heeft
+    const KRACHT = 42; // impuls (deg/s) per px/ms muissnelheid op afstand 0
+    const veren = ornamenten.map((el) => ({ el, hoek: 0, snelheid: 0 }));
+
+    let vorige: { x: number; y: number; t: number } | null = null;
+    let bezig = false;
+    let vorigTik = 0;
+
+    const tik = (nu: number) => {
+      const dt = Math.min(0.05, (nu - vorigTik) / 1000);
+      vorigTik = nu;
+      let actief = false;
+      for (const veer of veren) {
+        veer.snelheid += (-STIJF * veer.hoek - DEMP * veer.snelheid) * dt;
+        veer.hoek += veer.snelheid * dt;
+        if (Math.abs(veer.hoek) > 0.05 || Math.abs(veer.snelheid) > 0.5) {
+          actief = true;
+          veer.el.style.transform = `rotate(${Math.round(veer.hoek * 100) / 100}deg)`;
+        } else if (veer.hoek !== 0 || veer.snelheid !== 0) {
+          veer.hoek = 0;
+          veer.snelheid = 0;
+          veer.el.style.transform = '';
+        }
+      }
+      if (actief) requestAnimationFrame(tik);
+      else bezig = false;
+    };
+
+    addEventListener(
+      'pointermove',
+      (e) => {
+        if (rustig.matches || e.pointerType !== 'mouse') {
+          vorige = null;
+          return;
+        }
+        const nu = performance.now();
+        const was = vorige;
+        vorige = { x: e.clientX, y: e.clientY, t: nu };
+        if (!was || nu - was.t <= 0 || nu - was.t > 120) return;
+        const snelheid = Math.min(3, Math.hypot(e.clientX - was.x, e.clientY - was.y) / (nu - was.t));
+        if (snelheid < 0.08) return;
+        const richting = Math.sign(e.clientX - was.x) || 1;
+        let geraakt = false;
+        for (const veer of veren) {
+          const r = veer.el.getBoundingClientRect();
+          if (!r.width) continue; // verborgen (achter het klarinetmotief)
+          const afstand = Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2));
+          if (afstand >= BEREIK) continue;
+          veer.snelheid += richting * snelheid * (1 - afstand / BEREIK) * KRACHT;
+          // Harde wind blijft een bries: cap op de slingersnelheid.
+          veer.snelheid = Math.max(-110, Math.min(110, veer.snelheid));
+          geraakt = true;
+        }
+        if (geraakt && !bezig) {
+          bezig = true;
+          vorigTik = nu;
+          requestAnimationFrame(tik);
+        }
+      },
+      { passive: true },
+    );
+  }
+</script>
+
 <style>
   /* De bries: wiegen om de voet (de nootkop, de bloembodem) plus een trage
      zweef, elk met eigen tempo en fase zodat het nooit synchroon marcheert.
