@@ -121,24 +121,23 @@ import Sprig from './Sprig.astro';
         if (a.klem === 'rechts') x = Math.min(vw - 60, Math.max(x, content.right - baanRect.left + 70));
         return { x, y: r.top - baanRect.top + (a.y / 100) * r.height };
       });
-      // Het begin: de stengel groeit uit de beker van het omslagmotief.
-      // De bekerpunt gemeten (het instrument staat rond 52% van de
-      // motief-viewBox), iets erbinnen zodat de lijnen erachter vandaan
-      // komen; de baan mag boven zijn eigen vak uitsteken (overflow
+      // Het begin: de stengel komt verticaal uit de beker van het
+      // omslagmotief — de lijnen ontspringen in de bekermond (rond 52% van
+      // de tekenbreedte, net boven de onderrand van de tekenbox) en lopen
+      // eerst ~200px recht omlaag voordat de route naar de rechtermarge
+      // zwaait. De baan mag boven zijn eigen vak uitsteken (overflow
       // visible, alleen horizontaal geclipt).
       const motief = document.querySelector('.parallax-motief');
       if (motief) {
         const m = motief.getBoundingClientRect();
         if (m.height > 0) {
-          // Onder de volledige tekenbox, plus de halve linthoogte: het pad
-          // vertrekt hier vrijwel horizontaal, dus de buitenste van de vijf
-          // lijnen ligt ~2 lijnafstanden bóven het middenpad. Zonder die
-          // marge snijden ze de bekerrand en de rank van de tekening aan.
-          // De extra ~34px is voor de zwaai naar rechts direct na de start:
-          // die loopt onder de bloem rechtsonder langs, en de bovenste lijn
-          // stijgt daar licht boven het middenpad uit.
-          const halfLint = gapBalk * SCHAAL * 2;
-          ankers.unshift({ x: m.left - baanRect.left + m.width * 0.52, y: m.bottom - baanRect.top + halfLint + 34 });
+          // Het eerste route-anker (Over, y 0) ligt op dezelfde hoogte als
+          // de beker en zou de start meteen opzij trekken; met de verticale
+          // aanloop ervoor vervalt het.
+          ankers.shift();
+          const startX = m.left - baanRect.left + m.width * 0.52;
+          const startY = m.bottom - baanRect.top - m.height * 0.03;
+          ankers.unshift({ x: startX, y: startY }, { x: startX, y: startY + 200 });
         }
       }
       // De landing: verticaal aanlopen boven de balk, dan de kwartbocht.
@@ -194,12 +193,7 @@ import Sprig from './Sprig.astro';
         // balkmaat; de taper rekent tot daar.
         const rest = Math.max(0, totaal - cum[i] - 24);
         const s = rest >= TAPER_PX ? SCHAAL : 1 + (SCHAAL - 1) * (rest / TAPER_PX);
-        // Start-taper: het lint ontkiemt smal uit de beker en groeit over
-        // de eerste ~260px naar volle breedte. Organisch, én het houdt de
-        // binnenste lijnen uit elkaar in de krappe bocht direct na de
-        // start (daar kruisten ze anders tot een strik-artefact).
-        const groei = Math.min(1, 0.35 + 0.65 * (cum[i] / 260));
-        return gapBalk * s * groei;
+        return gapBalk * s;
       };
 
       svg.setAttribute('width', String(vw));
@@ -296,29 +290,43 @@ import Sprig from './Sprig.astro';
       }
     };
 
-    /** Het zichtbare stuk van één lijn als padstring: prefix tot aan de
-        gevraagde lengte, met een geïnterpoleerd eindpunt op de maat. */
-    const knip = (p: (typeof paden)[number], z: number) => {
-      if (z <= 0) return `M${p.punt[0]}`;
-      if (z >= p.lengte) return p.dVol;
-      let lo = 0, hi = p.cumL.length - 1;
+    /** Punt op afstand z langs de lijn, lineair geïnterpoleerd. */
+    const opMaat = (p: (typeof paden)[number], z: number, lo: number) => {
+      const rest = p.cumL[lo + 1] - p.cumL[lo];
+      const t = rest > 0 ? (z - p.cumL[lo]) / rest : 0;
+      const [ax, ay] = p.punt[lo].split(',').map(Number);
+      const [bx, by] = p.punt[lo + 1].split(',').map(Number);
+      return `${Math.round((ax + (bx - ax) * t) * 10) / 10},${Math.round((ay + (by - ay) * t) * 10) / 10}`;
+    };
+    /** Laatste sample-index met cumL ≤ z (en < laatste, zodat lo+1 bestaat). */
+    const zoek = (p: (typeof paden)[number], z: number) => {
+      let lo = 0, hi = p.cumL.length - 2;
       while (lo < hi) {
         const mid = (lo + hi + 1) >> 1;
         if (p.cumL[mid] <= z) lo = mid;
         else hi = mid - 1;
       }
-      const d = `M${p.punt[0]}${lo > 0 ? `L${p.punt.slice(1, lo + 1).join('L')}` : ''}`;
-      const rest = p.cumL[lo + 1] - p.cumL[lo];
-      const t = rest > 0 ? (z - p.cumL[lo]) / rest : 0;
-      const [ax, ay] = p.punt[lo].split(',').map(Number);
-      const [bx, by] = p.punt[lo + 1].split(',').map(Number);
-      return `${d}L${Math.round((ax + (bx - ax) * t) * 10) / 10},${Math.round((ay + (by - ay) * t) * 10) / 10}`;
+      return lo;
     };
+    /** Het zichtbare stuk van één lijn als padstring: van `van` tot `tot`,
+        met geïnterpoleerde eindpunten op de maat. */
+    const knip = (p: (typeof paden)[number], van: number, tot: number) => {
+      tot = Math.min(tot, p.lengte);
+      if (tot - van < 1) return `M${p.punt[0]}`;
+      const i0 = zoek(p, van);
+      const i1 = zoek(p, tot);
+      const midden = i1 > i0 ? `L${p.punt.slice(i0 + 1, i1 + 1).join('L')}` : '';
+      const slot = tot >= p.lengte ? '' : `L${opMaat(p, tot, i1)}`;
+      return `M${opMaat(p, van, i0)}${midden}${slot}`;
+    };
+    // Verspringende voetjes: elke lijn begint een eigen stukje onder de
+    // bekermond, zodat de aanzet organisch is in plaats van een vlakke rand.
+    const VOET = [16, 4, 24, 0, 10];
 
     const teken = () => {
       if (!paden.length) return;
       if (rustig.matches) {
-        for (const p of paden) p.el.setAttribute('d', p.dVol);
+        paden.forEach((p, i) => p.el.setAttribute('d', knip(p, VOET[i], p.lengte)));
         for (const l of lootEls) l.el.classList.add('is-af');
         schrijfBalk(1);
         return;
@@ -337,7 +345,7 @@ import Sprig from './Sprig.astro';
       const voorsprong = Math.min(1, s / 120);
       paden.forEach((p, i) => {
         const zichtbaar = Math.max(0, Math.min(p.lengte, (s / totaal) * p.lengte + LEAD[i] * voorsprong));
-        p.el.setAttribute('d', knip(p, zichtbaar));
+        p.el.setAttribute('d', knip(p, VOET[i], zichtbaar));
       });
       for (const l of lootEls) l.el.classList.toggle('is-af', l.s <= s);
       // Eén doorlopend front: eerst de stengel tot en met de landing, dan
