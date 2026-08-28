@@ -85,9 +85,10 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
      tegen de rand. */
   .golf-plaat :global(.golf-klarinet) {
     position: absolute;
-    bottom: 0;
+    /* Lucht onder de bloem: op de rand plakken oogt als een afsnede. */
+    bottom: 1.25rem;
     right: 1.25rem;
-    height: calc(100% + 3.5rem);
+    height: calc(100% + 2.5rem);
     aspect-ratio: 323 / 900;
     opacity: 0.2;
     pointer-events: none;
@@ -98,8 +99,9 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
   }
   @media (min-width: 48rem) {
     .golf-plaat :global(.golf-klarinet) {
+      bottom: 1.5rem;
       right: 2.5rem;
-      height: calc(100% + 4.5rem);
+      height: calc(100% + 3.5rem);
       opacity: 0.22;
     }
   }

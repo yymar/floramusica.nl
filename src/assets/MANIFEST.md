@@ -7,9 +7,6 @@ transparent ground; PNGs are rasterized at 2048px on the longest side in bordeau
 
 | file | viewBox | intended use |
 | --- | --- | --- |
-| `assets/motifs/floramusica-motif-klarinet-bloei.svg` | `0 0 80 112` | foreground hero motif |
-| `assets/motifs/floramusica-motif-klarinet-bloei-quiet.svg` | `0 0 80 112` | background watermark (10–12% opacity) |
-| `assets/motifs/floramusica-motif-klarinet-instrument.svg` | `0 0 80 112` | instrument only, from the layer pack; tall accent column |
 | `assets/ribbons/floramusica-ribbon-a.svg` | `0 0 144 24` | foreground divider / frame |
 | `assets/ribbons/floramusica-ribbon-a-quiet.svg` | `0 0 144 24` | background watermark (10–12% opacity) |
 | `assets/ribbons/floramusica-ribbon-a-centerline.svg` | `0 0 144 24` | stroke-dasharray draw animation |
@@ -35,13 +32,6 @@ transparent ground; PNGs are rasterized at 2048px on the longest side in bordeau
 
 | file | viewBox | intended use | stacking order |
 | --- | --- | --- | --- |
-
-### assets/layers/motif-klarinet-bloei/ — stack bottom→top
-| `assets/layers/motif-klarinet-bloei/floramusica-motif-klarinet-bloei-01-instrument.svg` (+ `.png`) | `0 0 80 112` | hand-edit layer | 01 |
-| `assets/layers/motif-klarinet-bloei/floramusica-motif-klarinet-bloei-02-vine-dominant.svg` (+ `.png`) | `0 0 80 112` | hand-edit layer | 02 |
-| `assets/layers/motif-klarinet-bloei/floramusica-motif-klarinet-bloei-03-flower.svg` (+ `.png`) | `0 0 80 112` | hand-edit layer | 03 |
-| `assets/layers/motif-klarinet-bloei/floramusica-motif-klarinet-bloei-04-leaf-accent-right.svg` (+ `.png`) | `0 0 80 112` | hand-edit layer | 04 |
-| `assets/layers/motif-klarinet-bloei/floramusica-motif-klarinet-bloei-05-hatching.svg` (+ `.png`) | `0 0 80 112` | hand-edit layer | 05 |
 
 ### assets/layers/ribbon-a/ — stack bottom→top
 | `assets/layers/ribbon-a/floramusica-ribbon-a-01-stafflines.svg` (+ `.png`) | `0 0 144 24` | hand-edit layer | 01 |

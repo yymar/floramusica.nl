@@ -15,11 +15,6 @@
 // De opties moeten hier letterlijk staan: Vite leest de glob statisch en ziet
 // een gedeelde constante niet, waarna je modules terugkrijgt in plaats van de
 // bestandsinhoud.
-const motieven = import.meta.glob('../../assets/motifs/*.svg', {
-  query: '?raw',
-  import: 'default',
-  eager: true,
-});
 const linten = import.meta.glob('../../assets/ribbons/*.svg', {
   query: '?raw',
   import: 'default',
@@ -42,7 +37,6 @@ const takjes = import.meta.glob('../../assets/sprigs/*.svg', {
  * naam erbij in de union hieronder. Vergeet je die laatste, dan faalt de
  * build alsnog hard — `zoek()` gooit als het bestand niet gevonden wordt.
  */
-export type MotiefNaam = 'klarinet-bloei' | 'klarinet-instrument';
 export type LintNaam = 'a' | 'b' | 'c';
 export type TakjeNaam = 'bloem-knop' | 'bloem-open' | 'tak-blad' | 'noten-blad' | 'sol-sleutel';
 
@@ -82,23 +76,11 @@ function zoek(map: Record<string, unknown>, bestand: string) {
  * `viewBox` en de fill/stroke-instelling per variant intact blijven — de
  * centerlines tekenen met stroke, de rest vult.
  *
- * `pathLength="1"` maakt de draw-animatie mogelijk zonder de echte padlengte
- * te kennen: dasharray en dashoffset rekenen dan in eenheden van 1.
  */
-function inline(
-  map: Record<string, unknown>,
-  familie: string,
-  naam: string,
-  variant: Variant,
-  klasse: string,
-  meetbaarPad = false,
-) {
+function inline(map: Record<string, unknown>, familie: string, naam: string, variant: Variant, klasse: string) {
   const achtervoegsel = variant === 'full' ? '' : `-${variant}`;
-  let svg = zoek(map, `floramusica-${familie}-${naam}${achtervoegsel}.svg`);
-
-  svg = svg.replace('<svg', `<svg aria-hidden="true" focusable="false" class="${escape(klasse)}"`);
-  if (meetbaarPad) svg = svg.replaceAll('<path', '<path pathLength="1"');
-  return svg;
+  const svg = zoek(map, `floramusica-${familie}-${naam}${achtervoegsel}.svg`);
+  return svg.replace('<svg', `<svg aria-hidden="true" focusable="false" class="${escape(klasse)}"`);
 }
 
 /**
@@ -138,12 +120,6 @@ export function lintSymbool(naam: LintNaam, variant: Variant) {
  */
 export const lintGebruik = (naam: LintNaam, variant: Variant, klasse: string) =>
   `<svg viewBox="${lintViewBox(naam, variant)}" preserveAspectRatio="none" aria-hidden="true" focusable="false" class="${escape(klasse)}"><use href="#${lintId(naam, variant)}"/></svg>`;
-
-export const motiefSvg = (naam: MotiefNaam, variant: Variant, klasse: string) =>
-  inline(motieven, 'motif', naam, variant, klasse);
-
-export const lintSvg = (naam: LintNaam, variant: Variant, klasse: string, draw = false) =>
-  inline(linten, 'ribbon', naam, variant, klasse, draw);
 
 export const takjeSvg = (naam: TakjeNaam, variant: Variant, klasse: string) =>
   inline(takjes, 'sprig', naam, variant, klasse);
