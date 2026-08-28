@@ -174,9 +174,12 @@ na de fix loopt hij tot 56px, gelijk aan de site.
   herladen), met de teken-tip op 60% van de viewporthoogte en een uitloop
   naar de paginavoet zodat de landing op maximale scroll af is. De tip is
   organisch: de middellijn loopt ~26px voor op de buitenste lijnen. Bij
-  reduced motion staat alles er volledig en statisch; de reveal gebruikt
-  gewone dashoffsets in pixelruimte (geen pathLength/non-scaling-stroke —
-  die combinatie rendert in Chromium stuk).
+  reduced motion staat alles er volledig en statisch; de reveal knipt per
+  frame het zichtbare stuk polyline in het `d`-attribuut (geen dasharray:
+  WebKit's dasher ontspoort op dit pad — honderden segmenten met dashes in
+  padlengte-orde — en tekende alles voorbij het front massief, in elke
+  variant: pixels, pathLength-genormaliseerd of via CSS. Geometrie knippen
+  is in elke engine deterministisch).
 - **Het omslagmotief beweegt niet meer mee** (was de vierde parallaxlaag):
   de stengel begint onder de omslagrand waar de beker onderduikt, en die
   aansluiting breekt zodra de bloem schuift. De notenbalk erachter beweegt nog wel — drie

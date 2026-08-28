@@ -22,8 +22,14 @@ import type { TakjeNaam } from '../components/ornaments/svg';
 
 export type StengelDeel = 'over' | 'beelden' | 'lessen' | 'locatie' | 'praktisch' | 'contact';
 
-/** Breedte (lijnafstand) t.o.v. de footerbalk — constant over de hele route. */
-export const SCHAAL = 1.75;
+/**
+ * Breedte (lijnafstand) t.o.v. de footerbalk — constant over de hele route.
+ * Op 1: het lint is overal exact even breed en dicht als de footerbalk,
+ * één gewicht van beker tot eindstreep (de 1.75 van eerst maakte de lange
+ * stukken visueel ijler dan de landing). De eindtaper is hiermee inert
+ * maar blijft staan voor als de schaal ooit weer omhoog gaat.
+ */
+export const SCHAAL = 1;
 /** Lijndikte t.o.v. de gemiddelde banddikte van de footerbalk. */
 export const DIKTE = 1.5;
 /** Dekking; de footerbalk zelf staat op 0.5. */
