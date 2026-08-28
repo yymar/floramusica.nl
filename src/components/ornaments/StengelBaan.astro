@@ -407,8 +407,11 @@ import Tekening from './Tekening.astro';
     rustig.addEventListener('change', teken);
     breed.addEventListener('change', bouw);
     // Herbouwen als de layout zet (fonts, late afbeeldingen, resize).
+    // Kort genoeg om een levende layoutverandering (textarea verslepen,
+    // venster schalen) vloeiend te volgen, lang genoeg om niet per
+    // observer-tik te herbouwen.
     let herbouwTimer = 0;
-    const herbouw = () => { clearTimeout(herbouwTimer); herbouwTimer = window.setTimeout(bouw, 120); };
+    const herbouw = () => { clearTimeout(herbouwTimer); herbouwTimer = window.setTimeout(bouw, 50); };
     new ResizeObserver(herbouw).observe(baan);
     addEventListener('resize', herbouw);
     bouw();
