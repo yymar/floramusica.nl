@@ -71,24 +71,12 @@ const enPad = nlPad === '/' ? '/en/' : `/en${nlPad}`;
     {
       taal === 'nl' && (
         <script is:inline>
-          // Taalcheck: Nederlands is en blijft de standaard. Alleen als de
-          // browser geen Nederlands maar wel Engels voert, gaat de bezoeker
-          // eenmalig naar /en/. Een expliciete keuze via de taalknop wordt
-          // bewaard en wint daarna altijd van deze check.
+          // Nederlands is de standaard, ook voor Engelstalige browsers en in
+          // incognito. Alleen een eerdere expliciete keuze voor Engels (via de
+          // taalknop, bewaard als fm:taal) stuurt door naar /en/.
           try {
-            var keuze = localStorage.getItem('fm:taal');
-            if (keuze === 'en') {
+            if (localStorage.getItem('fm:taal') === 'en') {
               location.replace('/en' + location.pathname + location.hash);
-            } else if (!keuze) {
-              var talen = navigator.languages || [navigator.language];
-              var nl = talen.some(function (t) { return /^nl/i.test(t); });
-              var en = talen.some(function (t) { return /^en/i.test(t); });
-              if (!nl && en) {
-                localStorage.setItem('fm:taal', 'en');
-                location.replace('/en' + location.pathname + location.hash);
-              } else {
-                localStorage.setItem('fm:taal', 'nl');
-              }
             }
           } catch (e) {}
         </script>
