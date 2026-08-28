@@ -212,6 +212,9 @@ const bezetting: Plek[] = [
   .orn {
     position: absolute;
     opacity: 0.4;
+    /* De wind (Wind.astro) buigt om de voet: het draaipunt ligt op de
+       balklijn waar de tekening op staat. */
+    transform-origin: 50% 100%;
   }
   .orn :global(img) {
     height: 100%;
