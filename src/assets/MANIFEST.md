@@ -66,3 +66,15 @@ transparent ground; PNGs are rasterized at 2048px on the longest side in bordeau
 | `assets/layers/sprig-sol-sleutel/floramusica-sprig-sol-sleutel-01-clef.svg` (+ `.png`) | `0 0 48 104` | hand-edit layer | 01 |
 | `assets/layers/sprig-sol-sleutel/floramusica-sprig-sol-sleutel-02-leaf.svg` (+ `.png`) | `0 0 48 104` | hand-edit layer | 02 |
 | `assets/layers/sprig-sol-sleutel/floramusica-sprig-sol-sleutel-03-bud.svg` (+ `.png`) | `0 0 48 104` | hand-edit layer | 03 |
+
+## Handgetekende tekeningen (Imke, Procreate)
+
+Vaste kleur (bordeaux `#7b1e2b` resp. crème `#faf6f3`), dus als PNG via
+`<img>`/`<image>` — niet in het inline-SVG/currentColor-systeem hierboven.
+Bron: Dropbox `Flora Musica Website/tekeningen_imke/` (4000x5000);
+hier bijgesneden op inhoud en verkleind.
+
+| bestand | maat (px) | gebruik |
+| --- | --- | --- |
+| `assets/imke-klarinet-creme.png` | 323 x 900 | omslagmotief in `Hero.astro` (crème op bordeaux) |
+| `assets/imke-sleutel-bordeaux.png` | 327 x 700 | solsleutel op de notenbalk in `PartituurRegel.astro` (toon-op-toon) |

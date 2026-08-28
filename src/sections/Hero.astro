@@ -14,11 +14,13 @@
  */
 import Figuur from '../components/Figuur.astro';
 import PartituurRegel from '../components/PartituurRegel.astro';
-import Motief from '../components/ornaments/Motief.astro';
 import Wordmark from '../components/Wordmark.astro';
 import { hero } from '../data/copy';
 // Portret uit de professionele fotoserie, 4:5 zoals het omslagontwerp vraagt.
 import portret from '../assets/portret-christa.jpg';
+// Het omslagmotief: Imkes handgetekende klarinet (Procreate), crème-variant
+// op het bordeaux vlak. Vaste kleur, dus een <img> en geen inline SVG.
+import klarinetImke from '../assets/imke-klarinet-creme.png';
 ---
 
 <section class="relative bg-bordeaux-deep" data-vlak="bordeaux">
@@ -29,7 +31,7 @@ import portret from '../assets/portret-christa.jpg';
       <PartituurRegel class="h-[clamp(7rem,19vw,13rem)]" />
     </div>
     <div class="parallax-motief">
-      <Motief name="klarinet-bloei" class="w-full" />
+      <img src={klarinetImke.src} alt="" width={klarinetImke.width} height={klarinetImke.height} loading="eager" />
     </div>
   </div>
 
@@ -104,21 +106,20 @@ import portret from '../assets/portret-christa.jpg';
   .parallax-motief {
     position: absolute;
     display: none;
-    aspect-ratio: 80 / 112;
+    aspect-ratio: 323 / 900;
     /* Drie grenzen, de kleinste wint: een vaste bovengrens, de hoogte van
        de omslag zelf, en de breedte van de marge (omgerekend naar hoogte
        via de verhouding van het motief). Die laatste is wat het motief
        heel houdt: mondstuk, klepwerk, bloem én beker blijven binnen beeld. */
-    height: min(26rem, 72%, calc(((100vw - 64rem) / 2 + 1.5rem) * 1.4));
+    height: min(26rem, 72%, calc(((100vw - 64rem) / 2 + 1.5rem) * 2.79));
     right: 0.5rem;
     bottom: 2rem;
-    /* Leesbaar op afstand: paper-dim op halve dekking — bloem en klepwerk
-       moeten in één oogopslag te herkennen zijn, geen toon-op-toon-raadsel. */
-    color: var(--color-paper-dim);
-    opacity: 0.5;
+    /* Imkes lijntekening is crème op bordeaux; dunne lijnen, dus meer
+       dekking dan het oude gevulde silhouet nodig had. */
+    opacity: 0.85;
     pointer-events: none;
   }
-  .parallax-motief :global(svg) {
+  .parallax-motief img {
     width: 100%;
     height: 100%;
   }
