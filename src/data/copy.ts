@@ -112,6 +112,9 @@ export const nietGevonden = {
 export const footer = {
   kvkLabel: 'KvK',
   colofon: `© ${new Date().getFullYear()} Muziekpraktijk Flora Musica`,
+  creditsLabel: 'Site door',
+  creditsNaam: 'yymar',
+  creditsUrl: 'https://github.com/yymar',
 };
 
 export const galerij = {

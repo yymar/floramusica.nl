@@ -124,7 +124,18 @@ const bezetting: Plek[] = [
         )
       }
     </div>
-    <p class="mt-10 text-klein text-ink-soft">{footer.colofon}</p>
+    <p class="mt-10 text-klein text-ink-soft">
+      {footer.colofon}
+      <span aria-hidden="true"> · </span>
+      {footer.creditsLabel}{' '}
+      <a
+        href={footer.creditsUrl}
+        rel="external noopener"
+        class="text-bordeaux underline underline-offset-2 hover:text-bordeaux-deep"
+      >
+        {footer.creditsNaam}
+      </a>
+    </p>
   </div>
 </footer>
 
