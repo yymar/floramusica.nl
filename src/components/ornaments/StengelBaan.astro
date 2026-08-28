@@ -316,7 +316,10 @@ import Sprig from './Sprig.astro';
       const i0 = zoek(p, van);
       const i1 = zoek(p, tot);
       const midden = i1 > i0 ? `L${p.punt.slice(i0 + 1, i1 + 1).join('L')}` : '';
-      const slot = tot >= p.lengte ? '' : `L${opMaat(p, tot, i1)}`;
+      // Volledig getekend: expliciet tot en met het allerlaatste punt (de
+      // 1px overlap de eerste tegel in) — zoek() stopt op length-2, dus
+      // zonder dit eindigde de lijn op het bocht-einde en gaapte de naad.
+      const slot = tot >= p.lengte ? `L${p.punt[p.punt.length - 1]}` : `L${opMaat(p, tot, i1)}`;
       return `M${opMaat(p, van, i0)}${midden}${slot}`;
     };
     // Verspringende voetjes: elke lijn begint een eigen stukje onder de
