@@ -5,15 +5,16 @@
  * Concept: het programmaboekje. Warm papier, bordeaux als enige accent.
  */
 @theme {
-  /* Kleur */
-  --color-paper: #faf6f3;
-  --color-paper-deep: #f1e9e4;
+  /* Kleur. Het papier is warm ivoor — de tint van bladmuziekpapier,
+     geen koel wit; de diepere en gedimde varianten schuiven mee. */
+  --color-paper: #f8f2e3;
+  --color-paper-deep: #f0e6d0;
   --color-ink: #231a1c;
   --color-ink-soft: #6b5a5d;
   --color-bordeaux: #7b1e2b;
   --color-bordeaux-deep: #4a1219;
-  --color-paper-dim: #e8d8d5;
-  --color-rule: #dccfc9;
+  --color-paper-dim: #eaddc9;
+  --color-rule: #dbceb6;
   --color-border-strong: #9a8180;
 
   /* Typografie */
