@@ -41,53 +41,53 @@ const { labels, fouten, status, concept } = formulier;
     </button>
   </p>
 
-  <div class="space-y-5">
+  <div class="space-y-6">
     <div class="rijs r2">
-      <label for="veld-naam" class="mb-1 block font-bold">{labels.naam}</label>
+      <label for="veld-naam" class="veldlabel">{labels.naam}</label>
       <input
         type="text"
         id="veld-naam"
         name="naam"
         required
         autocomplete="name"
-        class="w-full rounded-sm border border-border-strong bg-paper px-3 py-2.5 transition-colors hover:border-ink-soft focus:border-bordeaux"
+        class="veld"
         aria-describedby="fout-naam"
       />
       <p id="fout-naam" hidden class="mt-1 text-klein font-bold text-bordeaux"></p>
     </div>
 
     <div class="rijs r2">
-      <label for="veld-email" class="mb-1 block font-bold">{labels.email}</label>
+      <label for="veld-email" class="veldlabel">{labels.email}</label>
       <input
         type="email"
         id="veld-email"
         name="email"
         required
         autocomplete="email"
-        class="w-full rounded-sm border border-border-strong bg-paper px-3 py-2.5 transition-colors hover:border-ink-soft focus:border-bordeaux"
+        class="veld"
         aria-describedby="fout-email"
       />
       <p id="fout-email" hidden class="mt-1 text-klein font-bold text-bordeaux"></p>
     </div>
 
     <div class="rijs r2">
-      <label for="veld-telefoon" class="mb-1 block font-bold">{labels.telefoon}</label>
+      <label for="veld-telefoon" class="veldlabel">{labels.telefoon}</label>
       <input
         type="tel"
         id="veld-telefoon"
         name="telefoon"
         autocomplete="tel"
-        class="w-full rounded-sm border border-border-strong bg-paper px-3 py-2.5 transition-colors hover:border-ink-soft focus:border-bordeaux"
+        class="veld"
       />
     </div>
 
     <div class="rijs r3">
-      <label for="veld-instrument" class="mb-1 block font-bold">{labels.instrument}</label>
+      <label for="veld-instrument" class="veldlabel">{labels.instrument}</label>
       <select
         id="veld-instrument"
         name="instrument"
-        class="w-full rounded-sm border border-border-strong bg-paper px-3 py-2.5 transition-colors hover:border-ink-soft focus:border-bordeaux appearance-none bg-no-repeat pr-10"
-        style={`background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%237B1E2B' stroke-width='1.75' stroke-linecap='round'/%3E%3C/svg%3E"); background-position: right 0.875rem center;`}
+        class="veld veld-select bg-no-repeat"
+        style={`background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%237B1E2B' stroke-width='1.75' stroke-linecap='round'/%3E%3C/svg%3E"); background-position: right 0.25rem center;`}
       >
         <option value="">{labels.instrumentPlaceholder}</option>
         {instrumenten.map((instrument) => <option value={instrument.id}>{instrument.naam}</option>)}
@@ -96,7 +96,7 @@ const { labels, fouten, status, concept } = formulier;
     </div>
 
     <fieldset class="rijs r3" aria-describedby="fout-voor-wie">
-      <legend class="mb-1 font-bold">{labels.voorWie}</legend>
+      <legend class="veldlabel">{labels.voorWie}</legend>
       <div class="flex flex-wrap gap-x-6 gap-y-2">
         <label class="inline-flex items-center gap-2">
           <input type="radio" name="voor_wie" value="voor mezelf" required class="accent-bordeaux" />
@@ -111,13 +111,13 @@ const { labels, fouten, status, concept } = formulier;
     </fieldset>
 
     <div class="rijs r3">
-      <label for="veld-bericht" class="mb-1 block font-bold">{labels.bericht}</label>
+      <label for="veld-bericht" class="veldlabel">{labels.bericht}</label>
       <textarea
         id="veld-bericht"
         name="bericht"
         required
         rows={5}
-        class="w-full rounded-sm border border-border-strong bg-paper px-3 py-2.5 transition-colors hover:border-ink-soft focus:border-bordeaux"
+        class="veld veld-papier"
         aria-describedby="fout-bericht"></textarea>
       <p id="fout-bericht" hidden class="mt-1 text-klein font-bold text-bordeaux"></p>
     </div>
@@ -134,6 +134,74 @@ const { labels, fouten, status, concept } = formulier;
   {/* Succes- en foutmeldingen voor screenreaders en zichtbaar */}
   <p id="formulier-status" role="status" aria-live="polite" class="mt-4 font-bold empty:hidden"></p>
 </form>
+
+
+<style>
+  /* Het formulier als pagina uit het programmaboekje: geen invoerdozen
+     maar schrijfregels. Opschriften in klein kapitaal (zelfde stem als de
+     sectielabels), velden als een lijn waar je op schrijft, en het
+     bericht op gelinieerd papier. */
+  .veldlabel {
+    display: block;
+    margin-bottom: 0.125rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-bordeaux);
+  }
+  fieldset .veldlabel {
+    margin-bottom: 0.375rem;
+  }
+
+  .veld {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    border-bottom: 1px solid var(--color-border-strong);
+    padding: 0.5rem 0.125rem;
+    transition:
+      border-color 0.2s ease-out,
+      box-shadow 0.2s ease-out;
+  }
+  .veld:hover {
+    border-color: var(--color-ink-soft);
+  }
+  /* Focus is de regel die aandikt naar bordeaux — via box-shadow, zodat er
+     niets verspringt. Vervangt hier de globale outline: een kader om een
+     schrijfregel leest als een doos. */
+  .veld:focus {
+    outline: none;
+    border-color: var(--color-bordeaux);
+    box-shadow: 0 1px 0 0 var(--color-bordeaux);
+  }
+  .veld[aria-invalid='true'] {
+    border-color: var(--color-bordeaux);
+    box-shadow: 0 1px 0 0 var(--color-bordeaux);
+  }
+
+  .veld-select {
+    appearance: none;
+    padding-right: 2rem;
+  }
+
+  /* Gelinieerd papier: een lijn per tekstregel (1lh), meescrollend met de
+     inhoud; de onderste rand blijft de schrijfregel met de focusstaat. */
+  .veld-papier {
+    resize: vertical;
+    line-height: 1.9;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent calc(1lh - 1px),
+      var(--color-rule) calc(1lh - 1px),
+      var(--color-rule) 1lh
+    );
+    background-attachment: local;
+    background-origin: content-box;
+  }
+</style>
 
 <script>
   // Progressive enhancement bovenop de werkende no-JS-POST hierboven.
