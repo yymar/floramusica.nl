@@ -149,6 +149,45 @@ section[id] {
   scroll-margin-top: 5.5rem;
 }
 
+/* Alles wat getekend is, leeft. De ornamenten in het binnenwerk — loten
+   op de stengel, sectie-accenten, de finale op de footerbalk — wiegen en
+   zweven zoals de omslagregel, maar zachter en trager: de omslag zingt,
+   het binnenwerk neuriet. De wind (Wind.astro) komt hier via de
+   transform-property bovenop; bij de loten staat de vaste --draai op het
+   span-element, dus daar wiegt de tekening erbinnen. */
+@media (prefers-reduced-motion: no-preference) {
+  .loot > img,
+  .sier,
+  .kop-takje,
+  .slot-balk .orn img {
+    transform-origin: 50% 100%;
+    animation:
+      orn-wiegen 9s ease-in-out infinite alternate,
+      orn-zweven 7s ease-in-out infinite alternate;
+  }
+  .loot:nth-of-type(2n) > img,
+  .slot-balk .orn:nth-of-type(2n) img {
+    animation-duration: 10.5s, 6.2s;
+    animation-delay: -3.7s, -1.9s;
+  }
+  .loot:nth-of-type(3n) > img,
+  .slot-balk .orn:nth-of-type(3n) img {
+    animation-duration: 7.8s, 8.4s;
+    animation-delay: -5.4s, -3.2s;
+  }
+  .kop-takje {
+    animation-delay: -2.6s, -4.1s;
+  }
+}
+@keyframes orn-wiegen {
+  from { rotate: -1.6deg; }
+  to { rotate: 1.7deg; }
+}
+@keyframes orn-zweven {
+  from { translate: 0 1px; }
+  to { translate: 0 -2.5px; }
+}
+
 /* =============================================================
    Scroll-choreografie (MOTION.md) — de gedeelde laag.
 
