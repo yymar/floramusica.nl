@@ -1,6 +1,7 @@
 ---
 import Basis from '../layouts/Basis.astro';
-import { nietGevonden } from '../data/copy';
+import { copy } from '../data/copy';
+const { nietGevonden } = copy(Astro.currentLocale);
 ---
 
 <Basis titel={nietGevonden.titel} noindex>

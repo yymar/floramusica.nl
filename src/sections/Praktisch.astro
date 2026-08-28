@@ -1,17 +1,19 @@
 ---
 /**
- * Tarieven en lesduur. Zolang tarieven.bekend false is, blijft de sectie
+ * Tarieven en lesduur. Zolang prijslijst.bekend false is, blijft de sectie
  * kort: één zin plus een verwijzing naar het contactformulier. Geen lege
  * tabel met "op aanvraag"; regel is weglaten, nooit placeholder tonen.
  * Zodra de tarieven zijn ingevuld (`bekend: true` in src/data/tarieven.ts)
  * verschijnt de volledige lijst vanzelf.
  */
 import Sectie from '../components/Sectie.astro';
-import { praktisch } from '../data/copy';
+import { copy } from '../data/copy';
 import { tarieven } from '../data/tarieven';
+const { praktisch } = copy(Astro.currentLocale);
+const prijslijst = tarieven(Astro.currentLocale);
 ---
 
-<Sectie id="praktisch" label="Praktisch" kop={praktisch.kop} tint>
+<Sectie id="praktisch" label={praktisch.label} kop={praktisch.kop} tint>
   <p class="rijs r2 max-w-[62ch]">
     {praktisch.intro}{' '}
     {praktisch.introVraagVoor}{' '}<a
@@ -21,9 +23,9 @@ import { tarieven } from '../data/tarieven';
   </p>
 
   {
-    tarieven.bekend && (
+    prijslijst.bekend && (
       <dl class="mt-8 max-w-xl">
-        {tarieven.lesvormen.map((lesvorm) => (
+        {prijslijst.lesvormen.map((lesvorm) => (
           <div class="flex items-baseline justify-between gap-6 border-b border-rule py-4">
             <dt>
               <span class="font-bold">{lesvorm.naam}</span>
@@ -37,9 +39,9 @@ import { tarieven } from '../data/tarieven';
   }
 
   {
-    tarieven.bekend && tarieven.opmerkingen.length > 0 && (
+    prijslijst.bekend && prijslijst.opmerkingen.length > 0 && (
       <ul class="mt-6 max-w-[62ch] space-y-2 text-klein text-ink-soft">
-        {tarieven.opmerkingen.map((opmerking) => (
+        {prijslijst.opmerkingen.map((opmerking) => (
           <li>{opmerking}</li>
         ))}
       </ul>

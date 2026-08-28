@@ -37,8 +37,11 @@ export interface GalerijFoto {
   src?: ImageMetadata;
   /** Beschrijving voor screenreaders en het placeholder-slot. */
   alt: string;
+  /** Engelse variant van `alt`, voor de /en/-route. */
+  altEn: string;
   /** Kort bijschrift; zichtbaar als overlay bij hover/focus en in de lightbox. */
   onderschrift?: string;
+  onderschriftEn?: string;
   /**
    * Brandpunt van de uitsnede, als `object-position`. De cellen in het grid
    * hebben een vaste vorm, dus elke foto wordt bijgesneden; hiermee bepaal je
@@ -59,79 +62,98 @@ export const fotos: GalerijFoto[] = [
     src: klarinetPiano,
     formaat: 'groot',
     alt: 'Klarinet in close-up, liggend op de vleugel',
+    altEn: 'Clarinet in close-up, resting on the grand piano',
   },
   {
     src: christaBank,
     focus: '50% 35%', // zit links-onder in het kader
     formaat: 'middel',
     alt: 'Christa ten Berg zit lachend op de bank met haar klarinet op schoot',
+    altEn: 'Christa ten Berg sitting on the sofa, smiling, clarinet on her lap',
   },
   {
     src: liedjeLeerling,
     formaat: 'klein',
     alt: 'Handgeschreven briefje van een leerling, met een zelfbedacht liedje op een eigen notenbalk',
+    altEn: 'Handwritten note from a student, with a self-invented song on a homemade staff',
     onderschrift: 'Een eigen liedje van een leerling',
+    onderschriftEn: 'A student\u2019s own song',
   },
   {
     src: klarinetSneeuw,
     formaat: 'middel',
     alt: 'Klarinet rechtop voor een besneeuwde deur',
+    altEn: 'Clarinet standing upright in front of a snow-covered door',
   },
   {
     src: blokfluitKlarinet,
     formaat: 'middel',
     alt: 'Een blokfluit en een klarinet liggen naast elkaar op de toetsen van een piano',
+    altEn: 'A recorder and a clarinet lying side by side on the keys of a piano',
     onderschrift: 'Blokfluit, klarinet en piano',
+    onderschriftEn: 'Recorder, clarinet and piano',
   },
   {
     src: jongeKlarinettisten,
     focus: '50% 30%', // twee hoofden hoog in beeld
     formaat: 'middel',
     alt: 'Twee jonge klarinettistes spelen samen in een industriële ruimte',
+    altEn: 'Two young clarinettists playing together in an industrial space',
   },
   {
     src: klarinetGroen,
     formaat: 'groot',
     alt: 'Klarinet liggend tussen de groene bladeren van een struik',
+    altEn: 'Clarinet lying among the green leaves of a shrub',
     onderschrift: 'Flora en musica',
+    onderschriftEn: 'Flora and musica',
   },
   {
     src: klarinetensemble,
     focus: '50% 40%', // gezichten in de bovenste helft
     formaat: 'middel',
     alt: 'Klarinetensemble tijdens een optreden op een buitenpodium',
+    altEn: 'Clarinet ensemble performing on an outdoor stage',
     onderschrift: 'Het klarinetensemble op het podium',
+    onderschriftEn: 'The clarinet ensemble on stage',
   },
   {
     src: optreden,
     formaat: 'klein',
     alt: 'Optreden met klarinet',
+    altEn: 'Performance with clarinet',
   },
   {
     src: christaBuiten,
     focus: '50% 25%', // hoofd tegen de bovenrand
     formaat: 'middel',
     alt: 'Christa ten Berg buiten in het groen, met haar klarinet in haar handen',
+    altEn: 'Christa ten Berg outdoors among the greenery, clarinet in her hands',
   },
   {
     src: klarinetkring,
     formaat: 'middel',
     alt: 'Jonge klarinettisten in een kring, hun instrumenten naar het midden gericht, van bovenaf gezien',
+    altEn: 'Young clarinettists in a circle, instruments pointing to the middle, seen from above',
     onderschrift: 'Samenspel in de klas',
+    onderschriftEn: 'Playing together in class',
   },
   {
     src: cdStapel,
     formaat: 'middel',
     alt: 'Stapel cd\u2019s met een koptelefoon erbovenop',
+    altEn: 'Stack of CDs with headphones on top',
   },
   {
     src: klepwerk,
     formaat: 'klein',
     alt: 'Close-up van het klepwerk van een klarinet, in zwart-wit',
+    altEn: 'Close-up of the keywork of a clarinet, in black and white',
   },
   {
     src: roosBladmuziek,
     formaat: 'klein',
     alt: 'Witte roos op bladmuziek naast een klarinet, in zwart-wit',
+    altEn: 'White rose on sheet music next to a clarinet, in black and white',
   },
 ];

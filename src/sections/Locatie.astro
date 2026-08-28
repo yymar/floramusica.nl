@@ -8,12 +8,13 @@
  */
 import Sectie from '../components/Sectie.astro';
 import ExterneLink from '../components/ExterneLink.astro';
-import { locatie } from '../data/copy';
+import { copy } from '../data/copy';
+const { locatie } = copy(Astro.currentLocale);
 import { site } from '../data/site';
 import { organisaties } from '../data/organisaties';
 ---
 
-<Sectie id="locatie" label="Locatie" kop={locatie.kop} sier="bloem-1">
+<Sectie id="locatie" label={locatie.label} kop={locatie.kop} sier="bloem-1">
   <div class="rijs r2">
     <h3 class="font-display text-subkop font-semibold text-ink">{locatie.praktijkKop}</h3>
     <p class="mt-2 max-w-[62ch]">{locatie.praktijkTekst}</p>

@@ -16,6 +16,7 @@ import Footer from '../components/Footer.astro';
 import JsonLd from '../components/JsonLd.astro';
 import Wind from '../components/ornaments/Wind.astro';
 import { site } from '../data/site';
+import { copy, taalVan } from '../data/copy';
 
 interface Props {
   /** Paginatitel; de sitenaam wordt er automatisch achter gezet. */
@@ -24,13 +25,19 @@ interface Props {
   /** 404 en bedankt-pagina willen geen indexering. */
   noindex?: boolean;
 }
-const { titel, omschrijving = site.omschrijving, noindex = false } = Astro.props;
-const volledigeTitel = titel ? `${titel} · ${site.naam}` : `${site.naam} · Muziekles in Oss en omgeving`;
+const taal = taalVan(Astro.currentLocale);
+const { basis } = copy(Astro.currentLocale);
+const standaardOmschrijving = taal === 'en' ? site.omschrijvingEn : site.omschrijving;
+const { titel, omschrijving = standaardOmschrijving, noindex = false } = Astro.props;
+const volledigeTitel = titel ? `${titel} · ${site.naam}` : `${site.naam} · ${basis.titelRest}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+// hreflang-alternates: dezelfde pagina in beide talen.
+const nlPad = Astro.url.pathname.replace(/^\/en(?=\/|$)/, '') || '/';
+const enPad = nlPad === '/' ? '/en/' : `/en${nlPad}`;
 ---
 
 <!doctype html>
-<html lang="nl">
+<html lang={taal}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -40,6 +47,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" hreflang="nl" href={new URL(nlPad, Astro.site)} />
+    <link rel="alternate" hreflang="en" href={new URL(enPad, Astro.site)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(nlPad, Astro.site)} />
     {noindex && <meta name="robots" content="noindex" />}
 
     <meta property="og:type" content="website" />
@@ -47,11 +57,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:title" content={volledigeTitel} />
     <meta property="og:description" content={omschrijving} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content="nl_NL" />
+    <meta property="og:locale" content={taal === 'en' ? 'en_US' : 'nl_NL'} />
     <meta property="og:image" content={new URL('/og.png', Astro.site)} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={`${site.naam}, muziekles in Oss en omgeving`} />
+    <meta property="og:image:alt" content={basis.ogAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={new URL('/og.png', Astro.site)} />
     <meta name="twitter:title" content={volledigeTitel} />
@@ -65,7 +75,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       href="#inhoud"
       class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-sm focus:bg-paper focus:px-4 focus:py-2 focus:font-bold focus:text-bordeaux"
     >
-      Direct naar de inhoud
+      {basis.skiplink}
     </a>
     <div id="top"></div>
     <Header />

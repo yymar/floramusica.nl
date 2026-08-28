@@ -7,7 +7,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://floramusica.nl',
   output: 'static',
-  integrations: [sitemap()],
+  // Nederlands zonder prefix (bestaande URL's blijven), Engels onder /en/.
+  i18n: { defaultLocale: 'nl', locales: ['nl', 'en'] },
+  integrations: [sitemap({ i18n: { defaultLocale: 'nl', locales: { nl: 'nl', en: 'en' } } })],
 
   // Vastgezet omdat er meer projecten naast elkaar draaien op deze machine en
   // een dev-server die stilletjes doorschuift naar de volgende vrije poort een

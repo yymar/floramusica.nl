@@ -20,13 +20,21 @@ export interface Tarieven {
   opmerkingen: string[];
 }
 
-export const tarieven: Tarieven = {
+import { taalVan } from './copy';
+
+export const tarieven = (locale?: string): Tarieven => ({
   bekend: false,
-  lesvormen: [
-    { naam: 'Wekelijkse les', duur: '', prijs: '' }, // TODO
-    { naam: 'Les om de week', duur: '', prijs: '' }, // TODO
-  ],
+  lesvormen:
+    taalVan(locale) === 'en'
+      ? [
+          { naam: 'Weekly lesson', duur: '', prijs: '' }, // TODO
+          { naam: 'Fortnightly lesson', duur: '', prijs: '' }, // TODO
+        ]
+      : [
+          { naam: 'Wekelijkse les', duur: '', prijs: '' }, // TODO
+          { naam: 'Les om de week', duur: '', prijs: '' }, // TODO
+        ],
   opmerkingen: [
     // TODO: bijv. "Een proefles is altijd mogelijk." of iets over btw-vrijstelling onder 21 jaar.
   ],
-};
+});

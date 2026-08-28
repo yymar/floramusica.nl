@@ -5,11 +5,12 @@
  */
 import Sectie from '../components/Sectie.astro';
 import Figuur from '../components/Figuur.astro';
-import { over } from '../data/copy';
+import { copy } from '../data/copy';
+const { over } = copy(Astro.currentLocale);
 import lespraktijk from '../assets/lespraktijk.jpg';
 ---
 
-<Sectie id="over" label="Over" kop={over.kop} sier="blad-1">
+<Sectie id="over" label={over.label} kop={over.kop} sier="blad-1">
   <div class="grid gap-8 sm:grid-cols-[2fr_1fr] sm:gap-10">
     <div class="rijs r2 max-w-[62ch] space-y-4">
       {over.alineas.map((alinea) => <p>{alinea}</p>)}

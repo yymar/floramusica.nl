@@ -17,7 +17,9 @@ import { getImage } from 'astro:assets';
 import { Image } from 'astro:assets';
 import Sectie from '../components/Sectie.astro';
 import { fotos } from '../data/fotos';
-import { galerij } from '../data/copy';
+import { copy, taalVan } from '../data/copy';
+const { galerij } = copy(Astro.currentLocale);
+const engels = taalVan(Astro.currentLocale) === 'en';
 
 type Cel = {
   foto: (typeof fotos)[number];
@@ -31,7 +33,12 @@ type Cel = {
 // Lightbox-varianten: eigen srcset (max 1600px, webp) plus een kleine
 // thumb voor de instant blur-up.
 const cellen: Cel[] = await Promise.all(
-  fotos.map(async (foto, i): Promise<Cel> => {
+  fotos.map(async (bron, i): Promise<Cel> => {
+    const foto = {
+      ...bron,
+      alt: engels ? bron.altEn : bron.alt,
+      onderschrift: engels ? (bron.onderschriftEn ?? bron.onderschrift) : bron.onderschrift,
+    };
     const liggend = (foto.src?.width ?? 0) > (foto.src?.height ?? 1);
     const span =
       foto.formaat === 'groot' ? 'groot' : foto.formaat === 'middel' ? (liggend ? 'liggend' : 'staand') : 'klein';
@@ -55,7 +62,7 @@ const cellen: Cel[] = await Promise.all(
 
 {
   fotos.length > 0 && (
-    <Sectie id="beelden" label="Beelden" kop={galerij.kop} sier="bloem-2">
+    <Sectie id="beelden" label={galerij.label} kop={galerij.kop} sier="bloem-2">
       <div class="grid-quilt" id="galerij-grid">
         {cellen.map(({ foto, nummer, span, thumb, srcset, groot }) => (
           <figure class:list={['cel', `cel-${span}`]}>
@@ -68,21 +75,21 @@ const cellen: Cel[] = await Promise.all(
                 data-alt={foto.alt}
                 data-onderschrift={foto.onderschrift ?? ''}
                 data-nummer={nummer}
-                aria-label={`Bekijk foto ${nummer} groot: ${foto.alt}`}
+                aria-label={galerij.bekijkFoto(nummer, foto.alt)}
               >
                 <Image src={foto.src} alt={foto.alt} width={800} height={Math.round((800 / foto.src.width) * foto.src.height)} widths={[400, 800]} sizes="(min-width: 48rem) 26vw, 48vw" loading="lazy" class="cel-beeld" style={foto.focus ? `object-position: ${foto.focus};` : undefined} />
                 {foto.onderschrift && <span class="cel-overlay" aria-hidden="true">{foto.onderschrift}</span>}
               </a>
             ) : (
               <div class="cel-leeg" role="img" aria-label={foto.alt}>
-                <p class="m-0 max-w-[24ch] text-klein text-ink-soft">Foto volgt</p>
+                <p class="m-0 max-w-[24ch] text-klein text-ink-soft">{galerij.fotoVolgt}</p>
               </div>
             )}
           </figure>
         ))}
       </div>
 
-      <dialog id="galerij-dialoog" class="dialoog" aria-label="Fotoweergave">
+      <dialog id="galerij-dialoog" class="dialoog" aria-label={galerij.dialoogLabel}>
         <figure class="dialoog-figuur m-0">
           <div class="dialoog-doek">
             <img id="dialoog-thumb" alt="" aria-hidden="true" />
@@ -90,8 +97,8 @@ const cellen: Cel[] = await Promise.all(
             <div id="dialoog-spinner" class="dialoog-spinner" hidden aria-hidden="true" />
           </div>
           <p id="dialoog-fout" class="dialoog-fout" hidden>
-            De foto kon niet laden.
-            <button type="button" class="underline underline-offset-2" data-actie="opnieuw">Probeer opnieuw</button>
+            {galerij.fout}
+            <button type="button" class="underline underline-offset-2" data-actie="opnieuw">{galerij.opnieuw}</button>
           </p>
           <figcaption class="mt-3 flex items-baseline gap-3 text-klein text-paper-dim">
             <span id="dialoog-nummer" class="font-display font-semibold text-paper" />
@@ -99,17 +106,17 @@ const cellen: Cel[] = await Promise.all(
             <span id="dialoog-teller" class="ms-auto tabular-nums" />
           </figcaption>
         </figure>
-        <button type="button" class="dialoog-knop dialoog-sluit" data-actie="sluit" aria-label="Sluiten">
+        <button type="button" class="dialoog-knop dialoog-sluit" data-actie="sluit" aria-label={galerij.sluiten}>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
           </svg>
         </button>
-        <button type="button" class="dialoog-knop dialoog-vorige" data-actie="vorige" aria-label="Vorige foto">
+        <button type="button" class="dialoog-knop dialoog-vorige" data-actie="vorige" aria-label={galerij.vorige}>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </button>
-        <button type="button" class="dialoog-knop dialoog-volgende" data-actie="volgende" aria-label="Volgende foto">
+        <button type="button" class="dialoog-knop dialoog-volgende" data-actie="volgende" aria-label={galerij.volgende}>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>

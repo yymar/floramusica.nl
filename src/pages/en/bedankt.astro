@@ -1,10 +1,7 @@
 ---
-/**
- * Landingspagina na verzending zonder JavaScript (Web3Forms-redirect).
- * Ruimt het bewaarde concept op, want het bericht is verstuurd.
- */
-import Basis from '../layouts/Basis.astro';
-import { copy } from '../data/copy';
+/** Engelse variant van /bedankt (Web3Forms-redirect vanaf de /en/-route). */
+import Basis from '../../layouts/Basis.astro';
+import { copy } from '../../data/copy';
 const { bedankt } = copy(Astro.currentLocale);
 ---
 
@@ -13,7 +10,7 @@ const { bedankt } = copy(Astro.currentLocale);
     <h1 class="font-display text-kop font-semibold tracking-tight">{bedankt.titel}</h1>
     <p class="mt-4 max-w-[62ch]">{bedankt.tekst}</p>
     <p class="mt-8">
-      <a href="/" class="font-bold text-bordeaux underline underline-offset-2 hover:text-bordeaux-deep">
+      <a href="/en/" class="font-bold text-bordeaux underline underline-offset-2 hover:text-bordeaux-deep">
         {bedankt.terug}
       </a>
     </p>

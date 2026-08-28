@@ -14,16 +14,19 @@
 import Sectie from '../components/Sectie.astro';
 import Tekening from '../components/ornaments/Tekening.astro';
 import { instrumenten, doelgroepen } from '../data/instrumenten';
-import { lessen } from '../data/copy';
+import { copy } from '../data/copy';
+const { lessen } = copy(Astro.currentLocale);
+const alleInstrumenten = instrumenten(Astro.currentLocale);
+const alleDoelgroepen = doelgroepen(Astro.currentLocale);
 // Zelfde handgetekende klarinet als op de omslag (Imke, Procreate):
 // crème lijnen, dus op het bordeaux vlak als <img> met lage dekking.
 import klarinetImke from '../assets/imke-klarinet-creme.png';
 
-const hoofd = instrumenten.find((i) => i.hoofdinstrument);
-const overige = instrumenten.filter((i) => !i.hoofdinstrument);
+const hoofd = alleInstrumenten.find((i) => i.hoofdinstrument);
+const overige = alleInstrumenten.filter((i) => !i.hoofdinstrument);
 ---
 
-<Sectie id="lessen" label="Lessen" kop={lessen.kop} tint>
+<Sectie id="lessen" label={lessen.label} kop={lessen.kop} tint>
   <p class="rijs r2 max-w-[62ch]">{lessen.intro}</p>
 
   {
@@ -66,10 +69,10 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
     </h3>
     <p class="mt-2 max-w-[62ch]">{lessen.doelgroepTekst}</p>
     <p class="mt-3 text-klein text-ink-soft" aria-label="Doelgroepen">
-      {doelgroepen.map((groep, i) => (
+      {alleDoelgroepen.map((groep, i) => (
         <>
           <span class="capitalize">{groep}</span>
-          {i < doelgroepen.length - 1 && <span aria-hidden="true"> · </span>}
+          {i < alleDoelgroepen.length - 1 && <span aria-hidden="true"> · </span>}
         </>
       ))}
     </p>

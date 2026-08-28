@@ -10,11 +10,13 @@
  * De key komt uit PUBLIC_WEB3FORMS_KEY in .env; zie README.md.
  */
 import { instrumenten } from '../data/instrumenten';
-import { formulier } from '../data/copy';
+import { copy, taalVan } from '../data/copy';
+const { formulier } = copy(Astro.currentLocale);
+const alleInstrumenten = instrumenten(Astro.currentLocale);
 import { site } from '../data/site';
 
 const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
-const redirectUrl = new URL('/bedankt', Astro.site);
+const redirectUrl = new URL(taalVan(Astro.currentLocale) === 'en' ? '/en/bedankt' : '/bedankt', Astro.site);
 const { labels, fouten, status, concept } = formulier;
 ---
 
@@ -28,7 +30,7 @@ const { labels, fouten, status, concept } = formulier;
 >
   <input type="hidden" name="access_key" value={key} />
   <input type="hidden" name="redirect" value={redirectUrl.href} />
-  <input type="hidden" name="subject" value={`Nieuw bericht via ${site.url}`} />
+  <input type="hidden" name="subject" value={`${formulier.onderwerpVoor} ${site.url}`} />
   <input type="hidden" name="from_name" value={site.naam} />
   {/* Honeypot van Web3Forms: mensen zien dit veld niet, bots vullen het in. */}
   <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" aria-hidden="true" />
@@ -90,7 +92,7 @@ const { labels, fouten, status, concept } = formulier;
         style={`background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%237B1E2B' stroke-width='1.75' stroke-linecap='round'/%3E%3C/svg%3E"); background-position: right 0.25rem center;`}
       >
         <option value="">{labels.instrumentPlaceholder}</option>
-        {instrumenten.map((instrument) => <option value={instrument.id}>{instrument.naam}</option>)}
+        {alleInstrumenten.map((instrument) => <option value={instrument.id}>{instrument.naam}</option>)}
         <option value="anders">{labels.instrumentAnders}</option>
       </select>
     </div>

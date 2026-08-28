@@ -11,9 +11,19 @@
  */
 import Wordmark from './Wordmark.astro';
 import { navigatie } from '../data/navigatie';
+import { copy, taalVan } from '../data/copy';
 
-const ankers = navigatie.filter((item) => item.anker !== '#contact');
-const contact = navigatie.find((item) => item.anker === '#contact');
+const taal = taalVan(Astro.currentLocale);
+const { basis } = copy(Astro.currentLocale);
+const items = navigatie(Astro.currentLocale);
+const ankers = items.filter((item) => item.anker !== '#contact');
+const contact = items.find((item) => item.anker === '#contact');
+
+// De taalwissel wijst naar dezelfde pagina in de andere taal: /en/ ervoor
+// of eraf. De ankers zijn taalonafhankelijk, dus die blijven werken.
+const nlPad = Astro.url.pathname.replace(/^\/en(?=\/|$)/, '') || '/';
+const anderTaalPad = taal === 'en' ? nlPad : nlPad === '/' ? '/en/' : `/en${nlPad}`;
+const andereTaal = taal === 'en' ? 'nl' : 'en';
 ---
 
 <header class="sticky top-0 z-40 bg-bordeaux-deep" data-vlak="bordeaux">
@@ -22,7 +32,7 @@ const contact = navigatie.find((item) => item.anker === '#contact');
       <Wordmark toon="paper" />
     </a>
 
-    <nav aria-label="Hoofdnavigatie" class="flex items-center gap-3 sm:gap-6">
+    <nav aria-label={basis.navLabel} class="flex items-center gap-3 sm:gap-6">
       {/* Vanaf 40rem staan de ankers gewoon op een rij. */}
       <ul class="hidden items-center gap-6 sm:flex">
         {
@@ -42,7 +52,7 @@ const contact = navigatie.find((item) => item.anker === '#contact');
           class="flex cursor-pointer list-none items-center gap-2 rounded-sm px-2 py-1.5 text-klein text-paper-dim transition-colors hover:text-paper"
         >
           <span class="menu-streepjes" aria-hidden="true"></span>
-          Menu
+          {basis.menu}
         </summary>
         <ul class="menu-lade">
           {
@@ -67,6 +77,17 @@ const contact = navigatie.find((item) => item.anker === '#contact');
           </a>
         )
       }
+
+      {/* Taalwissel: klein kapitaal, zelfde stem als de sectielabels. */}
+      <a
+        href={anderTaalPad}
+        hreflang={andereTaal}
+        lang={andereTaal}
+        aria-label={basis.andereTaalLabel}
+        class="nav-link taal-link text-klein text-paper-dim transition-colors hover:text-paper"
+      >
+        {basis.andereTaalKnop}
+      </a>
     </nav>
   </div>
 </header>
@@ -104,6 +125,10 @@ const contact = navigatie.find((item) => item.anker === '#contact');
   .nav-link:hover::after,
   .nav-link:focus-visible::after {
     transform: scaleX(1);
+  }
+  .taal-link {
+    font-weight: 600;
+    letter-spacing: 0.14em;
   }
 
   /* De uitklap. Drie hairlines in plaats van een icoonfont: dezelfde

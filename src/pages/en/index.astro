@@ -1,0 +1,29 @@
+---
+/**
+ * De Engelse voorpagina: exact dezelfde secties als / — alle teksten
+ * komen per taal uit src/data via Astro.currentLocale.
+ */
+import Basis from '../../layouts/Basis.astro';
+import Hero from '../../sections/Hero.astro';
+import Over from '../../sections/Over.astro';
+import Galerij from '../../sections/Galerij.astro';
+import Lessen from '../../sections/Lessen.astro';
+import Locatie from '../../sections/Locatie.astro';
+import Praktisch from '../../sections/Praktisch.astro';
+import Contact from '../../sections/Contact.astro';
+import StengelBaan from '../../components/ornaments/StengelBaan.astro';
+---
+
+<Basis>
+  <Hero />
+  <div class="binnenwerk">
+    <div class="maatstreep" aria-hidden="true"></div>
+    <Over />
+    <Galerij />
+    <Lessen />
+    <Locatie />
+    <Praktisch />
+    <Contact />
+    <StengelBaan />
+  </div>
+</Basis>

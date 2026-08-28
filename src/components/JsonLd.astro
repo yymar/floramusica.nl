@@ -6,12 +6,17 @@
  */
 import { site } from '../data/site';
 import { instrumenten } from '../data/instrumenten';
+import { taalVan } from '../data/copy';
+
+const taal = taalVan(Astro.currentLocale);
+const alleInstrumenten = instrumenten(taal);
 
 const jsonLd: Record<string, unknown> = {
   '@context': 'https://schema.org',
   '@type': 'MusicSchool',
   name: site.naam,
-  description: site.omschrijving,
+  description: taal === 'en' ? site.omschrijvingEn : site.omschrijving,
+  inLanguage: taal,
   founder: { '@type': 'Person', name: 'Christa ten Berg' },
   url: site.url,
   address: {
@@ -28,12 +33,12 @@ const jsonLd: Record<string, unknown> = {
   },
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
-    name: 'Muzieklessen',
-    itemListElement: instrumenten.map((instrument) => ({
+    name: taal === 'en' ? 'Music lessons' : 'Muzieklessen',
+    itemListElement: alleInstrumenten.map((instrument) => ({
       '@type': 'Offer',
       itemOffered: {
         '@type': 'Course',
-        name: `${instrument.naam}les`,
+        name: taal === 'en' ? `${instrument.naam} lessons` : `${instrument.naam}les`,
         description: instrument.omschrijving,
         provider: { '@type': 'MusicSchool', name: site.naam },
       },
