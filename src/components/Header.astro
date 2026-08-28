@@ -106,7 +106,7 @@ const andereTaal = taal === 'en' ? 'nl' : 'en';
   const taalLink = document.querySelector<HTMLAnchorElement>('.taal-link');
   taalLink?.addEventListener('click', () => {
     try {
-      localStorage.setItem('fm:taal', taalLink.getAttribute('hreflang') ?? 'nl');
+      localStorage.setItem('fm:taalkeuze', taalLink.getAttribute('hreflang') ?? 'nl');
     } catch {
       /* geen opslag beschikbaar */
     }

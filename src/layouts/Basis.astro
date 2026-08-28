@@ -73,9 +73,9 @@ const enPad = nlPad === '/' ? '/en/' : `/en${nlPad}`;
         <script is:inline>
           // Nederlands is de standaard, ook voor Engelstalige browsers en in
           // incognito. Alleen een eerdere expliciete keuze voor Engels (via de
-          // taalknop, bewaard als fm:taal) stuurt door naar /en/.
+          // taalknop, bewaard als fm:taalkeuze) stuurt door naar /en/.
           try {
-            if (localStorage.getItem('fm:taal') === 'en') {
+            if (localStorage.getItem('fm:taalkeuze') === 'en') {
               location.replace('/en' + location.pathname + location.hash);
             }
           } catch (e) {}
