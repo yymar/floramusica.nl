@@ -12,7 +12,7 @@
  * op licht papier staat.
  */
 import Sectie from '../components/Sectie.astro';
-import Sprig from '../components/ornaments/Sprig.astro';
+import Tekening from '../components/ornaments/Tekening.astro';
 import { instrumenten, doelgroepen } from '../data/instrumenten';
 import { lessen } from '../data/copy';
 // Zelfde handgetekende klarinet als op de omslag (Imke, Procreate):
@@ -62,7 +62,7 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
   <div class="rijs doelgroep mt-10">
     <h3 class="font-display text-subkop font-semibold text-ink">
       {lessen.doelgroepLabel}
-      <Sprig name="noten-blad" class="kop-takje text-bordeaux opacity-55" />
+      <Tekening naam="noot-3" class="kop-takje opacity-55" />
     </h3>
     <p class="mt-2 max-w-[62ch]">{lessen.doelgroepTekst}</p>
     <p class="mt-3 text-klein text-ink-soft" aria-label="Doelgroepen">

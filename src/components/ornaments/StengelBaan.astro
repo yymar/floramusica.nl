@@ -20,7 +20,7 @@
  * zijn de marges er niet, en de bloem ook niet.
  */
 import { route, loten, SCHAAL, DIKTE, DEKKING, TAPER_PX } from '../../data/stengel';
-import Sprig from './Sprig.astro';
+import Tekening from './Tekening.astro';
 ---
 
 <div class="stengelbaan" aria-hidden="true" data-dekking={DEKKING}>
@@ -32,9 +32,9 @@ import Sprig from './Sprig.astro';
         data-deel={loot.deel}
         data-y={loot.y}
         data-kant={loot.kant}
-        style={`--draai: ${loot.draai}deg;`}
+        style={`--draai: ${loot.draai}deg; --maat: ${loot.maat ?? 2.5}rem;`}
       >
-        <Sprig name={loot.naam} class="w-full" />
+        <Tekening naam={loot.naam} class="w-full" />
       </span>
     ))
   }
@@ -121,12 +121,14 @@ import Sprig from './Sprig.astro';
         if (a.klem === 'rechts') x = Math.min(vw - 60, Math.max(x, content.right - baanRect.left + 70));
         return { x, y: r.top - baanRect.top + (a.y / 100) * r.height };
       });
-      // Het begin: de stengel komt verticaal uit de beker van het
-      // omslagmotief — de lijnen ontspringen in de bekermond (rond 52% van
-      // de tekenbreedte, net boven de onderrand van de tekenbox) en lopen
-      // eerst ~200px recht omlaag voordat de route naar de rechtermarge
-      // zwaait. De baan mag boven zijn eigen vak uitsteken (overflow
-      // visible, alleen horizontaal geclipt).
+      // Het begin: de stengel komt verticaal onder de beker van het
+      // omslagmotief vandaan — de lijnen starten een stukje ónder de
+      // tekenbox (Imkes klarinet heeft een getekende bekerrand en een bloem
+      // tot op de onderrand; lijnen die daar doorheen lopen lazen als
+      // overlap in plaats van als uitloper) en lopen eerst ~200px recht
+      // omlaag voordat de route naar de rechtermarge zwaait. De baan mag
+      // boven zijn eigen vak uitsteken (overflow visible, alleen
+      // horizontaal geclipt).
       const motief = document.querySelector('.parallax-motief');
       if (motief) {
         const m = motief.getBoundingClientRect();
@@ -136,7 +138,7 @@ import Sprig from './Sprig.astro';
           // aanloop ervoor vervalt het.
           ankers.shift();
           const startX = m.left - baanRect.left + m.width * 0.52;
-          const startY = m.bottom - baanRect.top - m.height * 0.03;
+          const startY = m.bottom - baanRect.top + 14;
           ankers.unshift({ x: startX, y: startY }, { x: startX, y: startY + 200 });
         }
       }
@@ -242,7 +244,10 @@ import Sprig from './Sprig.astro';
         let i = samples.findIndex((p) => p.y >= doelY);
         if (i < 0) i = samples.length - 1;
         const kant = Number(el.dataset.kant);
-        const lootX = Math.min(vw - 26, samples[i].x + kant * (2 * spreiding(i) + 26));
+        // Nét buiten de buitenste lijn, met de halve eigen breedte mee:
+        // de loten verschillen sinds Imkes tekeningen van maat.
+        const helft = el.offsetWidth / 2 + 6;
+        const lootX = Math.min(vw - helft, samples[i].x + kant * (2 * spreiding(i) + helft));
         el.style.left = `${rond(lootX)}px`;
         el.style.top = `${rond(doelY)}px`;
         lootEls.push({ el, s: cum[i] });
@@ -282,7 +287,10 @@ import Sprig from './Sprig.astro';
         nadat de stengel geland is, over de laatste ~200px fronttravel. */
     const schrijfBalk = (fractie: number) => {
       for (const sp of sporen) {
-        sp.style.clipPath = fractie < 1 ? `inset(0 ${Math.round((1 - fractie) * 1000) / 10}% 0 0)` : '';
+        // Boven en onder ruim los: Imkes noten steken boven de balk uit en
+        // mogen niet door de reveal-clip onthoofd worden.
+        sp.style.clipPath =
+          fractie < 1 ? `inset(-100% ${Math.round((1 - fractie) * 1000) / 10}% -20% 0)` : '';
       }
       if (eindstreep) {
         eindstreep.style.opacity =
@@ -395,7 +403,7 @@ import Sprig from './Sprig.astro';
   }
   .loot {
     position: absolute;
-    width: 2.5rem;
+    width: var(--maat, 2.5rem);
     translate: -50% -50%;
     rotate: var(--draai);
     opacity: 0;

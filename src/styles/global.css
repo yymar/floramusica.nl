@@ -105,6 +105,19 @@ body {
 h1, h2, h3 {
   text-wrap: balance;
 }
+
+/* De display-snede van Bricolage voor sectiekoppen: de optische as vol
+   open (96) geeft de nauwere apertuur en het eigenzinnige contrast waar
+   het font om gekozen is — op de tekst-snede leest dezelfde kop als een
+   generieke vette sans. Gewicht net onder semibold+ en een bescheiden
+   negatieve spatiëring; strakker kamt de display-snede dicht.
+   Vereist de standard-subset van het font (Basis.astro): de wght-subset
+   heeft de opsz-as niet aan boord. */
+.kop-display {
+  font-variation-settings: 'opsz' 96;
+  font-weight: 640;
+  letter-spacing: -0.01em;
+}
 p, figcaption, dd, li {
   text-wrap: pretty;
 }

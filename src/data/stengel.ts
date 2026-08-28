@@ -18,7 +18,7 @@
  * De maten zelf komen uit de footerbalk (de bronwaarheid): lijnafstand en
  * -dikte worden runtime van het slot gemeten en met SCHAAL vermenigvuldigd.
  */
-import type { TakjeNaam } from '../components/ornaments/svg';
+import type { TekeningNaam } from '../components/ornaments/tekeningen';
 
 export type StengelDeel = 'over' | 'beelden' | 'lessen' | 'locatie' | 'praktisch' | 'contact';
 
@@ -86,19 +86,34 @@ export const route: Anker[] = [
  * `kant` zet ze links (−1) of rechts (+1) nét buiten de buitenste lijn.
  * Dichtheid onder die van de footer — de finale blijft het rijkst.
  */
-export type Loot = { deel: StengelDeel; y: number; kant: -1 | 1; naam: TakjeNaam; draai: number };
+export type Loot = {
+  deel: StengelDeel;
+  y: number;
+  kant: -1 | 1;
+  naam: TekeningNaam;
+  draai: number;
+  /** Breedte in rem; standaard 2.5. Bloemen mogen iets groter, los blad iets kleiner. */
+  maat?: number;
+};
 
 export const loten: Loot[] = [
-  { deel: 'over', y: 30, kant: 1, naam: 'tak-blad', draai: 20 },
-  { deel: 'over', y: 62, kant: -1, naam: 'noten-blad', draai: -12 },
-  { deel: 'beelden', y: 22, kant: 1, naam: 'noten-blad', draai: 10 },
-  { deel: 'beelden', y: 52, kant: 1, naam: 'bloem-open', draai: 15 },
-  { deel: 'beelden', y: 80, kant: 1, naam: 'tak-blad', draai: 12 },
-  { deel: 'lessen', y: 38, kant: -1, naam: 'bloem-knop', draai: -15 },
-  { deel: 'lessen', y: 64, kant: 1, naam: 'noten-blad', draai: 12 },
-  { deel: 'locatie', y: 28, kant: -1, naam: 'noten-blad', draai: -15 },
-  { deel: 'locatie', y: 62, kant: 1, naam: 'tak-blad', draai: 12 },
-  { deel: 'praktisch', y: 42, kant: 1, naam: 'bloem-knop', draai: 15 },
-  { deel: 'contact', y: 34, kant: -1, naam: 'tak-blad', draai: -12 },
-  { deel: 'contact', y: 66, kant: 1, naam: 'noten-blad', draai: 18 },
+  { deel: 'over', y: 18, kant: 1, naam: 'blad-1', draai: 20, maat: 2 },
+  { deel: 'over', y: 44, kant: -1, naam: 'noot-3', draai: -12 },
+  { deel: 'over', y: 72, kant: 1, naam: 'noot-1', draai: 14, maat: 1.6 },
+  { deel: 'beelden', y: 16, kant: 1, naam: 'noot-5', draai: 10 },
+  { deel: 'beelden', y: 38, kant: -1, naam: 'blad-2', draai: -16, maat: 2 },
+  { deel: 'beelden', y: 56, kant: 1, naam: 'bloem-1', draai: 15, maat: 3 },
+  { deel: 'beelden', y: 78, kant: 1, naam: 'noot-7', draai: 12, maat: 2.75 },
+  { deel: 'beelden', y: 92, kant: -1, naam: 'blad-1', draai: -24, maat: 1.8 },
+  { deel: 'lessen', y: 24, kant: -1, naam: 'noot-3', draai: -15 },
+  { deel: 'lessen', y: 48, kant: 1, naam: 'bloem-2', draai: 10, maat: 2.75 },
+  { deel: 'lessen', y: 70, kant: 1, naam: 'noot-1', draai: 12, maat: 1.6 },
+  { deel: 'locatie', y: 20, kant: -1, naam: 'noot-5', draai: -15, maat: 2.75 },
+  { deel: 'locatie', y: 46, kant: 1, naam: 'blad-1', draai: 18, maat: 2 },
+  { deel: 'locatie', y: 70, kant: 1, naam: 'noot-3', draai: 12 },
+  { deel: 'praktisch', y: 30, kant: 1, naam: 'bloem-1', draai: 15, maat: 2.75 },
+  { deel: 'praktisch', y: 58, kant: -1, naam: 'blad-2', draai: -14, maat: 2 },
+  { deel: 'contact', y: 26, kant: -1, naam: 'blad-1', draai: -12, maat: 2 },
+  { deel: 'contact', y: 50, kant: 1, naam: 'noot-7', draai: 18, maat: 2.75 },
+  { deel: 'contact', y: 74, kant: 1, naam: 'noot-1', draai: 10, maat: 1.6 },
 ];

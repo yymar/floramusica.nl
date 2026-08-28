@@ -1,0 +1,30 @@
+---
+/**
+ * Eén van Imkes handgetekende ornamenten (blad, bloem, noot) als <img>.
+ * De opvolger van het oude Sprig-component: vaste bordeaux-kleur uit de
+ * tekening zelf, dekking en maat stuurt de context via `class`.
+ *
+ * Terughoudend gebruiken, net als voorheen: hoogstens één of twee per
+ * sectie, in de marge of aan een hoek, nooit naast lopende tekst. Geef
+ * altijd een breedte mee (`class="w-9"`); de hoogte volgt de verhouding
+ * van de tekening.
+ */
+import { tekening, type TekeningNaam } from './tekeningen';
+
+interface Props {
+  naam: TekeningNaam;
+  class?: string;
+}
+const { naam, class: className = '' } = Astro.props;
+const beeld = tekening(naam);
+---
+
+<img
+  src={beeld.src}
+  width={beeld.width}
+  height={beeld.height}
+  alt=""
+  aria-hidden="true"
+  loading="lazy"
+  class:list={['block h-auto', className]}
+/>

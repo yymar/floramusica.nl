@@ -2,24 +2,57 @@
 /**
  * Het partituur-motief van de omslag: een notenbalk die van rand tot rand
  * loopt met een solsleutel aan het begin, toon-op-toon op het bordeaux
- * vlak. De sleutel is Imkes handgetekende solsleutel-met-bloem (Procreate),
- * in dezelfde bordeaux als de balklijnen (#7b1e2b = --color-bordeaux),
- * dus de vaste PNG-kleur valt samen met currentColor van de lijnen.
+ * vlak. Sleutel, noten, bloemen en blad zijn allemaal Imkes handgetekende
+ * tekeningen (Procreate), in dezelfde bordeaux als de balklijnen
+ * (#7b1e2b = --color-bordeaux), dus de vaste PNG-kleur valt samen met
+ * currentColor van de lijnen.
  *
  * Coordinaten in font-units: notenbalklijnen op y 0..1000 (4 x 250),
  * na scale(1,-1) op schermcoordinaten 0..-1000; de G-lijn ligt op -250.
- * De sleutel is als <image> geplaatst zodat de krul rond de G-lijn valt.
+ * Alles is als <image> geplaatst; de bezetting hieronder zet nootkoppen
+ * op of net onder een balklijn (`bodem` is de onderrand van de tekening
+ * in schermcoordinaten, de hoogte bepaalt hoe ver stok en blad reiken).
+ *
+ * De eerste maat leeft: elk ornament wiegt traag om zijn voet, als een
+ * tuin in een lichte bries. Reduced motion zet alles stil.
  */
 interface Props {
   class?: string;
 }
 const { class: className } = Astro.props;
 import sleutelImke from '../assets/imke-sleutel-bordeaux.png';
+import { tekening, type TekeningNaam } from './ornaments/tekeningen';
 // Hoogte in font-units; breedte volgt de verhouding van de tekening.
 // Bijna de volle viewBox-hoogte (1756): de sleutel mag ruim boven en
 // onder de balk uitsteken, zoals een echte solsleutel.
 const H = 1550;
 const W = Math.round((H * sleutelImke.width) / sleutelImke.height);
+
+// De bezetting van de eerste regel, van links naar rechts. Gevulde koppen
+// (a-varianten): die lezen op deze schaal het best. De bloemen en het blad
+// staan óp de balk, tussen de noten — de tuin groeit door de partituur.
+type Plek = { naam: TekeningNaam; x: number; hoogte: number; bodem: number };
+const bezetting: Plek[] = [
+  { naam: 'noot-2a', x: 2100, hoogte: 700, bodem: -180 },
+  { naam: 'noot-5a', x: 3000, hoogte: 620, bodem: -430 },
+  { naam: 'bloem-2', x: 4150, hoogte: 460, bodem: -220 },
+  { naam: 'noot-3a', x: 5250, hoogte: 850, bodem: -180 },
+  { naam: 'noot-7a', x: 6600, hoogte: 560, bodem: -180 },
+  { naam: 'blad-2', x: 8000, hoogte: 380, bodem: 10 },
+  { naam: 'noot-1a', x: 8900, hoogte: 700, bodem: 70 },
+  { naam: 'noot-6a', x: 9900, hoogte: 620, bodem: -430 },
+  { naam: 'bloem-1', x: 11200, hoogte: 500, bodem: 30 },
+];
+const plekken = bezetting.map((p) => {
+  const beeld = tekening(p.naam);
+  return {
+    href: beeld.src,
+    x: p.x,
+    y: p.bodem - p.hoogte,
+    width: Math.round((p.hoogte * beeld.width) / beeld.height),
+    height: p.hoogte,
+  };
+});
 ---
 
 <svg
@@ -36,4 +69,37 @@ const W = Math.round((H * sleutelImke.width) / sleutelImke.height);
   {/* Iets vrij van de linkerrand, verticaal net onder de viewBox-top zodat
       de krul (op ~60% van de tekening) rond de onderste balklijnen valt. */}
   <image href={sleutelImke.src} x="450" y="-1068" width={W} height={H} />
+  {plekken.map((p) => <image class="orn" {...p} />)}
 </svg>
+
+<style>
+  /* De bries: traag wiegen om de voet (de nootkop, de bloembodem), per
+     ornament een eigen tempo en fase zodat het nooit synchroon marcheert.
+     Kleine uitslag — dit is de achtergrond van de omslag, geen carrousel. */
+  @media (prefers-reduced-motion: no-preference) {
+    .orn {
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+      animation: wiegen 7s ease-in-out infinite alternate;
+    }
+    .orn:nth-of-type(2n) {
+      animation-duration: 8.5s;
+      animation-delay: -3.2s;
+    }
+    .orn:nth-of-type(3n) {
+      animation-duration: 6.2s;
+      animation-delay: -1.6s;
+    }
+    .orn:nth-of-type(3n + 1) {
+      animation-delay: -5.1s;
+    }
+  }
+  @keyframes wiegen {
+    from {
+      transform: rotate(-1.2deg);
+    }
+    to {
+      transform: rotate(1.4deg);
+    }
+  }
+</style>

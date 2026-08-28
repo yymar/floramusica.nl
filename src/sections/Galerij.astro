@@ -55,7 +55,7 @@ const cellen: Cel[] = await Promise.all(
 
 {
   fotos.length > 0 && (
-    <Sectie id="beelden" label="Beelden" kop={galerij.kop} sier="bloem-open">
+    <Sectie id="beelden" label="Beelden" kop={galerij.kop} sier="bloem-2">
       <div class="grid-quilt" id="galerij-grid">
         {cellen.map(({ foto, nummer, span, thumb, srcset, groot }) => (
           <figure class:list={['cel', `cel-${span}`]}>

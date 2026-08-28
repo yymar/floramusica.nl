@@ -17,15 +17,15 @@
  * het programmaboekje, naast de kop waar het bij hoort. Accentmaat (32–40px),
  * nooit in de tekstkolom.
  */
-import Sprig from './ornaments/Sprig.astro';
-import type { TakjeNaam } from './ornaments/svg';
+import Tekening from './ornaments/Tekening.astro';
+import type { TekeningNaam } from './ornaments/tekeningen';
 
 interface Props {
   id: string;
   label: string;
   kop: string;
   tint?: boolean;
-  sier?: TakjeNaam;
+  sier?: TekeningNaam;
 }
 const { id, label, kop, tint = false, sier } = Astro.props;
 
@@ -37,11 +37,11 @@ const delen = woorden.length > 4 ? [...woorden.slice(0, 3), woorden.slice(3).joi
   <div class="mx-auto max-w-5xl px-5 py-sectie sm:px-8">
     <div class="md:grid md:grid-cols-[10rem_1fr] md:gap-10 lg:grid-cols-[12rem_1fr]">
       <div class="labelkolom mb-2 md:mb-0 md:self-start md:pt-[0.6em]">
-        {sier && <Sprig name={sier} class="sier" />}
-        <p class="text-klein font-bold text-bordeaux" aria-hidden="true">{label}</p>
+        {sier && <Tekening naam={sier} class="sier" />}
+        <p class="label text-bordeaux" aria-hidden="true">{label}</p>
       </div>
       <div>
-        <h2 class="font-display text-kop font-semibold tracking-tight text-ink">
+        <h2 class="kop-display font-display text-kop text-ink">
           {
             delen.map((woord, i) => (
               <>
@@ -70,6 +70,15 @@ const delen = woorden.length > 4 ? [...woorden.slice(0, 3), woorden.slice(3).joi
     align-items: center;
     justify-content: flex-end;
     gap: 0.75rem;
+  }
+  /* Het label als programma-opschrift: klein kapitaal met ruime spatiëring,
+     zoals een boekje zijn rubrieken zet. Draagt minder gewicht dan eerst
+     (semibold in plaats van bold): het opschrift wijst, de kop spreekt. */
+  .label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
   .labelkolom :global(.sier) {
     display: none;
