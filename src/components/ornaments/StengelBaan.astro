@@ -91,7 +91,10 @@ import Tekening from './Tekening.astro';
       paden = [];
       lootEls = [];
       if (!breed.matches) {
-        schrijfBalk(1); // onder 80rem schrijft de footer zichzelf via CSS
+        // Onder 80rem is er geen stengel: de footer schrijft zichzelf via
+        // CSS en de CSS-balklijnen komen terug.
+        document.querySelector('.slot-balk')?.classList.remove('balk-door-stengel');
+        schrijfBalk(1);
         return;
       }
 
@@ -158,12 +161,11 @@ import Tekening from './Tekening.astro';
       // zodat de eindtangent exact vlak is en de vijf lijnen exact op de
       // balklijnen landen.
       const b0 = midden[midden.length - 1];
-      // De bocht eindigt 18px vóór de tegels; daarna volgt een exact
-      // horizontaal stukje dat 1px de eerste tegel in doorloopt (zoals de
-      // tegels onderling overlappen tegen antialiasing-naden). Zo staan
-      // de laatste normalen precies verticaal (geen minieme rotatie van de
-      // vijf uiteinden op de naad) en zit het lint zonder spleet aan de
-      // tegel vast.
+      // De bocht eindigt 18px vóór de tegelrand; daarna volgt een exact
+      // horizontaal stukje tot precies óp die rand. Zo staan de laatste
+      // normalen precies verticaal (geen minieme rotatie van de vijf
+      // uiteinden op de naad) en sluit het lint stotend aan op de
+      // balklijnen, zonder dubbel getekende overlap.
       const eindX = tegelStart - 18;
       for (let k = 1; k <= 26; k++) {
         const u = k / 26, w = 1 - u;
@@ -174,7 +176,18 @@ import Tekening from './Tekening.astro';
           y: w * w * w * b0.y + 3 * w * w * u * c1.y + 3 * w * u * u * c2.y + u * u * u * balkMidden,
         });
       }
-      midden.push({ x: tegelStart - 8, y: balkMidden }, { x: tegelStart + 1, y: balkMidden });
+      // Vanaf hier tekent de stengel de balklijnen zélf door tot het einde
+      // van het slot: één doorlopend pad per lijn, dus geen naad die kan
+      // gapen of dubbel-donker kan overlappen (twee lagen op 0.5 dekking
+      // stoten nooit onzichtbaar). De CSS-balklijnen van de footer gaan
+      // boven 80rem uit (klasse balk-door-stengel).
+      const balkEind = slotRect.right - baanRect.left;
+      midden.push(
+        { x: tegelStart - 8, y: balkMidden },
+        { x: tegelStart, y: balkMidden },
+        { x: balkEind, y: balkMidden },
+      );
+      slot.classList.add('balk-door-stengel');
 
       samples = midden;
       cum = [0];
@@ -354,14 +367,21 @@ import Tekening from './Tekening.astro';
       // De organische voorsprong van de middellijn groeit mee met het
       // begin, anders steken er op de eerste pixels al puntjes uit.
       const voorsprong = Math.min(1, s / 120);
+      // Eén doorlopend front: eerst de stengel tot en met de landing, dan
+      // de balk van links naar rechts, als voortzetting van dezelfde t.
+      // De lijnen zelf zijn het laatste (rechte) padsegment; hun groei
+      // volgt dezelfde fractie als het spoor met de ornamenten.
+      const balkFrac = s >= totaal - 1 ? Math.min(1, Math.max(0, (fy - balkY) / 160)) : 0;
       paden.forEach((p, i) => {
-        const zichtbaar = Math.max(0, Math.min(p.lengte, (s / totaal) * p.lengte + LEAD[i] * voorsprong));
+        const balkVan = p.cumL[p.cumL.length - 2];
+        const zichtbaar = Math.max(0, Math.min(
+          balkVan + balkFrac * (p.lengte - balkVan),
+          (s / totaal) * p.lengte + LEAD[i] * voorsprong,
+        ));
         p.el.setAttribute('d', knip(p, VOET[i], zichtbaar));
       });
       for (const l of lootEls) l.el.classList.toggle('is-af', l.s <= s);
-      // Eén doorlopend front: eerst de stengel tot en met de landing, dan
-      // de balk van links naar rechts, als voortzetting van dezelfde t.
-      schrijfBalk(s >= totaal - 1 ? Math.min(1, Math.max(0, (fy - balkY) / 160)) : 0);
+      schrijfBalk(balkFrac);
     };
 
     let vlag = false;

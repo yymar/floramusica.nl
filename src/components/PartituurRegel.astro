@@ -42,6 +42,18 @@ const bezetting: Plek[] = [
   { naam: 'noot-1a', x: 8900, hoogte: 700, bodem: 70 },
   { naam: 'noot-6a', x: 9900, hoogte: 620, bodem: -430 },
   { naam: 'bloem-1', x: 11200, hoogte: 500, bodem: 30 },
+  // Voorbij het portret gaat de regel gewoon door: de viewBox toont bij
+  // 2560px breed zo'n 21600 eenheden, dus de tuin loopt door tot daar —
+  // de balk mag nergens kaal ophouden.
+  { naam: 'noot-5a', x: 12400, hoogte: 620, bodem: -430 },
+  { naam: 'noot-2a', x: 13500, hoogte: 700, bodem: -180 },
+  { naam: 'blad-1', x: 14700, hoogte: 380, bodem: 10 },
+  { naam: 'noot-7a', x: 15600, hoogte: 560, bodem: -180 },
+  { naam: 'noot-4a', x: 16800, hoogte: 850, bodem: -180 },
+  { naam: 'bloem-2', x: 18000, hoogte: 460, bodem: -220 },
+  { naam: 'noot-6a', x: 19100, hoogte: 620, bodem: -430 },
+  { naam: 'noot-1a', x: 20200, hoogte: 700, bodem: 70 },
+  { naam: 'blad-2', x: 21400, hoogte: 380, bodem: 10 },
 ];
 const plekken = bezetting.map((p) => {
   const beeld = tekening(p.naam);

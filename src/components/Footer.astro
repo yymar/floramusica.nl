@@ -23,18 +23,20 @@ const lijnen = [33.333, 41.667, 50, 58.333, 66.667];
 // ertussen — dezelfde tuin als op de omslag, nu in bordeaux op papier.
 // `links` is % van de balk, `hoogte`/`voet` in % van de balkhoogte.
 type Plek = { naam: TekeningNaam; links: number; hoogte: number; voet: number };
+// Zelfde terughoudende maat als de ornamenten elders op de pagina (loten,
+// kop-takjes): de balk draagt, de tekeningen versieren — geen etalage.
 const bezetting: Plek[] = [
-  { naam: 'blad-1', links: 3, hoogte: 70, voet: 33 },
-  { naam: 'noot-2a', links: 12, hoogte: 115, voet: 30 },
-  { naam: 'noot-5a', links: 21, hoogte: 100, voet: 36 },
-  { naam: 'bloem-1', links: 31, hoogte: 85, voet: 33 },
-  { naam: 'noot-3a', links: 40, hoogte: 130, voet: 30 },
-  { naam: 'noot-7a', links: 49, hoogte: 95, voet: 34 },
-  { naam: 'blad-2', links: 60, hoogte: 75, voet: 33 },
-  { naam: 'noot-6a', links: 67, hoogte: 100, voet: 36 },
-  { naam: 'noot-1a', links: 77, hoogte: 115, voet: 26 },
-  { naam: 'bloem-2', links: 84, hoogte: 90, voet: 33 },
-  { naam: 'noot-4a', links: 92, hoogte: 125, voet: 30 },
+  { naam: 'blad-1', links: 3, hoogte: 46, voet: 33 },
+  { naam: 'noot-2a', links: 12, hoogte: 75, voet: 30 },
+  { naam: 'noot-5a', links: 21, hoogte: 65, voet: 36 },
+  { naam: 'bloem-1', links: 31, hoogte: 55, voet: 33 },
+  { naam: 'noot-3a', links: 40, hoogte: 85, voet: 30 },
+  { naam: 'noot-7a', links: 49, hoogte: 62, voet: 34 },
+  { naam: 'blad-2', links: 60, hoogte: 49, voet: 33 },
+  { naam: 'noot-6a', links: 67, hoogte: 65, voet: 36 },
+  { naam: 'noot-1a', links: 77, hoogte: 75, voet: 26 },
+  { naam: 'bloem-2', links: 84, hoogte: 59, voet: 33 },
+  { naam: 'noot-4a', links: 92, hoogte: 81, voet: 30 },
 ];
 ---
 
@@ -183,6 +185,13 @@ const bezetting: Plek[] = [
     translate: 0 -50%;
     background: currentColor;
     opacity: 0.5;
+  }
+  /* Boven 80rem tekent de stengel de vijf lijnen zélf door tot het einde
+     (StengelBaan zet deze klasse): één verflaag, dus geen zichtbare naad
+     op de landing. Zonder JavaScript blijft de klasse weg en staan deze
+     CSS-lijnen er gewoon. */
+  .slot-balk.balk-door-stengel .balklijn {
+    display: none;
   }
 
   /* Imkes tekeningen liggen lichter dan de balk zelf, zoals in de rest van
