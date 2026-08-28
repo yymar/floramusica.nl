@@ -73,6 +73,33 @@ import klarinetImke from '../assets/imke-klarinet-creme.png';
   </div>
 </section>
 
+<script>
+  // De notenbalk loopt de volle breedte door, ook door de rechtermarge waar
+  // het klarinetmotief staat. Welke ornamenten daar precies achter vallen
+  // hangt van de vensterbreedte af (de balk schaalt in viewBox-eenheden,
+  // het motief in rem), dus dat wordt gemeten: elke tekening die de
+  // tekenbox raakt gaat uit. De balklijnen zelf blijven gewoon doorlopen.
+  const motief = document.querySelector('.parallax-motief');
+  const ornamenten = document.querySelectorAll<SVGImageElement>('.partituur .orn');
+  if (motief && ornamenten.length) {
+    const pas = () => {
+      const zichtbaar = getComputedStyle(motief).display !== 'none';
+      const m = motief.getBoundingClientRect();
+      for (const o of ornamenten) {
+        const r = o.getBoundingClientRect();
+        const raakt = zichtbaar && r.right > m.left - 12 && r.left < m.right + 12;
+        o.style.opacity = raakt ? '0' : '';
+      }
+    };
+    let timer = 0;
+    addEventListener('resize', () => {
+      clearTimeout(timer);
+      timer = window.setTimeout(pas, 80);
+    });
+    pas();
+  }
+</script>
+
 <style>
   /* `clip` en niet `hidden`: hidden maakt hiervan een scrollcontainer, en dan
      resolvet de view()-timeline van de lagen hierbinnen tegen dít blok — dat

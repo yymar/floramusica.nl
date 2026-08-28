@@ -67,6 +67,7 @@ const bezetting: Plek[] = [
             bezetting.map((plek, i) => (
               <span
                 class:list={['orn', i % 2 === 1 && 'orn-rust']}
+                data-links={plek.links}
                 style={`left: ${plek.links}%; height: ${plek.hoogte}%; bottom: ${plek.voet}%;`}
               >
                 <Tekening naam={plek.naam} />
@@ -210,6 +211,24 @@ const bezetting: Plek[] = [
   @media (max-width: 47.99rem) {
     .orn-rust {
       display: none;
+    }
+  }
+
+  /* Boven 80rem (waar de stengel de balklijnen zelf tekent) faden de
+     tekeningen één voor één in zodra het front hun voet passeert — zelfde
+     gebaar als de loten op de stengel. De klasse is-af komt uit
+     StengelBaan. Zonder JavaScript bestaat balk-door-stengel niet en
+     staan ze er gewoon. */
+  .slot-balk.balk-door-stengel .orn {
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-organic);
+  }
+  .slot-balk.balk-door-stengel .orn.is-af {
+    opacity: 0.4;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .slot-balk.balk-door-stengel .orn {
+      transition: none;
     }
   }
 

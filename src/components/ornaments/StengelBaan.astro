@@ -61,6 +61,8 @@ import Tekening from './Tekening.astro';
     let totaal = 0;
     let balkY = 0;
     const sporen = document.querySelectorAll<HTMLElement>('.slot-balk .spoor');
+    const slotBalk = document.querySelector<HTMLElement>('.slot-balk');
+    const ornamenten = document.querySelectorAll<HTMLElement>('.slot-balk .orn');
     const eindstreep = document.querySelector<HTMLElement>('.eindstreep');
 
     /** Catmull-Rom door de ankers, bemonsterd; tangenten centraal verschil. */
@@ -299,11 +301,21 @@ import Tekening from './Tekening.astro';
     /** Voortzetting van hetzelfde front: de balk schrijft zichzelf pas
         nadat de stengel geland is, over de laatste ~200px fronttravel. */
     const schrijfBalk = (fractie: number) => {
-      for (const sp of sporen) {
-        // Boven en onder ruim los: Imkes noten steken boven de balk uit en
-        // mogen niet door de reveal-clip onthoofd worden.
-        sp.style.clipPath =
-          fractie < 1 ? `inset(-100% ${Math.round((1 - fractie) * 1000) / 10}% -20% 0)` : '';
+      if (slotBalk?.classList.contains('balk-door-stengel')) {
+        // De lijnen tekent de stengel zelf (zie bouw); de tekeningen faden
+        // hier één voor één in zodra het front hun voet passeert — geen
+        // clip-wipe, dus ook geen half aangesneden noten.
+        for (const sp of sporen) sp.style.clipPath = '';
+        for (const o of ornamenten) {
+          o.classList.toggle('is-af', fractie >= Number(o.dataset.links) / 100);
+        }
+      } else {
+        for (const sp of sporen) {
+          // Boven en onder ruim los: Imkes noten steken boven de balk uit
+          // en mogen niet door de reveal-clip onthoofd worden.
+          sp.style.clipPath =
+            fractie < 1 ? `inset(-100% ${Math.round((1 - fractie) * 1000) / 10}% -20% 0)` : '';
+        }
       }
       if (eindstreep) {
         eindstreep.style.opacity =
