@@ -12,10 +12,12 @@
  * op licht papier staat.
  */
 import Sectie from '../components/Sectie.astro';
-import Motief from '../components/ornaments/Motief.astro';
 import Sprig from '../components/ornaments/Sprig.astro';
 import { instrumenten, doelgroepen } from '../data/instrumenten';
 import { lessen } from '../data/copy';
+// Zelfde handgetekende klarinet als op de omslag (Imke, Procreate):
+// crème lijnen, dus op het bordeaux vlak als <img> met lage dekking.
+import klarinetImke from '../assets/imke-klarinet-creme.png';
 
 const hoofd = instrumenten.find((i) => i.hoofdinstrument);
 const overige = instrumenten.filter((i) => !i.hoofdinstrument);
@@ -27,12 +29,12 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
   {
     hoofd && (
       <article class="golf-plaat">
-        {/* De klarinet — de instrumentlaag uit het sier-motief — staat als
-            hoge accentkolom tegen de rechterkant van het vlak en loopt aan
-            de bovenkant het vlak uit; de clip van het vlak maakt daar een
-            bewuste snede van. Gecomponeerd op het blok, niet erbovenop. */}
+        {/* De klarinet — Imkes tekening, dezelfde als op de omslag — staat
+            als hoge accentkolom tegen de rechterkant van het vlak en loopt
+            aan de bovenkant het vlak uit; de clip van het vlak maakt daar
+            een bewuste snede van. Gecomponeerd op het blok, niet erbovenop. */}
         <div class="golf-klarinet" aria-hidden="true">
-          <Motief name="klarinet-instrument" class="w-full" />
+          <img src={klarinetImke.src} alt="" width={klarinetImke.width} height={klarinetImke.height} loading="lazy" />
         </div>
         <h3 class="font-display text-subkop font-semibold text-paper">{hoofd.naam}</h3>
         <p class="mt-2 max-w-[52ch] text-paper-dim">{hoofd.omschrijving}</p>
@@ -78,27 +80,25 @@ const overige = instrumenten.filter((i) => !i.hoofdinstrument);
 <style>
   /* De klarinet staat op de bodem van het vlak en is hoger dan het vlak
      zelf, dus hij loopt er aan de bovenkant uit; `overflow: clip` op het
-     vlak maakt daar een bewuste snede van. De viewBox heeft links en
-     rechts lucht om het instrument heen (het instrument zit op 33–66% van
-     de breedte), vandaar de negatieve rechteroffset: die zet het zichtbare
-     instrument tegen de rand, niet zijn lege kader. */
+     vlak maakt daar een bewuste snede van. De tekening is strak op de
+     inhoud bijgesneden, dus een kleine positieve inzet zet het instrument
+     tegen de rand. */
   .golf-plaat :global(.golf-klarinet) {
     position: absolute;
     bottom: 0;
-    right: -2.25rem;
+    right: 1.25rem;
     height: calc(100% + 3.5rem);
-    aspect-ratio: 80 / 112;
+    aspect-ratio: 323 / 900;
     opacity: 0.2;
-    color: var(--color-paper);
     pointer-events: none;
   }
-  .golf-plaat :global(.golf-klarinet svg) {
+  .golf-plaat :global(.golf-klarinet img) {
     width: 100%;
     height: 100%;
   }
   @media (min-width: 48rem) {
     .golf-plaat :global(.golf-klarinet) {
-      right: -1rem;
+      right: 2.5rem;
       height: calc(100% + 4.5rem);
       opacity: 0.22;
     }
