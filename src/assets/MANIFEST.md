@@ -14,7 +14,7 @@ bijgesneden op inhoud en verkleind.
 
 | bestand | maat (px) | gebruik |
 | --- | --- | --- |
-| `assets/imke-klarinet-creme.png` | 323 x 900 | omslagmotief in `Hero.astro` en het vlak in `Lessen.astro` (crème op bordeaux) |
+| `assets/imke-klarinet-creme.png` | 318 x 900 | omslagmotief in `Hero.astro` en het vlak in `Lessen.astro` (crème op bordeaux) |
 | `assets/imke-sleutel-bordeaux.png` | 327 x 700 | solsleutel op de notenbalk in `PartituurRegel.astro` (toon-op-toon) |
 
 ### Ornamentset `assets/imke/` (via `scripts/imke-assets.mjs`)
