@@ -4,7 +4,7 @@ Zelfstandige context voor ontwerpwerk (Claude Design, design system, nieuwe asse
 
 ## Wat dit is
 
-One-pager voor de lespraktijk van Christa ten Berg, muziekdocent in Oss (hoofdinstrument klarinet; ook basklarinet, saxofoon, piano, blokfluit). Publiek: ouders die les zoeken voor hun kind, en volwassen (her)beginners. Doel: aanmeldingen via het contactformulier én een professioneel visitekaartje voor doorverwijzers. Er is ruim plek voor nieuwe leerlingen; de site mag actief uitnodigen. Live op floramusica.nl (GitHub Pages, Astro 7 + Tailwind 4, statisch, geen tracking).
+One-pager voor de lespraktijk van Christa ten Berg, muziekdocent in Oss (hoofdinstrument klarinet; ook basklarinet en piano, plus lezingen over klassieke muziek en dirigeren/coachen). Publiek: ouders die les zoeken voor hun kind, en volwassen (her)beginners. Doel: aanmeldingen via het contactformulier én een professioneel visitekaartje voor doorverwijzers. Er is ruim plek voor nieuwe leerlingen; de site mag actief uitnodigen. Live op floramusica.nl (GitHub Pages, Astro 7 + Tailwind 4, statisch, geen tracking).
 
 ## Centraal concept: de partituurregel
 

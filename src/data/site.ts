@@ -34,7 +34,7 @@ export const site: SiteGegevens = {
   omschrijving:
     'Muziekles in Oss en omgeving: klarinet, basklarinet en piano. Voor kinderen, jongeren en volwassenen, in de lespraktijk aan de Floraliastraat in Oss.',
   omschrijvingEn:
-    'Music lessons in Oss and the surrounding area: clarinet, bass clarinet and piano. For children, teenagers and adults, at the teaching practice on the Floraliastraat in Oss.',
+    'Music lessons in Oss and the surrounding area: clarinet, bass clarinet and piano. For children, teenagers and adults, at the teaching practice on Floraliastraat in Oss.',
   url: 'https://floramusica.nl',
   regio: 'Oss en omgeving',
   adres: {

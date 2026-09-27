@@ -10,7 +10,7 @@ De pagina is opgebouwd als een concertprogramma. De hero is de omslag: een diep 
 
 ## De bewuste esthetische keuze: de partituurregel
 
-De pagina is één partituurregel. Hij opent op de omslag met een toon-op-toon notenbalk die van rand tot rand loopt, met een echte solsleutel aan het begin (ook op mobiel, iets compacter, zodat de parallax daar voelbaar is), en hij sluit boven de footer af met dezelfde notenbalk mét eindstreep (dunne plus dikke streep, muzikaal correct). De sleutel is de G-sleutel uit Bravura, het professionele notatiefont van Steinberg (SIL Open Font License), als vectorpad overgenomen in `src/components/PartituurRegel.astro` zodat er geen notatiefont geladen wordt. Tussen opening en slot is de pagina gedisciplineerd stil: het marge-grid en het bordeaux vlak doen het werk. Geen verdere *notatie*-ornamenten strooien; als systeem is de partituurregel opening en slot, niets ertussen. Wat er sinds de assetset wél aan decoratie bij is gekomen, en met welke terughoudendheid, staat hieronder onder Ornamenten.
+De pagina is één partituurregel. Hij opent op de omslag met een toon-op-toon notenbalk die van rand tot rand loopt, met een echte solsleutel aan het begin (ook op mobiel, iets compacter, zodat de parallax daar voelbaar is), en hij sluit boven de footer af met dezelfde notenbalk mét eindstreep (dunne plus dikke streep, muzikaal correct). De sleutel is de G-sleutel uit Bravura, het professionele notatiefont van Steinberg (SIL Open Font License), als vectorpad overgenomen in `src/components/PartituurRegel.astro` zodat er geen notatiefont geladen wordt. Achter de titel is de balk een stille maat: de lijnen en de sleutel lopen door, maar noten en bloemen die de titelkolom raken staan uit (gemeten in `Hero.astro`), zodat de naam rust heeft. Tussen opening en slot is de pagina gedisciplineerd stil: het marge-grid en het bordeaux vlak doen het werk. Geen verdere *notatie*-ornamenten strooien; als systeem is de partituurregel opening en slot, niets ertussen. Wat er sinds de assetset wél aan decoratie bij is gekomen, en met welke terughoudendheid, staat hieronder onder Ornamenten.
 
 ## Ornamenten
 
@@ -58,31 +58,31 @@ Bordeaux is de signatuurkleur (wens van de eigenaar) en de enige accentkleur op 
 
 | Token | Hex | Rol |
 |---|---|---|
-| `--paper` | `#FAF6F3` | achtergrond, warm wit |
-| `--paper-deep` | `#F1E9E4` | rustige sectiewissel |
+| `--paper` | `#F8F2E3` | achtergrond, warm wit |
+| `--paper-deep` | `#F0E6D0` | rustige sectiewissel |
 | `--ink` | `#231A1C` | tekst, warm donker (geen zuiver zwart) |
 | `--ink-soft` | `#6B5A5D` | bijschriften, secundaire tekst |
 | `--bordeaux` | `#7B1E2B` | links, knoppen, labels, accent |
 | `--bordeaux-deep` | `#4A1219` | hero-vlak, header, hover |
-| `--paper-dim` | `#E8D8D5` | secundaire tekst op bordeaux |
-| `--rule` | `#DCCFC9` | decoratieve hairlines |
+| `--paper-dim` | `#EADDC9` | secundaire tekst op bordeaux |
+| `--rule` | `#DBCEB6` | decoratieve hairlines |
 | `--border-strong` | `#9A8180` | randen van formuliervelden |
 
 ### Contrastratio's (WCAG, berekend)
 
 | Paar | Ratio | Eis | |
 |---|---|---|---|
-| `ink` op `paper` | 15,81 : 1 | 4,5 : 1 | ✓ |
-| `ink` op `paper-deep` | 14,17 : 1 | 4,5 : 1 | ✓ |
-| `ink-soft` op `paper` | 6,02 : 1 | 4,5 : 1 | ✓ |
-| `ink-soft` op `paper-deep` | 5,40 : 1 | 4,5 : 1 | ✓ |
-| `bordeaux` op `paper` (links, labels) | 9,47 : 1 | 4,5 : 1 | ✓ |
-| `bordeaux` op `paper-deep` | 8,49 : 1 | 4,5 : 1 | ✓ |
-| `paper` op `bordeaux-deep` (hero-tekst) | 14,04 : 1 | 4,5 : 1 | ✓ |
-| `paper-dim` op `bordeaux-deep` (hero-subtekst) | 10,93 : 1 | 4,5 : 1 | ✓ |
-| `paper` op `bordeaux` (knoptekst) | 9,47 : 1 | 4,5 : 1 | ✓ |
-| `bordeaux-deep` op `paper` (hero-knoptekst) | 14,04 : 1 | 4,5 : 1 | ✓ |
-| `border-strong` op `paper` (veldranden) | 3,35 : 1 | 3 : 1 (niet-tekst) | ✓ |
+| `ink` op `paper` | 15,21 : 1 | 4,5 : 1 | ✓ |
+| `ink` op `paper-deep` | 13,70 : 1 | 4,5 : 1 | ✓ |
+| `ink-soft` op `paper` | 5,79 : 1 | 4,5 : 1 | ✓ |
+| `ink-soft` op `paper-deep` | 5,22 : 1 | 4,5 : 1 | ✓ |
+| `bordeaux` op `paper` (links, labels) | 9,11 : 1 | 4,5 : 1 | ✓ |
+| `bordeaux` op `paper-deep` | 8,21 : 1 | 4,5 : 1 | ✓ |
+| `paper` op `bordeaux-deep` (hero-tekst) | 13,51 : 1 | 4,5 : 1 | ✓ |
+| `paper-dim` op `bordeaux-deep` (hero-subtekst) | 11,27 : 1 | 4,5 : 1 | ✓ |
+| `paper` op `bordeaux` (knoptekst) | 9,11 : 1 | 4,5 : 1 | ✓ |
+| `bordeaux-deep` op `paper` (hero-knoptekst) | 13,51 : 1 | 4,5 : 1 | ✓ |
+| `border-strong` op `paper` (veldranden) | 3,23 : 1 | 3 : 1 (niet-tekst) | ✓ |
 
 Narekenen: WCAG 2.x relatieve-luminantieformule; zie bijvoorbeeld webaim.org/resources/contrastchecker.
 

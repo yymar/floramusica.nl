@@ -68,8 +68,14 @@ const delen = woorden.length > 4 ? [...woorden.slice(0, 3), woorden.slice(3).joi
   .labelkolom {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
     gap: 0.75rem;
+  }
+  /* In de marge lijnt het label rechts uit tegen de kop; op mobiel staat
+     het erboven en lijnt het links, net als de kop. */
+  @media (min-width: 48rem) {
+    .labelkolom {
+      justify-content: flex-end;
+    }
   }
   /* Het label als programma-opschrift: klein kapitaal met ruime spatiëring,
      zoals een boekje zijn rubrieken zet. Draagt minder gewicht dan eerst

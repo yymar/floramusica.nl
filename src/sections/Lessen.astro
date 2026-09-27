@@ -73,11 +73,11 @@ const overige = [...alleInstrumenten.filter((i) => !i.hoofdinstrument), ...aanbo
       <Tekening naam="noot-3" class="kop-takje opacity-55" />
     </h3>
     <p class="mt-2 max-w-[62ch]">{lessen.doelgroepTekst}</p>
-    <p class="mt-3 text-klein text-ink-soft" aria-label="Doelgroepen">
+    <p class="mt-3 text-klein text-ink-soft">
       {alleDoelgroepen.map((groep, i) => (
         <>
           <span class="capitalize">{groep}</span>
-          {i < alleDoelgroepen.length - 1 && <span aria-hidden="true"> · </span>}
+          {i < alleDoelgroepen.length - 1 && <>{' '}<span aria-hidden="true">·</span>{' '}</>}
         </>
       ))}
     </p>
@@ -98,7 +98,8 @@ const overige = [...alleInstrumenten.filter((i) => !i.hoofdinstrument), ...aanbo
     right: 1.25rem;
     height: calc(100% + 2.5rem);
     aspect-ratio: 323 / 900;
-    opacity: 0.2;
+    /* Op mobiel loopt de tekening door de tekst heen; daar alleen een zweem. */
+    opacity: 0.09;
     pointer-events: none;
   }
   .golf-plaat :global(.golf-klarinet img) {
@@ -160,14 +161,17 @@ const overige = [...alleInstrumenten.filter((i) => !i.hoofdinstrument), ...aanbo
     }
   }
 
+  /* De teksten zijn ongelijk lang (een anekdote naast een korte schets),
+     dus geen grid met rijen maar krantenkolommen: geen gaten onder de
+     kortere items. Twee kolommen pas vanaf 64rem; op tablet werden ze te
+     smal voor lopende tekst. */
   .instr-grid {
     margin-top: 2rem;
-    display: grid;
-    column-gap: 2.5rem;
   }
-  @media (min-width: 40rem) {
+  @media (min-width: 64rem) {
     .instr-grid {
-      grid-template-columns: 1fr 1fr;
+      columns: 2;
+      column-gap: 2.5rem;
     }
   }
   /* De hairline is een pseudo-element en geen border: alleen zo kan hij van
@@ -175,6 +179,7 @@ const overige = [...alleInstrumenten.filter((i) => !i.hoofdinstrument), ...aanbo
   .instr {
     position: relative;
     padding-block: 1rem;
+    break-inside: avoid;
   }
   .instr::before {
     content: '';
@@ -197,6 +202,14 @@ const overige = [...alleInstrumenten.filter((i) => !i.hoofdinstrument), ...aanbo
         animation-fill-mode: both;
         animation-timeline: view();
         animation-range: entry 10% entry 70%;
+      }
+      /* Op telefoons is het vlak hoger dan een derde van het scherm; wie er
+         via het menu naartoe springt, landt anders op een half open vlak
+         met afgesneden tekst. Daar is het al open voordat je het leest. */
+      @media (max-width: 47.99rem) {
+        .golf-plaat {
+          animation-range: entry 0% entry 30%;
+        }
       }
       .instr::before {
         animation-name: lijn-groei;

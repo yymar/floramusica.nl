@@ -9,6 +9,8 @@ interface Props {
   class?: string;
 }
 const { href, class: className } = Astro.props;
+import { copy } from '../data/copy';
+const { basis } = copy(Astro.currentLocale);
 ---
 
 <a
@@ -32,5 +34,5 @@ const { href, class: className } = Astro.props;
       stroke-linejoin="round"
     />
   </svg>
-  <span class="sr-only">(opent in nieuw tabblad)</span>
+  <span class="sr-only">({basis.nieuwTabblad})</span>
 </a>

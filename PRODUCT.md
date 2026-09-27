@@ -30,15 +30,14 @@ Les voor alle niveaus en leeftijden, in eigen tempo: van jonge beginner tot volw
 - Alle content in getypeerde datafiles onder `src/data/`; de eigenaar en haar zoon moeten teksten kunnen bijwerken zonder de layout te raken.
 - Geen cookies, geen tracking, geen externe requests (fonts zelf-gehost); er is bewust geen cookiebanner.
 - Harde regel: niets verzinnen. Geen jaartallen, opleidingen, reviews, leerlingaantallen of prijzen die niet zijn aangeleverd; ontbrekende feiten staan als TODO in CONTENT-TODO.md.
-- Nog niet aangeleverd (open): biografie, tarieven en lesduur, e-mail, telefoon, KvK-nummer, postcode, foto's, definitief logo.
+- Nog niet aangeleverd (open): lesduur/info over proeflessen, telefoon, KvK-nummer, postcode. Tarieven komen bewust niet op de site (keuze van de eigenaar).
 
 ## Brand Commitments
 
 - Naam: Muziekpraktijk Flora Musica; domein floramusica.nl. Docent: Christa ten Berg.
 - Bordeauxrood is de signatuurkleur (uitdrukkelijke wens van de eigenaar); geen paars- of roze-verschuiving.
-- Toon: warm, persoonlijk, vakkundig, rustig. Nederlands, je-vorm, geen superlatieven, geen uitroeptekens.
+- Toon: warm, persoonlijk, vakkundig, rustig. Nederlands, je-vorm. De teksten over de praktijk, de biografie en het aanbod zijn door Christa zelf geschreven: alleen spelling en zinsloop corrigeren, haar stem (inclusief '&' en uitroeptekens) blijft.
 - "Flora" mag de richting subtiel voeden (groei, bloei, de toepasselijke Floraliastraat), nooit als bloemenbehang.
-- Logo en favicon zijn tijdelijke placeholders; definitief beeldmerk volgt in fase 2.
 
 ## Evidence on Hand
 

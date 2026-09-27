@@ -51,7 +51,6 @@
   --dur-m: 240ms;  /* onderstreping, pijl */
   --dur-l: 350ms;  /* beeld-scale in galerijcellen */
   --schuif-m: 1rem;      /* reveal-afstand tekstblokken en koppen */
-  --drift-galerij: 1.5rem;
   /* Overhang van het portret over de omslag/papier-grens. Onder 48rem is het
      scherm smaller en het portret kleiner, dus daar hangt het minder ver. */
   --overlap-hero: 2.5rem;
@@ -74,6 +73,10 @@
 
 html {
   scroll-behavior: smooth;
+  /* Ankers én focus komen onder de sticky header uit (64px + lucht). Op
+     html en niet als scroll-margin op de secties: zo geldt het ook voor een
+     formulierveld dat met Tab onder de header zou schuiven. */
+  scroll-padding-top: 5.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -112,7 +115,7 @@ h1, h2, h3 {
    het font om gekozen is — op de tekst-snede leest dezelfde kop als een
    generieke vette sans. Gewicht net onder semibold+ en een bescheiden
    negatieve spatiëring; strakker kamt de display-snede dicht.
-   Vereist de standard-subset van het font (Basis.astro): de wght-subset
+   Vereist de opsz-subset van het font (Basis.astro): de wght-subset
    heeft de opsz-as niet aan boord. */
 .kop-display {
   font-variation-settings: 'opsz' 96;
@@ -121,6 +124,10 @@ h1, h2, h3 {
 }
 p, figcaption, dd, li {
   text-wrap: pretty;
+  /* Nederlands heeft lange samenstellingen (klarinettechnische,
+     sectierepetities); zonder afbreken rafelt een smalle kolom zichtbaar.
+     Volgt het lang-attribuut, dus /en/ breekt Engels af. */
+  hyphens: auto;
 }
 
 /* Het thema is bewust alleen licht; dit stuurt ook native UI (scrollbars,
@@ -142,11 +149,6 @@ p, figcaption, dd, li {
 }
 [data-vlak='bordeaux'] :focus-visible {
   outline-color: var(--color-paper);
-}
-
-/* Ankersecties komen onder de sticky header uit */
-section[id] {
-  scroll-margin-top: 5.5rem;
 }
 
 /* Alles wat getekend is, leeft. De ornamenten in het binnenwerk — loten

@@ -100,7 +100,7 @@ const aanbodNl: Aanbod[] = [
     naam: 'Dirigeren en coachen',
     omschrijving: [
       '25 jaar lang heeft Christa met veel enthousiasme haar eigen klarinetensemble gedirigeerd, tot corona roet in het eten gooide. (Plannen voor een nieuw te vormen ensemble zijn in de maak, houd deze site in de gaten.)',
-      'Ook in het coachen van sectierepetities van harmonieorkesten heeft zij veel ervaring. Je kunt haar hier altijd voor benaderen. Met de klarinetsectie van jullie orkest gaat ze de door jullie te spelen stukken instuderen. Samen met jullie gaat ze werken aan specifiek klarinettechnische uitdagingen. Denk aan houding, ademhaling, toonvorming, techniek, muzikale expressie, articulatie, samenspel en intonatie. Hiermee komen alle facetten van het klarinetspel weer aan bod, waardoor je je individuele spel en het groepsspel kunt verbeteren en verder kunt groeien. Alles vanuit positieve feedback, en met plezier in het muziek maken voorop!',
+      'Ook in het coachen van sectierepetities van harmonieorkesten heeft zij veel ervaring. Je kunt haar hier altijd voor benaderen. Met de klarinetsectie van jullie orkest gaat ze de door jullie te spelen stukken instuderen. Samen met jullie gaat ze werken aan specifiek klarinettechnische uitdagingen. Denk aan houding, ademhaling, toonvorming, techniek, muzikale expressie, articulatie, samenspel en intonatie. Hiermee komen alle facetten van het klarinetspel weer aan bod, waardoor je je individuele spel en het groepsspel kunt verbeteren en verder kunt groeien. Alles vanuit positieve feedback, en met plezier in het muziekmaken voorop!',
     ],
   },
 ];

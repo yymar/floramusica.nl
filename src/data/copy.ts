@@ -155,6 +155,7 @@ const nl = {
     /** Opschrift op de taalknop: de taal waar je naartoe schakelt. */
     andereTaalKnop: 'EN',
     andereTaalLabel: 'Switch to English',
+    nieuwTabblad: 'opent in nieuw tabblad',
   },
 };
 
@@ -203,7 +204,7 @@ const en: typeof nl = {
     kop: 'Where to find her',
     praktijkKop: 'The teaching practice',
     praktijkTekst:
-      'Most lessons take place at her home practice on the Floraliastraat in Oss — a street name that could hardly suit this practice better. This is where she takes on students herself; feel free to get in touch.',
+      'Most lessons take place at her home practice on Floraliastraat in Oss — a street name that could hardly suit this practice better. This is where she takes on students herself; feel free to get in touch.',
     kaartLabel: 'View on the map',
     organisatiesKop: 'She also works for',
     organisatiesTekst:
@@ -299,12 +300,13 @@ const en: typeof nl = {
 
   basis: {
     skiplink: 'Skip to content',
-    titelRest: 'Music lessons in Oss and the surrounding area',
+    titelRest: 'Music lessons in and around Oss',
     ogAlt: 'Muziekpraktijk Flora Musica, music lessons in Oss and the surrounding area',
     navLabel: 'Main navigation',
     menu: 'Menu',
     andereTaalKnop: 'NL',
     andereTaalLabel: 'Wissel naar Nederlands',
+    nieuwTabblad: 'opens in a new tab',
   },
 };
 

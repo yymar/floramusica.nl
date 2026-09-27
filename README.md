@@ -30,12 +30,12 @@ Alle bewerkbare inhoud staat in `src/data/`; de layout hoef je daarvoor niet aan
 |---|---|
 | `src/data/site.ts` | naam, adres, e-mail, telefoon, KvK, kaartlink |
 | `src/data/copy.ts` | alle lopende teksten per sectie |
-| `src/data/instrumenten.ts` | instrumenten en doelgroepen |
+| `src/data/instrumenten.ts` | instrumenten, overig aanbod (lezingen, dirigeren) en doelgroepen |
 | `src/data/organisaties.ts` | organisaties waarvoor gewerkt wordt |
-| `src/data/tarieven.ts` | lesvormen, tarieven ("op aanvraag" zolang `bekend: false`) |
+| `src/data/tarieven.ts` | lesvormen; bedragen komen bewust niet op de site |
 | `src/data/navigatie.ts` | menu-items |
 
-Openstaande punten staan in `CONTENT-TODO.md`. De ontwerpkeuzes (kleuren, contrast, typografie) staan in `DESIGN.md`. Logo en favicon zijn placeholders: vervang `src/components/Wordmark.astro` en `public/favicon.svg`.
+Openstaande punten staan in `CONTENT-TODO.md`. De ontwerpkeuzes (kleuren, contrast, typografie) staan in `DESIGN.md`.
 
 ## Foto's en ornamenten
 

@@ -46,6 +46,8 @@ await mkdir(DOEL, { recursive: true });
 for (const [naam, bron] of Object.entries(SELECTIE)) {
   const uit = path.join(DOEL, `${naam}.png`);
   const beeld = sharp(path.join(BRON, bron)).trim().resize(MAX, MAX, { fit: 'inside', withoutEnlargement: true });
-  const info = await beeld.png({ compressionLevel: 9 }).toFile(uit);
+  // Palette-PNG: lijntekeningen in één kleur met alfa; visueel gelijk aan
+  // truecolor, maar ongeveer een kwart van de bytes.
+  const info = await beeld.png({ palette: true, quality: 90, compressionLevel: 9, effort: 10 }).toFile(uit);
   console.log(`${naam}.png  ${info.width}x${info.height}  ${(info.size / 1024).toFixed(0)}kB`);
 }

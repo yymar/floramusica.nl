@@ -20,7 +20,7 @@ export const organisaties: Organisatie[] = [
   {
     naam: "Muziekvereniging EMM",
     plaats: "Boekel",
-    url: "https://www.emmcapelle.nl/",
+    url: "https://www.emm-boekel.nl/",
   },
   {
     naam: "Muziekvereniging Zeelandia",

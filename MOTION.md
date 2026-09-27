@@ -21,9 +21,7 @@ De pagina is één partituurregel, en de scroll is de uitvoering: een doorlopend
   --dur-l: 350ms;  /* beeld-scale in galerijcellen */
   --schuif-s: 0.75rem; /* reveal-afstand galerijcellen */
   --schuif-m: 1rem;    /* reveal-afstand tekstblokken en koppen */
-  --schuif-l: 1.5rem;  /* galerij-drift amplitude */
   --overlap-hero: 4rem; /* portret-overhang over de hero/Over-grens; 2.5rem onder 48rem */
-  --drift-galerij: 1.5rem;  /* micro-parallax in de spread */
   --z-achter: 0; --z-inhoud: 1; --z-accent: 2; /* dieptelagen; header blijft z-40 */
 }
 ```
@@ -59,9 +57,9 @@ Scroll-gekoppelde animaties zijn `linear` zonder duur: positie in de `animation-
 
 ### Beelden (galerij)
 - Cel-reveal gerepareerd: `opacity 0→1` (was 0.25) + `translateY 0.75rem`, ranges `entry 0–40%`, `nth-child(3n+2)` `8–48%`, `nth-child(3n)` `16–56%`.
-- Drift (B): binnen elke cel krijgt de link `translateY ±1.5rem` over `cover 0%–100%` — oneven op, even neer; de spread "bladert". Alleen ≥48rem.
+- Geen drift meer: de micro-parallax binnen de cellen werd door `overflow: hidden` op `.cel` nooit zichtbaar (val #2) en is geschrapt.
 - Hover: beeld `scale(1.02)`, `--dur-l` `--ease-organic`; bijschrift-overlay fade 200ms (bestaand).
-- Reduced: reveal en drift uit, hover-scale uit.
+- Reduced: reveal uit, hover-scale uit.
 
 ### Lessen — de bordeaux-golf
 - Het klarinet-artikel is een bordeaux-deep vlak (`--paper`-tekst, contrast 14:1) dat rechts uit de container bloedt: `margin-right: calc(50% − 50vw)`.
@@ -93,7 +91,7 @@ Scroll-gekoppelde animaties zijn `linear` zonder duur: positie in de `animation-
 |---|---|---|
 | Hero | 2 lagen, alles lag achter | 3 lagen (achter/midden/voor), portret leidt en hangt 4rem over de sectiegrens — de omslag krijgt fysieke diepte |
 | Over | verscheen instant | kop bouwt per woord, tekst en foto volgen gestaggerd; portret-overhang verbindt hero en Over |
-| Beelden | reveal vanaf 0.25 (leek laadfout) | echte reveal 0→1 + tegengestelde drift per cel: de spread bladert i.p.v. staat |
+| Beelden | reveal vanaf 0.25 (leek laadfout) | echte reveal 0→1 met een kleine stagger per cel |
 | Lessen | klarinet even passief als de rest | klarinet opent als bordeaux crescendo-vlak dat de paginarand raakt; de rest volgt op groeiende hairlines |
 | Locatie | statische lijst | lijst bouwt zich op hairline voor hairline, zelfde taal als Lessen |
 | Praktisch | stil | bewust bijna stil gehouden — rustpunt is nu een keuze i.p.v. een gat |
@@ -150,9 +148,8 @@ na de fix loopt hij tot 56px, gelijk aan de site.
   decoratieve assetset (`motif-klarinet-bloei`) lag er al toen dit gebouwd werd
   en ligt als achterste laag achter de notenbalk, met de grootste lag (4,5rem
   desktop, 6,5rem mobiel). Deze spec is van vóór die assetset.
-- **`--schuif-s` en `--schuif-l` zijn geen tokens geworden.** Beide waarden
-  komen maar op één plek voor en staan daar direct in de keyframe.
-  `--drift-galerij` is er wél, want die wordt in twee keyframes gespiegeld.
+- **`--schuif-s` is geen token geworden.** De waarde komt maar op één plek
+  voor en staat daar direct in de keyframe.
 - **De contactvelden staan in twee groepen, niet drie.** De spec noemt
   `r2`/`r2`/`r3` en beschrijft dat zelf al als "twee zichtbare stappen"; de
   code volgt die twee stappen (NAW op `r2`, de rest op `r3`).

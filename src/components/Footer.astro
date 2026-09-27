@@ -88,7 +88,8 @@ const bezetting: Plek[] = [
     <div class="flex flex-col gap-8 sm:flex-row sm:justify-between">
       <div class="text-[1.25rem]">
         <Wordmark />
-        <p class="mt-3 max-w-[36ch] text-klein text-ink-soft">
+        {/* text-wrap: wrap — met pretty zet Safari dit korte adres op drie regels. */}
+        <p class="mt-3 max-w-[36ch] text-klein text-ink-soft" style="text-wrap: wrap">
           {site.adres.straat}, {site.adres.plaats}<br />
           {basis.titelRest}
         </p>
@@ -126,9 +127,7 @@ const bezetting: Plek[] = [
       }
     </div>
     <p class="mt-10 text-klein text-ink-soft">
-      {footer.colofon}
-      <span aria-hidden="true"> · </span>
-      {footer.creditsLabel}{' '}
+      {footer.colofon}{' '}<span aria-hidden="true">·</span>{' '}{footer.creditsLabel}{' '}
       <a
         href={footer.creditsUrl}
         rel="external noopener"

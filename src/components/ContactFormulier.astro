@@ -134,7 +134,9 @@ const { labels, fouten, status, concept } = formulier;
   </button>
 
   {/* Succes- en foutmeldingen voor screenreaders en zichtbaar */}
-  <p id="formulier-status" role="status" aria-live="polite" class="mt-4 font-bold empty:hidden"></p>
+  {/* empty:mt-0 en niet empty:hidden: een verborgen live region wordt door
+      sommige schermlezers niet meer gevolgd. */}
+  <p id="formulier-status" role="status" aria-live="polite" class="mt-4 font-bold empty:mt-0"></p>
 </form>
 
 
@@ -176,11 +178,12 @@ const { labels, fouten, status, concept } = formulier;
   .veld:focus {
     outline: none;
     border-color: var(--color-bordeaux);
-    box-shadow: 0 1px 0 0 var(--color-bordeaux);
+    box-shadow: 0 2px 0 0 var(--color-bordeaux);
   }
+  /* Een fout kleurt alleen de regel; dikker wordt hij pas bij focus, zodat
+     je in een rij foute velden altijd ziet waar je staat. */
   .veld[aria-invalid='true'] {
     border-color: var(--color-bordeaux);
-    box-shadow: 0 1px 0 0 var(--color-bordeaux);
   }
 
   .veld-select {
@@ -304,6 +307,10 @@ const { labels, fouten, status, concept } = formulier;
     document.getElementById('concept-wissen')?.addEventListener('click', () => {
       wisConcept();
       formulier.reset();
+      aangeraakt.clear();
+      geprobeerd = false;
+      // De knop verdwijnt; zet de focus op het eerste veld in plaats van nergens.
+      (formulier.elements.namedItem('naam') as HTMLInputElement | null)?.focus();
     });
     zetConceptTerug();
 
@@ -346,12 +353,20 @@ const { labels, fouten, status, concept } = formulier;
 
     const teValiderenVelden = ['naam', 'email', 'voor_wie', 'bericht'];
 
-    // Meldingen verschijnen pas na blur, niet tijdens het typen.
+    // Meldingen verschijnen pas na blur, niet tijdens het typen — en alleen
+    // voor een veld waar al iets in is gebeurd, of na een eerste
+    // verzendpoging. Wie alleen door de velden tabt, krijgt geen rood.
+    const aangeraakt = new Set<string>();
+    let geprobeerd = false;
     for (const naam of teValiderenVelden) {
       const veld = formulier.elements.namedItem(naam);
       const elementen = veld instanceof RadioNodeList ? Array.from(veld) : veld ? [veld] : [];
       for (const element of elementen) {
-        (element as HTMLElement).addEventListener('blur', () => toonFout(naam, foutVoorVeld(naam)));
+        element.addEventListener('input', () => aangeraakt.add(naam));
+        element.addEventListener('change', () => aangeraakt.add(naam));
+        (element as HTMLElement).addEventListener('blur', () => {
+          if (geprobeerd || aangeraakt.has(naam)) toonFout(naam, foutVoorVeld(naam));
+        });
       }
     }
 
@@ -378,6 +393,7 @@ const { labels, fouten, status, concept } = formulier;
       statusRegel.textContent = '';
       statusRegel.classList.remove('text-bordeaux');
 
+      geprobeerd = true;
       if (!valideerAlles()) return;
 
       // Spamcheck: een mens heeft meer dan een paar seconden nodig.
@@ -411,6 +427,8 @@ const { labels, fouten, status, concept } = formulier;
           statusRegel.textContent = statusTeksten.succes;
           formulier.reset();
           wisConcept();
+          aangeraakt.clear();
+          geprobeerd = false;
         } else {
           throw new Error(resultaat.message ?? 'Onbekende fout');
         }
@@ -421,6 +439,8 @@ const { labels, fouten, status, concept } = formulier;
       } finally {
         verstuurKnop.disabled = false;
         verstuurKnop.textContent = knopTekst;
+        // Een uitgeschakelde knop verliest de focus; geef hem terug.
+        verstuurKnop.focus();
       }
     });
   }

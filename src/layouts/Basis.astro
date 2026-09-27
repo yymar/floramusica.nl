@@ -3,9 +3,10 @@
  * Basislayout: fonts, meta, SEO, skip-link, header en footer.
  * Alleen de latin-subsets van de fonts worden geladen.
  */
-// De standard-subset: alle assen (wght, wdth én opsz) — de sectiekoppen
-// gebruiken de optische as, zie .kop-display in global.css.
-import '@fontsource-variable/bricolage-grotesque/standard.css';
+// De opsz-subset (wght + opsz): de sectiekoppen gebruiken de optische as,
+// zie .kop-display in global.css. De wdth-as wordt nergens gebruikt, dus de
+// zwaardere standard-subset is niet nodig.
+import '@fontsource-variable/bricolage-grotesque/opsz.css';
 import '@fontsource/atkinson-hyperlegible-next/latin-400.css';
 import '@fontsource/atkinson-hyperlegible-next/latin-400-italic.css';
 import '@fontsource/atkinson-hyperlegible-next/latin-700.css';
@@ -44,20 +45,30 @@ const enPad = nlPad === '/' ? '/en/' : `/en${nlPad}`;
     <meta name="color-scheme" content="light" />
     <title>{volledigeTitel}</title>
     <meta name="description" content={omschrijving} />
-    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <link rel="alternate" hreflang="nl" href={new URL(nlPad, Astro.site)} />
-    <link rel="alternate" hreflang="en" href={new URL(enPad, Astro.site)} />
-    <link rel="alternate" hreflang="x-default" href={new URL(nlPad, Astro.site)} />
-    {noindex && <meta name="robots" content="noindex" />}
+    {/* Canonical en taalalternatieven alleen voor echte pagina's: de 404
+        wordt door GitHub Pages op elk onbekend pad geserveerd, en een
+        /en/404/ bestaat niet. */}
+    {
+      noindex ? (
+        <meta name="robots" content="noindex" />
+      ) : (
+        <>
+          <link rel="canonical" href={canonical} />
+          <link rel="alternate" hreflang="nl" href={new URL(nlPad, Astro.site)} />
+          <link rel="alternate" hreflang="en" href={new URL(enPad, Astro.site)} />
+          <link rel="alternate" hreflang="x-default" href={new URL(nlPad, Astro.site)} />
+        </>
+      )
+    }
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.naam} />
     <meta property="og:title" content={volledigeTitel} />
     <meta property="og:description" content={omschrijving} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content={taal === 'en' ? 'en_US' : 'nl_NL'} />
+    <meta property="og:locale" content={taal === 'en' ? 'en_GB' : 'nl_NL'} />
     <meta property="og:image" content={new URL('/og.png', Astro.site)} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -69,11 +80,13 @@ const enPad = nlPad === '/' ? '/en/' : `/en${nlPad}`;
 
     <meta name="generator" content={Astro.generator} />
     {
-      taal === 'nl' && (
+      taal === 'nl' && !noindex && (
         <script is:inline>
           // Nederlands is de standaard, ook voor Engelstalige browsers en in
           // incognito. Alleen een eerdere expliciete keuze voor Engels (via de
           // taalknop, bewaard als fm:taalkeuze) stuurt door naar /en/.
+          // Niet op noindex-pagina's: de 404 staat op elk onbekend pad, ook
+          // op /en/…, en zou zichzelf dan eindeloos doorsturen.
           try {
             if (localStorage.getItem('fm:taalkeuze') === 'en') {
               location.replace('/en' + location.pathname + location.hash);

@@ -10,7 +10,7 @@ Alles wat nog aangeleverd moet worden. Elke regel verwijst naar de plek in de co
 - [ ] **Keuze: teksten zonder aanlevering** houden, laten herschrijven door Christa of weg: intro bij Lessen, blok "Voor wie", teksten bij Locatie, Praktisch en Contact · `src/data/copy.ts`
 - [ ] **Controleren**: schrijfwijze "Trio En-Semble" (stond als "En- Semble") · `src/data/copy.ts` (`over.bio`)
 - [ ] **Controleren**: bij het Mozart-citaat stond "brief over het 3e deel van het klarinetconcert voor Anton Stadler"; het citaat komt uit een brief aan zijn vader uit Mannheim (1778). Op de site staat nu alleen "Wolfgang Amadeus Mozart" · `src/data/copy.ts` (`hero.citaat`)
-- [ ] **Plaats van Muziekvereniging Zeelandia en Phoenix Cultuur** bevestigen · `src/data/organisaties.ts`
+- [x] **Plaats van Muziekvereniging Zeelandia en Phoenix Cultuur**: Zeeland en Veghel kloppen volgens hun eigen sites · `src/data/organisaties.ts`
 
 ## Praktisch
 

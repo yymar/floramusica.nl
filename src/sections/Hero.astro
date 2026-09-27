@@ -32,14 +32,14 @@ import klarinetImke from '../assets/imke-klarinet-creme.png';
       <PartituurRegel class="h-[clamp(7rem,19vw,13rem)]" />
     </div>
     <div class="parallax-motief">
-      <img src={klarinetImke.src} alt="" width={klarinetImke.width} height={klarinetImke.height} loading="eager" />
+      <img src={klarinetImke.src} alt="" width={klarinetImke.width} height={klarinetImke.height} loading="lazy" />
     </div>
   </div>
 
   <div class="relative mx-auto max-w-5xl px-5 pt-14 pb-16 sm:px-8 sm:pt-20 sm:pb-24">
     <div class="grid items-end gap-10 md:grid-cols-[3fr_2fr] md:gap-16">
       <div class="hero-tekst">
-        <h1 class="text-paper">
+        <h1 class="w-fit text-paper">
           <span class="block text-omslag">
             <Wordmark toon="paper" />
           </span>
@@ -79,29 +79,30 @@ import klarinetImke from '../assets/imke-klarinet-creme.png';
 </section>
 
 <script>
-  // De notenbalk loopt de volle breedte door, ook door de rechtermarge waar
-  // het klarinetmotief staat. Welke ornamenten daar precies achter vallen
-  // hangt van de vensterbreedte af (de balk schaalt in viewBox-eenheden,
-  // het motief in rem), dus dat wordt gemeten: elke tekening die de
-  // tekenbox raakt gaat uit. De balklijnen zelf blijven gewoon doorlopen.
+  // De notenbalk loopt de volle breedte door, de ornamenten erop niet
+  // overal: achter de titel een stille maat, in de rechtermarge het
+  // klarinetmotief. Welke tekeningen daar vallen hangt van de vensterbreedte
+  // af (de balk schaalt in viewBox-eenheden, titel en motief in rem), dus
+  // dat wordt gemeten: elke tekening die een van die kolommen raakt gaat uit.
+  // ResizeObserver en geen directe meting: WebKit draait dit script vóór de
+  // stylesheets er zijn, en dan raakt alles alles. De observer meet pas na
+  // echte layout, en opnieuw na de fontwissel en bij elke resize.
+  const titel = document.querySelector('.hero-tekst h1');
   const motief = document.querySelector('.parallax-motief');
+  const balk = document.querySelector('.partituur');
   const ornamenten = document.querySelectorAll<SVGImageElement>('.partituur .orn');
-  if (motief && ornamenten.length) {
+  if (titel && motief && balk && ornamenten.length) {
     const pas = () => {
-      const zichtbaar = getComputedStyle(motief).display !== 'none';
-      const m = motief.getBoundingClientRect();
+      const zones = [titel.getBoundingClientRect()];
+      if (getComputedStyle(motief).display !== 'none') zones.push(motief.getBoundingClientRect());
       for (const o of ornamenten) {
         const r = o.getBoundingClientRect();
-        const raakt = zichtbaar && r.right > m.left - 12 && r.left < m.right + 12;
-        o.style.opacity = raakt ? '0' : '';
+        o.style.opacity = zones.some((z) => r.right > z.left - 16 && r.left < z.right + 16) ? '0' : '';
       }
     };
-    let timer = 0;
-    addEventListener('resize', () => {
-      clearTimeout(timer);
-      timer = window.setTimeout(pas, 80);
-    });
-    pas();
+    const ro = new ResizeObserver(pas);
+    ro.observe(titel);
+    ro.observe(balk);
   }
 </script>
 
