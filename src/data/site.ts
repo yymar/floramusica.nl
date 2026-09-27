@@ -21,7 +21,7 @@ export interface SiteGegevens {
   url: string;
   regio: string;
   adres: Adres;
-  /** TODO: e-mailadres aanleveren. Leeg laten tot het bekend is. */
+  /** Contactadres; ook het adres waarop Web3Forms moet afleveren. */
   email: string;
   /** TODO: telefoonnummer aanleveren. Leeg laten tot het bekend is. */
   telefoon: string;
@@ -45,7 +45,7 @@ export const site: SiteGegevens = {
     land: 'NL',
     kaartUrl: 'https://www.google.com/maps/search/?api=1&query=Floraliastraat+68,+Oss',
   },
-  email: '', // TODO: e-mailadres
+  email: 'christa.muziek@gmail.com',
   telefoon: '', // TODO: telefoonnummer
   kvk: '', // TODO: KvK-nummer
 };

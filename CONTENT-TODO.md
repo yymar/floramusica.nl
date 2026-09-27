@@ -20,7 +20,7 @@ Alles wat nog aangeleverd moet worden. Elke regel verwijst naar de plek in de co
 
 ## Contact en zakelijk
 
-- [ ] **E-mailadres** · `src/data/site.ts` (`email`)
+- [x] **E-mailadres**: christa.muziek@gmail.com · `src/data/site.ts` (`email`)
 - [ ] **Telefoonnummer** · `src/data/site.ts` (`telefoon`)
 - [ ] **KvK-nummer** · `src/data/site.ts` (`kvk`)
 - [ ] **Postcode** van Floraliastraat 68 · `src/data/site.ts` (`adres.postcode`)
