@@ -6,7 +6,7 @@ Alles wat nog aangeleverd moet worden. Elke regel verwijst naar de plek in de co
 
 - [x] **Biografie** en eigen teksten van Christa verwerkt (september 2026) · `src/data/copy.ts`, `src/data/instrumenten.ts`
 - [x] **Saxofoon** verwijderd (geeft ze geen les in)
-- [ ] **Keuze: blokfluit** houden of weg? Christa noemt alleen klarinet, basklarinet en piano; de tekst bij blokfluit is niet van haar · `src/data/instrumenten.ts`, ook `src/data/site.ts` (`omschrijving`)
+- [x] **Blokfluit** verwijderd (voorlopig niet) · `src/data/instrumenten.ts`, ook `src/data/site.ts` (`omschrijving`)
 - [ ] **Keuze: teksten zonder aanlevering** houden, laten herschrijven door Christa of weg: intro bij Lessen, blok "Voor wie", teksten bij Locatie, Praktisch en Contact · `src/data/copy.ts`
 - [ ] **Controleren**: schrijfwijze "Trio En-Semble" (stond als "En- Semble") · `src/data/copy.ts` (`over.bio`)
 - [ ] **Controleren**: bij het Mozart-citaat stond "brief over het 3e deel van het klarinetconcert voor Anton Stadler"; het citaat komt uit een brief aan zijn vader uit Mannheim (1778). Op de site staat nu alleen "Wolfgang Amadeus Mozart" · `src/data/copy.ts` (`hero.citaat`)

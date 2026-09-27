@@ -48,13 +48,6 @@ const nl: Instrument[] = [
       'Kun jij nou ook nooit zomaar aan dit prachtige instrument voorbijlopen zonder het even aan te raken, schrijf je dan in voor een proefles piano.',
     ],
   },
-  {
-    id: 'blokfluit',
-    naam: 'Blokfluit',
-    hoofdinstrument: false,
-    // Geen tekst van Christa; staat niet in haar eigen opsomming. Houden of weg?
-    omschrijving: ['Een fijne eerste kennismaking met muziek, en een volwaardig instrument op zich.'],
-  },
 ];
 
 const en: Instrument[] = [
@@ -87,12 +80,6 @@ const en: Instrument[] = [
       'She started it as a second subject at the conservatoire, and this instrument won her over. Later in life she picked it up again. With its 88 keys, the piano is a whole orchestra you can play on your own. You can play all kinds of music on it: from classical to jazz, from pop to folk.',
       'Can you never walk past this beautiful instrument without touching it for a moment either? Then sign up for a trial piano lesson.',
     ],
-  },
-  {
-    id: 'blokfluit',
-    naam: 'Recorder',
-    hoofdinstrument: false,
-    omschrijving: ['A lovely first introduction to music, and a full instrument in its own right.'],
   },
 ];
 
