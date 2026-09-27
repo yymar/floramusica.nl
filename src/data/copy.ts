@@ -62,8 +62,8 @@ const nl = {
   praktisch: {
     label: 'Praktisch',
     kop: 'Praktisch',
-    intro: 'De tarieven en lestijden staan hier zodra ze zijn vastgesteld.',
-    introVraagVoor: 'Wil je nu al iets weten, stel je vraag gerust via',
+    intro: 'Voor tarieven en lestijden neem je het beste persoonlijk contact op.',
+    introVraagVoor: 'Dat kan via',
     introVraagLink: 'het contactformulier',
     opAanvraag: 'op aanvraag',
   },
@@ -213,8 +213,8 @@ const en: typeof nl = {
   praktisch: {
     label: 'Practical',
     kop: 'Practical',
-    intro: 'Rates and lesson times will appear here once they have been set.',
-    introVraagVoor: 'Want to know something already? Feel free to ask via',
+    intro: 'For rates and lesson times, it is best to get in touch personally.',
+    introVraagVoor: 'You can do so via',
     introVraagLink: 'the contact form',
     opAanvraag: 'on request',
   },

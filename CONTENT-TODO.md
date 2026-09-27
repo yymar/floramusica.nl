@@ -14,8 +14,8 @@ Alles wat nog aangeleverd moet worden. Elke regel verwijst naar de plek in de co
 
 ## Praktisch
 
-- [ ] **Tarieven en lesduur** per lesvorm; daarna `bekend: true` zetten · `src/data/tarieven.ts`
-- [ ] **Opmerkingen** bij tarieven (proefles? btw-vrijstelling onder 21?) · `src/data/tarieven.ts`
+- [x] **Tarieven** komen niet op de site (keuze van Christa); de sectie verwijst naar contact
+- [ ] **Lesduur en info over (proef)lessen**; daarna `bekend: true` zetten · `src/data/tarieven.ts`
 - [x] **Proefles**: ja; de knop in de hero is nu "Vraag een proefles aan" · `src/data/copy.ts` (`hero.cta`)
 
 ## Contact en zakelijk

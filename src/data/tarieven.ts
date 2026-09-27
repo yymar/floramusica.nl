@@ -1,14 +1,14 @@
 /**
- * Tarieven en lesvormen. Alles hieronder is placeholder-structuur:
- * TODO: tarieven en lesduur aanleveren, dan `bekend: true` zetten.
- * Zolang `bekend: false` is, toont de site "op aanvraag" in plaats van bedragen.
+ * Lesvormen. Bedragen komen bewust níet op de site (keuze van Christa):
+ * `prijs` leeg laten, dan toont de site "op aanvraag". Lesduur en
+ * opmerkingen over (proef)lessen mogen wel; zet dan `bekend: true`.
  */
 
 export interface Lesvorm {
   naam: string;
   /** Bijvoorbeeld "30 minuten, wekelijks". TODO: invullen. */
   duur: string;
-  /** Bijvoorbeeld "€ 00 per les" of "€ 000 per 10 lessen". TODO: invullen. */
+  /** Blijft leeg: bedragen staan niet op de site. */
   prijs: string;
 }
 
@@ -35,6 +35,6 @@ export const tarieven = (locale?: string): Tarieven => ({
           { naam: 'Les om de week', duur: '', prijs: '' }, // TODO
         ],
   opmerkingen: [
-    // TODO: bijv. "Een proefles is altijd mogelijk." of iets over btw-vrijstelling onder 21 jaar.
+    // TODO: bijv. iets over de proefles, zodra Christa dat aanlevert.
   ],
 });
