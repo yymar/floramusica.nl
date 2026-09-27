@@ -24,7 +24,7 @@ Alles wat nog aangeleverd moet worden. Elke regel verwijst naar de plek in de co
 - [ ] **Telefoonnummer** · `src/data/site.ts` (`telefoon`)
 - [ ] **KvK-nummer** · `src/data/site.ts` (`kvk`)
 - [ ] **Postcode** van Floraliastraat 68 · `src/data/site.ts` (`adres.postcode`)
-- [ ] **Web3Forms-key** aanvragen en instellen (lokaal in `.env`, op GitHub als secret `PUBLIC_WEB3FORMS_KEY`) · zie README.md
+- [x] **Web3Forms-key** aanvragen en instellen (lokaal in `.env`, op GitHub als secret `PUBLIC_WEB3FORMS_KEY`) · zie README.md
 
 ## Beeld (fase 2)
 
