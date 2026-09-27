@@ -13,7 +13,7 @@
  */
 import Sectie from '../components/Sectie.astro';
 import Tekening from '../components/ornaments/Tekening.astro';
-import { instrumenten, doelgroepen } from '../data/instrumenten';
+import { instrumenten, doelgroepen, aanbod } from '../data/instrumenten';
 import { copy } from '../data/copy';
 const { lessen } = copy(Astro.currentLocale);
 const alleInstrumenten = instrumenten(Astro.currentLocale);
@@ -23,7 +23,7 @@ const alleDoelgroepen = doelgroepen(Astro.currentLocale);
 import klarinetImke from '../assets/imke-klarinet-creme.png';
 
 const hoofd = alleInstrumenten.find((i) => i.hoofdinstrument);
-const overige = alleInstrumenten.filter((i) => !i.hoofdinstrument);
+const overige = [...alleInstrumenten.filter((i) => !i.hoofdinstrument), ...aanbod(Astro.currentLocale)];
 ---
 
 <Sectie id="lessen" label={lessen.label} kop={lessen.kop} tint>
@@ -40,7 +40,9 @@ const overige = alleInstrumenten.filter((i) => !i.hoofdinstrument);
           <img src={klarinetImke.src} alt="" width={klarinetImke.width} height={klarinetImke.height} loading="lazy" />
         </div>
         <h3 class="font-display text-subkop font-semibold text-paper">{hoofd.naam}</h3>
-        <p class="mt-2 max-w-[52ch] text-paper-dim">{hoofd.omschrijving}</p>
+        <div class="mt-2 max-w-[52ch] space-y-3 text-paper-dim">
+          {hoofd.omschrijving.map((alinea) => <p>{alinea}</p>)}
+        </div>
       </article>
     )
   }
@@ -55,7 +57,10 @@ const overige = alleInstrumenten.filter((i) => !i.hoofdinstrument);
             <h3 class="font-display text-[1.1rem] leading-snug font-semibold text-ink">
               {instrument.naam}
             </h3>
-            <p class="mt-1 text-klein text-ink-soft">{instrument.omschrijving}</p>
+            {instrument.motto && <p class="mt-1 italic text-ink-soft">{instrument.motto}</p>}
+            <div class="mt-1 space-y-2 text-klein text-ink-soft">
+              {instrument.omschrijving.map((alinea) => <p>{alinea}</p>)}
+            </div>
           </div>
         </article>
       ))

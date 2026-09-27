@@ -4,14 +4,19 @@ Alles wat nog aangeleverd moet worden. Elke regel verwijst naar de plek in de co
 
 ## Teksten
 
-- [ ] **Biografie**: achtergrond, opleiding, manier van lesgeven · `src/data/copy.ts` (`over.alineas`)
+- [x] **Biografie** en eigen teksten van Christa verwerkt (september 2026) · `src/data/copy.ts`, `src/data/instrumenten.ts`
+- [x] **Saxofoon** verwijderd (geeft ze geen les in)
+- [ ] **Keuze: blokfluit** houden of weg? Christa noemt alleen klarinet, basklarinet en piano; de tekst bij blokfluit is niet van haar · `src/data/instrumenten.ts`, ook `src/data/site.ts` (`omschrijving`)
+- [ ] **Keuze: teksten zonder aanlevering** houden, laten herschrijven door Christa of weg: intro bij Lessen, blok "Voor wie", teksten bij Locatie, Praktisch en Contact · `src/data/copy.ts`
+- [ ] **Controleren**: schrijfwijze "Trio En-Semble" (stond als "En- Semble") · `src/data/copy.ts` (`over.bio`)
+- [ ] **Controleren**: bij het Mozart-citaat stond "brief over het 3e deel van het klarinetconcert voor Anton Stadler"; het citaat komt uit een brief aan zijn vader uit Mannheim (1778). Op de site staat nu alleen "Wolfgang Amadeus Mozart" · `src/data/copy.ts` (`hero.citaat`)
 - [ ] **Plaats van Muziekvereniging Zeelandia en Phoenix Cultuur** bevestigen · `src/data/organisaties.ts`
 
 ## Praktisch
 
 - [ ] **Tarieven en lesduur** per lesvorm; daarna `bekend: true` zetten · `src/data/tarieven.ts`
 - [ ] **Opmerkingen** bij tarieven (proefles? btw-vrijstelling onder 21?) · `src/data/tarieven.ts`
-- [ ] **Vraag**: biedt ze proeflessen aan? Zo ja, kan de call-to-action "Plan een proefles" worden in plaats van "Neem contact op" · `src/data/copy.ts` (`hero.cta`)
+- [x] **Proefles**: ja; de knop in de hero is nu "Vraag een proefles aan" · `src/data/copy.ts` (`hero.cta`)
 
 ## Contact en zakelijk
 

@@ -16,7 +16,7 @@ Portfoliowebsite van Muziekpraktijk Flora Musica, de eenmanszaak van een muziekd
 
 ## Positioning
 
-Les voor alle niveaus en leeftijden, in eigen tempo: van jonge beginner tot volwassen herstarter. Dat is de bevestigde kern van de positionering. Feitelijke context die dit ondersteunt (geen aparte claim): hoofdinstrument klarinet, daarnaast basklarinet, saxofoon, piano en blokfluit; eigen lespraktijk aan huis (Floraliastraat 68, Oss) waar ze zelf leerlingen aanneemt.
+Les voor alle niveaus en leeftijden, in eigen tempo: van jonge beginner tot volwassen herstarter. Dat is de bevestigde kern van de positionering. Feitelijke context die dit ondersteunt (geen aparte claim): hoofdinstrument klarinet, daarnaast basklarinet, piano en blokfluit; eigen lespraktijk aan huis (Floraliastraat 68, Oss) waar ze zelf leerlingen aanneemt.
 
 ## Operating Context
 

@@ -39,7 +39,7 @@ const jsonLd: Record<string, unknown> = {
       itemOffered: {
         '@type': 'Course',
         name: taal === 'en' ? `${instrument.naam} lessons` : `${instrument.naam}les`,
-        description: instrument.omschrijving,
+        description: instrument.omschrijving.join(' '),
         provider: { '@type': 'MusicSchool', name: site.naam },
       },
     })),

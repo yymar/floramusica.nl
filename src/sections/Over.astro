@@ -14,8 +14,10 @@ import lespraktijk from '../assets/lespraktijk.jpg';
   <div class="grid gap-8 sm:grid-cols-[2fr_1fr] sm:gap-10">
     <div class="rijs r2 max-w-[62ch] space-y-4">
       {over.alineas.map((alinea) => <p>{alinea}</p>)}
+      <h3 class="!mt-10 font-display text-subkop font-semibold text-ink">{over.bioKop}</h3>
+      {over.bio.map((alinea) => <p>{alinea}</p>)}
     </div>
-    <div class="rijs r3">
+    <div class="rijs r3 self-start">
       <Figuur
         src={lespraktijk}
         alt={over.fotoAlt}

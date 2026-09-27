@@ -11,21 +11,28 @@ const nl = {
   hero: {
     titel: 'Flora Musica',
     subtitel: 'Muziekles in Oss en omgeving',
+    citaat: 'Ach, wenn wir nur auch Clarinetti hätten',
+    citaatBron: 'Wolfgang Amadeus Mozart',
     intro:
-      'Muziekpraktijk Flora Musica is de lespraktijk van Christa ten Berg, docent klarinet. Ze geeft ook les in basklarinet, saxofoon, piano en blokfluit, aan kinderen, jongeren en volwassenen.',
-    cta: 'Neem contact op',
+      'Muziekpraktijk Flora Musica is de lespraktijk van Christa ten Berg, docent klarinet. Ze geeft hier klarinet-, basklarinet- & pianoles voor jong tot oud, van beginner tot (ver)gevorderde. Daarnaast verzorgt zij lezingen over klassieke muziek en dirigeert en coacht ze ensembles. Ook als je je wilt verdiepen in de muziektheorie en/of jouw kennis wilt bijspijkeren, ben je bij haar aan het goede adres.',
+    cta: 'Vraag een proefles aan',
     portretAlt: 'Christa ten Berg met haar klarinet',
   },
 
   over: {
     label: 'Over',
     kop: 'Over de praktijk',
-    /**
-     * TODO: biografie aanleveren. Hieronder staat alleen wat vaststaat;
-     * er zijn bewust geen jaartallen, opleidingen of anekdotes verzonnen.
-     */
+    /** Teksten van Christa zelf; alleen spelling en zinsbouw zijn bijgewerkt. */
     alineas: [
-      'De klarinet is haar hoofdinstrument, en van daaruit is de praktijk gegroeid: van basklarinet en saxofoon tot piano en blokfluit. Les op maat, in een rustig tempo dat bij je past, of je nu voor het eerst een instrument vastpakt of na jaren weer begint.',
+      'De klarinet is het hart van haar muziekpraktijk, en van daaruit is alles gegroeid: van basklarinet tot piano. Les op maat, op het niveau & in het tempo dat bij je past, of je nu voor het eerst een instrument vastpakt of na jaren weer begint.',
+      'Naast het overbrengen van de passie voor het klarinetspelen heeft zij ook altijd veel interesse gehad in de mens achter het instrument. Het vertrouwen dat leerlingen haar geven en de band die ze in de loop der jaren met hen opbouwt, maken het lesgeven zo interessant, aantrekkelijk & uitdagend. Door te kijken en te luisteren naar haar leerlingen wil ze de sleutel tot ieders muzikale talent vinden. Op deze manier kan iedere leerling, ongeacht aanleg of niveau, met veel plezier leren spelen en zo zijn muzikale talent maximaal laten bloeien.',
+    ],
+    bioKop: 'Over Christa ten Berg',
+    bio: [
+      'Al vanaf heel jonge leeftijd heeft de klarinet een magische aantrekkingskracht op Christa. Tien jaar oud, eindelijk mocht zij dit mooie instrument gaan leren bespelen.',
+      'Opgegroeid in de wereld van het harmonieorkest, ging zij studeren aan het Prins Claus Conservatorium te Groningen. In 1995 rondde zij haar studie succesvol af. Vervolgens studeerde zij nog aan de kunsthogeschool ArtEZ en volgde ze een specialisatie kamermuziek bij de Belgische klarinettist Eddy Vanoosthuyse in Gent (België).',
+      'Al sinds haar studie geeft Christa met veel passie en enthousiasme les aan mensen van jong tot oud. Daarnaast is zij ook werkzaam als klarinetdocent bij diverse kunstinstellingen en verenigingen. In 2015 is zij haar eigen muziekpraktijk gestart onder de naam Flora Musica, waar ze naast lesgeven ook dirigeert en lezingen over het luisteren naar klassieke muziek geeft.',
+      'Naast het lesgeven speelt zij nog in diverse ensembles, waaronder Trio En-Semble, waarmee zij Franse chansons vertolkt.',
     ],
     fotoAlt: 'Christa met haar klarinet aan de piano in de lespraktijk',
   },
@@ -156,9 +163,11 @@ const en: typeof nl = {
   hero: {
     titel: 'Flora Musica',
     subtitel: 'Music lessons in Oss and the surrounding area',
+    citaat: 'Ach, wenn wir nur auch Clarinetti hätten',
+    citaatBron: 'Wolfgang Amadeus Mozart',
     intro:
-      'Muziekpraktijk Flora Musica is the teaching practice of Christa ten Berg, clarinet teacher. She also teaches bass clarinet, saxophone, piano and recorder, to children, teenagers and adults.',
-    cta: 'Get in touch',
+      'Muziekpraktijk Flora Musica is the teaching practice of Christa ten Berg, clarinet teacher. Here she teaches clarinet, bass clarinet & piano to young and old, from beginner to (very) advanced. She also gives talks on classical music, and conducts and coaches ensembles. And if you want to dive deeper into music theory and/or brush up your knowledge, she is the right person to go to.',
+    cta: 'Book a trial lesson',
     portretAlt: 'Christa ten Berg with her clarinet',
   },
 
@@ -166,7 +175,15 @@ const en: typeof nl = {
     label: 'About',
     kop: 'About the practice',
     alineas: [
-      'The clarinet is her main instrument, and the practice has grown from there: from bass clarinet and saxophone to piano and recorder. Lessons made to measure, at a calm pace that suits you, whether you are picking up an instrument for the first time or returning after years.',
+      'The clarinet is the heart of her music practice, and everything has grown from there: from bass clarinet to piano. Lessons made to measure, at the level & pace that suit you, whether you are picking up an instrument for the first time or starting again after years.',
+      'Besides passing on her passion for playing the clarinet, she has always been very interested in the person behind the instrument. The trust her students give her and the bond she builds with them over the years make teaching so interesting, appealing & challenging. By watching and listening to her students, she wants to find the key to everyone’s musical talent. That way every student, whatever their aptitude or level, can learn to play with a lot of enjoyment and let their musical talent flourish to the full.',
+    ],
+    bioKop: 'About Christa ten Berg',
+    bio: [
+      'From a very young age the clarinet has had a magical pull on Christa. At ten years old she was finally allowed to start learning this beautiful instrument.',
+      'Having grown up in the world of the wind band, she went on to study at the Prince Claus Conservatoire in Groningen, graduating successfully in 1995. She then studied at the ArtEZ University of the Arts and specialised in chamber music with the Belgian clarinettist Eddy Vanoosthuyse in Ghent (Belgium).',
+      'Ever since her studies, Christa has taught people young and old with a great deal of passion and enthusiasm. She also works as a clarinet teacher for various arts institutions and music societies. In 2015 she started her own music practice under the name Flora Musica, where besides teaching she also conducts and gives talks on listening to classical music.',
+      'Alongside teaching she plays in various ensembles, including Trio En-Semble, with whom she performs French chansons.',
     ],
     fotoAlt: 'Christa with her clarinet at the piano in the teaching practice',
   },

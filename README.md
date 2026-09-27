@@ -1,6 +1,6 @@
 # floramusica.nl
 
-Portfoliowebsite van Muziekpraktijk Flora Musica: muziekles in Oss en omgeving (klarinet, basklarinet, saxofoon, piano en blokfluit). Gebouwd met [Astro](https://astro.build) en Tailwind CSS, gehost op GitHub Pages.
+Portfoliowebsite van Muziekpraktijk Flora Musica: muziekles in Oss en omgeving (klarinet, basklarinet, piano en blokfluit). Gebouwd met [Astro](https://astro.build) en Tailwind CSS, gehost op GitHub Pages.
 
 ## Lokaal draaien
 
