@@ -114,8 +114,12 @@ const andereTaal = taal === 'en' ? 'nl' : 'en';
     document.addEventListener('click', (e) => {
       if (menu.open && !menu.contains(e.target as Node)) menu.open = false;
     });
+    // Alleen bij focus naar een ánder element (Tab). Safari focust een link
+    // niet bij een tik: dan is relatedTarget null en zou de lade dichtklappen
+    // vóór de click, waardoor de tik doorvalt op de sectie eronder.
     menu.addEventListener('focusout', (e) => {
-      if (menu.open && !menu.contains(e.relatedTarget as Node | null)) menu.open = false;
+      const naar = e.relatedTarget as Node | null;
+      if (menu.open && naar && !menu.contains(naar)) menu.open = false;
     });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && menu.open) {
