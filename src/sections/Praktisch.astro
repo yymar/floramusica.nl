@@ -9,8 +9,11 @@
 import Sectie from '../components/Sectie.astro';
 import { copy } from '../data/copy';
 import { tarieven } from '../data/tarieven';
+import { handigeLinks } from '../data/links';
+import ExterneLink from '../components/ExterneLink.astro';
 const { praktisch } = copy(Astro.currentLocale);
 const prijslijst = tarieven(Astro.currentLocale);
+const links = handigeLinks(Astro.currentLocale);
 ---
 
 <Sectie id="praktisch" label={praktisch.label} kop={praktisch.kop} tint>
@@ -47,4 +50,18 @@ const prijslijst = tarieven(Astro.currentLocale);
       </ul>
     )
   }
+
+  <div class="rijs r3 mt-12">
+    <h3 class="font-display text-subkop font-semibold text-ink">{praktisch.linksKop}</h3>
+    <ul class="mt-4 max-w-xl">
+      {
+        links.map((link) => (
+          <li class="border-b border-rule py-3">
+            {link.url ? <ExterneLink href={link.url}>{link.naam}</ExterneLink> : <span class="font-bold">{link.naam}</span>}
+            <span class="block text-klein text-ink-soft">{link.omschrijving}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
 </Sectie>

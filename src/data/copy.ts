@@ -12,7 +12,7 @@ const nl = {
     titel: 'Flora Musica',
     subtitel: 'Muziekles in Oss en omgeving',
     citaat: 'Ach, wenn wir nur auch Clarinetti hätten',
-    citaatBron: 'Wolfgang Amadeus Mozart',
+    citaatBron: 'Wolfgang Amadeus Mozart, in een brief aan zijn vader (1778)',
     intro:
       'Muziekpraktijk Flora Musica is de lespraktijk van Christa ten Berg, docent klarinet. Ze geeft hier klarinet-, basklarinet- & pianoles voor jong tot oud, van beginner tot (ver)gevorderde. Daarnaast verzorgt zij lezingen over klassieke muziek en dirigeert en coacht ze ensembles. Ook als je je wilt verdiepen in de muziektheorie en/of jouw kennis wilt bijspijkeren, ben je bij haar aan het goede adres.',
     cta: 'Vraag een proefles aan',
@@ -40,11 +40,10 @@ const nl = {
   lessen: {
     label: 'Lessen',
     kop: 'Lessen',
-    intro:
-      'Iedere les is individueel, afgestemd op je eigen doelen en tempo. Dit zijn de instrumenten waarin je les kunt krijgen.',
+    intro: 'Dit zijn de instrumenten waarin je les kunt krijgen.',
     doelgroepLabel: 'Voor wie',
     doelgroepTekst:
-      'De lessen zijn er voor kinderen, jongeren en volwassenen. Ook als je na jaren weer wilt beginnen ben je welkom.',
+      'De lessen zijn er voor jong tot oud, van beginner tot (ver)gevorderde.',
   },
 
   locatie: {
@@ -66,13 +65,14 @@ const nl = {
     introVraagVoor: 'Dat kan via',
     introVraagLink: 'het contactformulier',
     opAanvraag: 'op aanvraag',
+    linksKop: 'Handige links',
   },
 
   contact: {
     label: 'Contact',
     kop: 'Contact',
     intro:
-      'Wil je een les afspreken of heb je een vraag, laat hieronder een bericht achter. Je krijgt persoonlijk antwoord.',
+      'Wil je een proefles aanvragen of heb je een andere vraag, laat hieronder een bericht achter. Je krijgt persoonlijk antwoord.',
     mailtoTekst: 'Liever direct mailen? Dat kan ook:',
   },
 
@@ -165,7 +165,7 @@ const en: typeof nl = {
     titel: 'Flora Musica',
     subtitel: 'Music lessons in Oss and the surrounding area',
     citaat: 'Ach, wenn wir nur auch Clarinetti hätten',
-    citaatBron: 'Wolfgang Amadeus Mozart',
+    citaatBron: 'Wolfgang Amadeus Mozart, in a letter to his father (1778)',
     intro:
       'Muziekpraktijk Flora Musica is the teaching practice of Christa ten Berg, clarinet teacher. Here she teaches clarinet, bass clarinet & piano to young and old, from beginner to (very) advanced. She also gives talks on classical music, and conducts and coaches ensembles. And if you want to dive deeper into music theory and/or brush up your knowledge, she is the right person to go to.',
     cta: 'Book a trial lesson',
@@ -192,11 +192,10 @@ const en: typeof nl = {
   lessen: {
     label: 'Lessons',
     kop: 'Lessons',
-    intro:
-      'Every lesson is individual, tuned to your own goals and pace. These are the instruments you can take lessons in.',
+    intro: 'These are the instruments you can take lessons in.',
     doelgroepLabel: 'Who it is for',
     doelgroepTekst:
-      'Lessons are open to children, teenagers and adults. You are equally welcome if you want to pick an instrument up again after years.',
+      'Lessons are for young and old, from beginner to (very) advanced.',
   },
 
   locatie: {
@@ -218,13 +217,14 @@ const en: typeof nl = {
     introVraagVoor: 'You can do so via',
     introVraagLink: 'the contact form',
     opAanvraag: 'on request',
+    linksKop: 'Useful links',
   },
 
   contact: {
     label: 'Contact',
     kop: 'Contact',
     intro:
-      'Want to book a lesson or ask a question? Leave a message below and you will get a personal reply.',
+      'Want to book a trial lesson or have another question? Leave a message below and you will get a personal reply.',
     mailtoTekst: 'Prefer to email directly? That works too:',
   },
 

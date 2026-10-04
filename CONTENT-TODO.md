@@ -7,12 +7,14 @@ Alles wat nog aangeleverd moet worden. Elke regel verwijst naar de plek in de co
 - [x] **Biografie** en eigen teksten van Christa verwerkt (september 2026) · `src/data/copy.ts`, `src/data/instrumenten.ts`
 - [x] **Saxofoon** verwijderd (geeft ze geen les in)
 - [x] **Blokfluit** verwijderd (voorlopig niet) · `src/data/instrumenten.ts`, ook `src/data/site.ts` (`omschrijving`)
-- [ ] **Keuze: teksten zonder aanlevering** houden, laten herschrijven door Christa of weg: intro bij Lessen, blok "Voor wie", teksten bij Locatie, Praktisch en Contact · `src/data/copy.ts`
-- [ ] **Controleren**: schrijfwijze "Trio En-Semble" (stond als "En- Semble") · `src/data/copy.ts` (`over.bio`)
-- [ ] **Controleren**: bij het Mozart-citaat stond "brief over het 3e deel van het klarinetconcert voor Anton Stadler"; het citaat komt uit een brief aan zijn vader uit Mannheim (1778). Op de site staat nu alleen "Wolfgang Amadeus Mozart" · `src/data/copy.ts` (`hero.citaat`)
+- [x] **Teksten zonder aanlevering** doorgenomen door Christa (oktober 2026): intro Lessen ingekort, "Voor wie" en Contact herschreven, Locatie en Praktisch blijven · `src/data/copy.ts`
+- [x] **Schrijfwijze "Trio En-Semble"** bevestigd · `src/data/copy.ts` (`over.bio`)
+- [x] **Mozart-citaat**: bron is nu "in een brief aan zijn vader (1778)". Christa wilde "uit brief over het klarinetconcert", maar dat klopt niet: het concert is van 1791. Oorspronkelijke notitie: stond "brief over het 3e deel van het klarinetconcert voor Anton Stadler"; het citaat komt uit een brief aan zijn vader uit Mannheim (1778). Op de site staat nu alleen "Wolfgang Amadeus Mozart" · `src/data/copy.ts` (`hero.citaat`)
 - [x] **Plaats van Muziekvereniging Zeelandia en Phoenix Cultuur**: Zeeland en Veghel kloppen volgens hun eigen sites · `src/data/organisaties.ts`
 
 ## Praktisch
+
+- [x] **Handige links** (Klarinetatelier Arnhem zonder link: de site werkt niet) · `src/data/links.ts`
 
 - [x] **Tarieven** komen niet op de site (keuze van Christa); de sectie verwijst naar contact
 - [ ] **Lesduur en info over (proef)lessen**; daarna `bekend: true` zetten · `src/data/tarieven.ts`
@@ -28,7 +30,7 @@ Alles wat nog aangeleverd moet worden. Elke regel verwijst naar de plek in de co
 
 ## Beeld (fase 2)
 
-- [x] **Definitieve portretfoto** voor de hero (professionele serie, 4:5) · `src/assets/portret-christa.jpg`
+- [x] **Definitieve portretfoto** voor de hero: het zwart-witportret ("Foto Biografie 2018"), keuze van Christa · `src/assets/portret-christa.jpg`
 - [x] **Foto uit de lespraktijk** (Christa aan de piano, 3:4) · `src/assets/lespraktijk.jpg`
 - [x] **Galerij**: veertien foto's als quilted spread · `src/data/fotos.ts`, `src/sections/Galerij.astro`
 - [ ] **Toestemming portretrecht** checken voor galerijfoto's met herkenbare personen · `src/data/fotos.ts`
