@@ -32,19 +32,9 @@ Alles wat nog aangeleverd moet worden. Elke regel verwijst naar de plek in de co
 
 - [x] **Definitieve portretfoto** voor de hero: het zwart-witportret ("Foto Biografie 2018"), keuze van Christa · `src/assets/portret-christa.jpg`
 - [x] **Foto uit de lespraktijk** (Christa aan de piano, 3:4) · `src/assets/lespraktijk.jpg`
-- [x] **Galerij**: veertien foto's als quilted spread · `src/data/fotos.ts`, `src/sections/Galerij.astro`
-- [ ] **Toestemming portretrecht** checken voor galerijfoto's met herkenbare personen · `src/data/fotos.ts`
-  - № 3 — briefje met de voornaam van een leerling ("Luna")
-  - № 6 — twee jonge klarinettistes, beiden goed herkenbaar in beeld
-  - № 8 — het klarinetensemble
-  - № 9 — het optreden
-  - № 11 — de klarinetkring; vooral handen, maar enkele gezichten deels in beeld
-  - Let op: № 6 en № 11 zijn erbij gekomen in augustus 2026 en tonen (mogelijk
-    minderjarige) leerlingen. Voor een openbare site is dat het punt om
-    expliciet af te tikken vóór de eerstvolgende deploy.
-  - De nummers hierboven zijn posities in `fotos.ts`; ze schuiven mee als je
-    een foto tussenvoegt.
-- [ ] **Bijschriften galerij** aanvullen of corrigeren (nu № 3, 5, 7, 8 en 11) · `src/data/fotos.ts`
+- [x] **Galerij**: twintig foto's uit Christa's selectie ("fotos mam 2e ronde", oktober 2026) als quilted spread · `src/data/fotos.ts`, `src/sections/Galerij.astro`
+- [x] **Toestemming portretrecht**: in orde volgens Christa (oktober 2026); de foto's met leerlingen stonden al via de praktijk op Facebook
+- [ ] **Bijschriften galerij** aanvullen of corrigeren (nu alleen Klarinetdag en Samenspel in de klas) · `src/data/fotos.ts`
 - [ ] **Citaat voor de galerij** (optioneel): een kort tekstfragment voor een bordeaux cel in het grid, zodat het niet mechanisch voelt · `src/sections/Galerij.astro`
 - [x] **Logo / wordmark**: het fm-merk (forte-f + mezzo-m uit Bravura) staat in `Wordmark.astro`
 - [x] **Favicon**: forte-f op bordeaux tegel in `public/favicon.svg`

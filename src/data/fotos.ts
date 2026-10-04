@@ -19,18 +19,24 @@ import type { ImageMetadata } from 'astro';
 
 import klarinetPiano from '../assets/fotos/klarinet-piano.jpg';
 import christaBank from '../assets/fotos/christa-bank.jpg';
-import liedjeLeerling from '../assets/fotos/liedje-leerling.jpg';
+import harmonieUniform from '../assets/fotos/harmonie-uniform.jpg';
+import trioLeerlingen from '../assets/fotos/trio-leerlingen.jpg';
+import klarinettenOmhoog from '../assets/fotos/klarinetten-omhoog.jpg';
+import rodeKlarinet from '../assets/fotos/rode-klarinet.jpg';
+import hondPiano from '../assets/fotos/hond-piano.jpg';
+import klarinetdag from '../assets/fotos/klarinetdag.jpg';
 import klarinetSneeuw from '../assets/fotos/klarinet-sneeuw.jpg';
-import klarinetensemble from '../assets/fotos/klarinetensemble.jpg';
-import optreden from '../assets/fotos/optreden.jpg';
-import cdStapel from '../assets/fotos/cd-stapel.jpg';
-import roosBladmuziek from '../assets/fotos/roos-bladmuziek.jpg';
-import klarinetGroen from '../assets/fotos/klarinet-groen.jpg';
-import jongeKlarinettisten from '../assets/fotos/jonge-klarinettisten.jpg';
-import christaBuiten from '../assets/fotos/christa-buiten.jpg';
+import volwassenenensemble from '../assets/fotos/volwassenenensemble.jpg';
+import pianoles from '../assets/fotos/pianoles.jpg';
+import krantenknipsel from '../assets/fotos/krantenknipsel.jpg';
+import kerstmutsen from '../assets/fotos/kerstmutsen.jpg';
+import basklarinet from '../assets/fotos/basklarinet.jpg';
 import klarinetkring from '../assets/fotos/klarinetkring.jpg';
+import trioOptreden from '../assets/fotos/trio-optreden.jpg';
 import klepwerk from '../assets/fotos/klepwerk-zwartwit.jpg';
-import blokfluitKlarinet from '../assets/fotos/blokfluit-klarinet.jpg';
+import leerlingenPodium from '../assets/fotos/leerlingen-podium.jpg';
+import optreden from '../assets/fotos/optreden.jpg';
+import roosBladmuziek from '../assets/fotos/roos-bladmuziek.jpg';
 
 export interface GalerijFoto {
   /** Geïmporteerde afbeelding; weglaten zolang de foto er nog niet is. */
@@ -72,12 +78,44 @@ export const fotos: GalerijFoto[] = [
     altEn: 'Christa ten Berg sitting on the sofa, smiling, clarinet on her lap',
   },
   {
-    src: liedjeLeerling,
+    src: harmonieUniform,
+    focus: '50% 30%', // gezichten in de bovenste helft
     formaat: 'klein',
-    alt: 'Handgeschreven briefje van een leerling, met een zelfbedacht liedje op een eigen notenbalk',
-    altEn: 'Handwritten note from a student, with a self-invented song on a homemade staff',
-    onderschrift: 'Een eigen liedje van een leerling',
-    onderschriftEn: 'A student\u2019s own song',
+    alt: 'Oude foto van twee meisjes in het blauwe uniform van een harmonieorkest',
+    altEn: 'Old photo of two girls in the blue uniform of a wind band',
+  },
+  {
+    src: trioLeerlingen,
+    formaat: 'klein',
+    alt: 'Drie klarinettistes spelen samen achter muziekstandaards op een kleed',
+    altEn: 'Three clarinettists playing together behind music stands on a rug',
+  },
+  {
+    src: klarinettenOmhoog,
+    focus: '50% 10%', // de klarinetten in de lucht
+    formaat: 'middel',
+    alt: 'Een groep jonge leerlingen steekt vrolijk hun klarinetten in de lucht',
+    altEn: 'A group of young students cheerfully holding their clarinets up in the air',
+  },
+  {
+    src: rodeKlarinet,
+    formaat: 'middel',
+    alt: 'Een rode klarinet in onderdelen in de koffer',
+    altEn: 'A red clarinet in parts, lying in its case',
+  },
+  {
+    src: hondPiano,
+    formaat: 'klein',
+    alt: 'Een hond kijkt mee naar de bladmuziek op de piano',
+    altEn: 'A dog looking at the sheet music on the piano',
+  },
+  {
+    src: klarinetdag,
+    formaat: 'groot',
+    alt: 'Een zaal vol klarinettisten repeteert samen in paars podiumlicht',
+    altEn: 'A hall full of clarinettists rehearsing together in purple stage light',
+    onderschrift: 'Klarinetdag',
+    onderschriftEn: 'Clarinet day',
   },
   {
     src: klarinetSneeuw,
@@ -86,63 +124,41 @@ export const fotos: GalerijFoto[] = [
     altEn: 'Clarinet standing upright in front of a snow-covered door',
   },
   {
-    src: blokfluitKlarinet,
+    src: volwassenenensemble,
     formaat: 'middel',
-    alt: 'Een blokfluit en een klarinet liggen naast elkaar op de toetsen van een piano',
-    altEn: 'A recorder and a clarinet lying side by side on the keys of a piano',
-    onderschrift: 'Blokfluit, klarinet en piano',
-    onderschriftEn: 'Recorder, clarinet and piano',
+    alt: 'Volwassen klarinettisten spelen samen terwijl de coach meeluistert',
+    altEn: 'Adult clarinettists playing together while the coach listens',
   },
   {
-    src: jongeKlarinettisten,
-    focus: '50% 30%', // twee hoofden hoog in beeld
-    formaat: 'middel',
-    alt: 'Twee jonge klarinettistes spelen samen in een industriële ruimte',
-    altEn: 'Two young clarinettists playing together in an industrial space',
-  },
-  {
-    src: klarinetGroen,
-    formaat: 'groot',
-    alt: 'Klarinet liggend tussen de groene bladeren van een struik',
-    altEn: 'Clarinet lying among the green leaves of a shrub',
-    onderschrift: 'Flora en musica',
-    onderschriftEn: 'Flora and musica',
-  },
-  {
-    src: klarinetensemble,
-    focus: '50% 40%', // gezichten in de bovenste helft
-    formaat: 'middel',
-    alt: 'Klarinetensemble tijdens een optreden op een buitenpodium',
-    altEn: 'Clarinet ensemble performing on an outdoor stage',
-    onderschrift: 'Het klarinetensemble op het podium',
-    onderschriftEn: 'The clarinet ensemble on stage',
-  },
-  {
-    src: optreden,
+    src: pianoles,
+    focus: '50% 30%', // hoed én toetsen in beeld
     formaat: 'klein',
-    alt: 'Optreden met klarinet',
-    altEn: 'Performance with clarinet',
+    alt: 'Een verklede leerling met een tovenaarshoed speelt piano',
+    altEn: 'A student in a wizard hat playing the piano',
   },
   {
-    src: christaBuiten,
-    focus: '50% 25%', // hoofd tegen de bovenrand
-    formaat: 'middel',
-    alt: 'Christa ten Berg buiten in het groen, met haar klarinet in haar handen',
-    altEn: 'Christa ten Berg outdoors among the greenery, clarinet in her hands',
+    src: krantenknipsel,
+    formaat: 'klein',
+    alt: 'Krantenknipsel over een koffieconcert met muziek op een boerderij in Elden',
+    altEn: 'Newspaper cutting about a coffee concert with music at a farm in Elden',
   },
   {
-    src: klarinetkring,
+    src: kerstmutsen,
     formaat: 'middel',
-    alt: 'Jonge klarinettisten in een kring, hun instrumenten naar het midden gericht, van bovenaf gezien',
-    altEn: 'Young clarinettists in a circle, instruments pointing to the middle, seen from above',
-    onderschrift: 'Samenspel in de klas',
-    onderschriftEn: 'Playing together in class',
+    alt: 'Vijf jonge klarinettisten met kerstmutsen spelen samen',
+    altEn: 'Five young clarinettists in Christmas hats playing together',
   },
   {
-    src: cdStapel,
-    formaat: 'middel',
-    alt: 'Stapel cd\u2019s met een koptelefoon erbovenop',
-    altEn: 'Stack of CDs with headphones on top',
+    src: basklarinet,
+    formaat: 'klein',
+    alt: 'De zilveren beker van een basklarinet op een houten vloer',
+    altEn: 'The silver bell of a bass clarinet on a wooden floor',
+  },
+  {
+    src: trioOptreden,
+    formaat: 'klein',
+    alt: 'Optreden van een trio met klarinet, gitaar en accordeon',
+    altEn: 'A trio with clarinet, guitar and accordion performing',
   },
   {
     src: klepwerk,
@@ -151,9 +167,30 @@ export const fotos: GalerijFoto[] = [
     altEn: 'Close-up of the keywork of a clarinet, in black and white',
   },
   {
+    src: leerlingenPodium,
+    focus: '50% 10%', // hoofden hoog in beeld
+    formaat: 'middel',
+    alt: 'Christa speelt op het podium samen met vier jonge leerlingen',
+    altEn: 'Christa on stage playing together with four young students',
+  },
+  {
+    src: optreden,
+    formaat: 'middel',
+    alt: 'Optreden met klarinet',
+    altEn: 'Performance with clarinet',
+  },
+  {
     src: roosBladmuziek,
-    formaat: 'klein',
+    formaat: 'middel',
     alt: 'Witte roos op bladmuziek naast een klarinet, in zwart-wit',
     altEn: 'White rose on sheet music next to a clarinet, in black and white',
+  },
+  {
+    src: klarinetkring,
+    formaat: 'middel',
+    alt: 'Jonge klarinettisten in een kring, hun instrumenten naar het midden gericht, van bovenaf gezien',
+    altEn: 'Young clarinettists in a circle, instruments pointing to the middle, seen from above',
+    onderschrift: 'Samenspel in de klas',
+    onderschriftEn: 'Playing together in class',
   },
 ];
