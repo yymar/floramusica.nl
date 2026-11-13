@@ -1,0 +1,37 @@
+# Klein (minor en patch) komt als een gegroepeerde PR, een major komt los.
+# Mergen gaat met de hand: er draait geen CI op een PR, en mergen naar main
+# zet de site live.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: Europe/Amsterdam
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 3
+    ignore:
+      # TypeScript 7 (de Go-versie) heeft de oude compiler-API niet meer.
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
+    groups:
+      klein:
+        patterns: ['*']
+        update-types: [minor, patch]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: Europe/Amsterdam
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 3
+    groups:
+      klein:
+        patterns: ['*']
+        update-types: [minor, patch]
