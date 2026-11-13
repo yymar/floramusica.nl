@@ -21,7 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
       - name: Build met Astro
-        uses: withastro/action@v5
+        uses: withastro/action@v6
         env:
           # Zet de Web3Forms-key als repository secret: Settings > Secrets > Actions
           PUBLIC_WEB3FORMS_KEY: ${{ secrets.PUBLIC_WEB3FORMS_KEY }}
